@@ -89,23 +89,50 @@ public class Twitup
    */
   protected void initLookAndFeel()
   {
-	  try {
-		UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-	} catch (ClassNotFoundException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	} catch (InstantiationException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	} catch (IllegalAccessException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	} catch (UnsupportedLookAndFeelException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	}
+	  
+	  //recuperation du look and feel a partir du fichier de conf
+	  Properties prop = PropertiesManager.loadProperties(Constants.CONFIGURATION_FILE);
+	  String dir = prop.getProperty(Constants.CONFIGURATION_KEY_LOOK_AND_FEEL);
+	  
+	  if(!dir.isEmpty()){
+	  
+		try {
+			UIManager.setLookAndFeel(dir);
+		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
+				| UnsupportedLookAndFeelException e) {
+			// TODO Auto-generated catch block
+		    initDefaultLookAndFeel();
+			e.printStackTrace();
+		}
+		
+	  }else{
+		  //le properties n'a pas pu etre charge 
+		  initDefaultLookAndFeel();
+	  }
   }
 
+  
+  protected void initDefaultLookAndFeel()
+  {
+	  try {
+		  String directoryLookAndFeel=UIManager.getSystemLookAndFeelClassName();
+			UIManager.setLookAndFeel(directoryLookAndFeel);
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InstantiationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (UnsupportedLookAndFeelException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 
+  }
+  
+  
   /**
    * Initialisation de l'interface graphique.
    */
