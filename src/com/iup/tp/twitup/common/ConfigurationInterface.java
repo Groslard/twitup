@@ -16,6 +16,6 @@ public class ConfigurationInterface {
 
 
 	public void changeDirectory(String newPath){
-		twitup.changeDirectory(newPath);
+		twitup.initDirectory(newPath);
 	}
 }
