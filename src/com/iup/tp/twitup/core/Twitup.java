@@ -81,13 +81,39 @@ public class Twitup {
 		this.initDirectory();
 	}
 
-	/**
-	 * Initialisation du look and feel de l'application.
-	 */
-	protected void initLookAndFeel() {
+  /**
+   * Initialisation du look and feel de l'application.
+   */
+  protected void initLookAndFeel()
+  {
+	  
+	  //recuperation du look and feel a partir du fichier de conf
+	  Properties prop = PropertiesManager.loadProperties(Constants.CONFIGURATION_FILE);
+	  String dir = prop.getProperty(Constants.CONFIGURATION_KEY_LOOK_AND_FEEL);
+	  
+	  if(!dir.isEmpty()){
+	  
 		try {
-			UIManager
-					.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+			UIManager.setLookAndFeel(dir);
+		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
+				| UnsupportedLookAndFeelException e) {
+			// TODO Auto-generated catch block
+		    initDefaultLookAndFeel();
+			e.printStackTrace();
+		}
+		
+	  }else{
+		  //le properties n'a pas pu etre charge 
+		  initDefaultLookAndFeel();
+	  }
+  }
+
+  
+  protected void initDefaultLookAndFeel()
+  {
+	  try {
+		  String directoryLookAndFeel=UIManager.getSystemLookAndFeelClassName();
+			UIManager.setLookAndFeel(directoryLookAndFeel);
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -100,21 +126,27 @@ public class Twitup {
 		} catch (UnsupportedLookAndFeelException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-	}
+		} 
+  }
+  
+  
+  /**
+   * Initialisation de l'interface graphique.
+   */
+  protected void initGui()
+  {
+	  
+	  ConfigurationInterface ci = new ConfigurationInterface(this);
+	  
+    this.mMainView = new TwitupMainView(ci);
+    
+    this.mMainView.showGUI();
+    this.mDatabase.addObserver(this.mMainView);
+  }
 
 	/**
 	 * Initialisation de l'interface graphique.
 	 */
-	protected void initGui() {
-
-		ConfigurationInterface ci = new ConfigurationInterface(this);
-
-		this.mMainView = new TwitupMainView(ci);
-
-		this.mMainView.showGUI();
-		this.mDatabase.addObserver(this.mMainView);
-	}
 
 	/**
 	 * Initialisation du répertoire d'échange (depuis la conf ou depuis un file

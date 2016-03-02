@@ -68,4 +68,11 @@ public interface Constants
    * Clé de configuration pour le mode bouchoné
    */
   public static final String CONFIGURATION_KEY_MOCK_ENABLED = "MOCK_ENABLED";
+  
+
+  /**
+   * Clé de configuration pour le look and feel
+   */
+  public static final String CONFIGURATION_KEY_LOOK_AND_FEEL = "LOOK_AND_FEEL";
+  
 }
