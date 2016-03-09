@@ -1,5 +1,6 @@
 package com.iup.tp.twitup.ihm.connexion;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -13,52 +14,24 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
-public class TwiupIncriptionView extends TwiupChoixConnexion{
+import com.iup.tp.twitup.core.ViewController;
+
+public class InscriptionComponent extends JPanel{
 	protected JLabel labelTag;
 	protected JTextField textTag;
 	
+	protected JLabel labelLogin;
+	protected JLabel labelPassword;
+	protected JTextField textLogin;
+	protected JTextField textPassword;
+	protected JButton validation;
 	
-	public String getPassword() {
-		String password = "";
-		return password;
-	}
-
-	public String getLogin() {
-		String login = "";
-		return login;
-	}
-
-	public void showGUI() {
-
-		if (labelLogin == null) {
-			this.initGUI();
-		}
-		
-		// Affichage dans l'EDT
-		SwingUtilities.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				// Custom de l'affichage
-
-				Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
-				labelLogin.setSize(screenSize.width / 4, screenSize.height / 4);
-				labelPassword.setSize(screenSize.width / 4, screenSize.height / 4);
-				labelTag.setSize(screenSize.width / 4, screenSize.height / 4);
-				labelTag.setSize(screenSize.width / 4, screenSize.height / 4);
-				textLogin.setSize(screenSize.width / 4, screenSize.height / 4);
-				textPassword.setSize(screenSize.width / 4, screenSize.height / 4);
-				validation.setSize(screenSize.width / 4, screenSize.height / 4);
-				// Affichage
-
-			}
-		});
-		
-		this.setVisible(true);
-	}
-
-	protected void initGUI() {
+	
+	
+	public InscriptionComponent(ViewController viewController) {
 		this.setLayout(new GridBagLayout());
-		this.setVisible(true);
+		this.setBackground(Color.WHITE);
+		
 		labelLogin=new JLabel();
 		labelLogin.setText("Login");
 		labelTag=new JLabel();
@@ -92,25 +65,7 @@ public class TwiupIncriptionView extends TwiupChoixConnexion{
 		this.add(validation,new GridBagConstraints(5, 4, 2, 1, 1, 1,
 				GridBagConstraints.CENTER, GridBagConstraints.NONE, new Insets(
 						10, 5, 0, 5), 0, 0));
-		
-		
-		
+	}
 
-	}
-	
-	public static void main(String[] args) {
-		
-		
-		 JFrame f = new JFrame();
-		    f.setSize( 250, 150);
-		    f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		    f.setVisible(true);
-		   
-		
-		//test du composant 
-		    TwiupIncriptionView connection= new TwiupIncriptionView();
-		connection.initGUI();
-		 f.getContentPane().add(connection);
-		 f.pack();
-	}
+
 }

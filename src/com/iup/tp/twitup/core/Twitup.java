@@ -1,21 +1,18 @@
 package com.iup.tp.twitup.core;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.Properties;
 
-import javax.swing.JFileChooser;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
-import com.iup.tp.twitup.common.ConfigurationInterface;
 import com.iup.tp.twitup.common.Constants;
 import com.iup.tp.twitup.common.PropertiesManager;
 import com.iup.tp.twitup.datamodel.Database;
 import com.iup.tp.twitup.datamodel.IDatabase;
+import com.iup.tp.twitup.datamodel.IDatabaseObserver;
 import com.iup.tp.twitup.events.file.IWatchableDirectory;
 import com.iup.tp.twitup.events.file.WatchableDirectory;
-import com.iup.tp.twitup.ihm.TwitupMainView;
 import com.iup.tp.twitup.ihm.TwitupMock;
 
 /**
@@ -33,11 +30,6 @@ public class Twitup {
 	 * Gestionnaire des entités contenu de la base de données.
 	 */
 	protected EntityManager mEntityManager;
-
-	/**
-	 * Vue principale de l'application.
-	 */
-	protected TwitupMainView mMainView;
 
 	/**
 	 * Classe de surveillance de répertoire
@@ -59,6 +51,8 @@ public class Twitup {
 	 */
 	protected String mUiClassName;
 
+	protected ViewController mViewController;
+
 	/**
 	 * Constructeur.
 	 */
@@ -75,78 +69,58 @@ public class Twitup {
 		}
 
 		// Initialisation de l'IHM
-		this.initGui();
+		this.initViewController();
 
 		// Initialisation du répertoire d'échange
 		this.initDirectory();
 	}
 
-  /**
-   * Initialisation du look and feel de l'application.
-   */
-  protected void initLookAndFeel()
-  {
-	  
-	  //recuperation du look and feel a partir du fichier de conf
-	  Properties prop = PropertiesManager.loadProperties(Constants.CONFIGURATION_FILE);
-	  String dir = prop.getProperty(Constants.CONFIGURATION_KEY_LOOK_AND_FEEL);
-	  
-	  if(!dir.isEmpty()){
-	  
-		try {
-			UIManager.setLookAndFeel(dir);
-		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
-				| UnsupportedLookAndFeelException e) {
-			// TODO Auto-generated catch block
-		    initDefaultLookAndFeel();
-			e.printStackTrace();
-		}
-		
-	  }else{
-		  //le properties n'a pas pu etre charge 
-		  initDefaultLookAndFeel();
-	  }
-  }
-
-  
-  protected void initDefaultLookAndFeel()
-  {
-	  try {
-		  String directoryLookAndFeel=UIManager.getSystemLookAndFeelClassName();
-			UIManager.setLookAndFeel(directoryLookAndFeel);
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InstantiationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (UnsupportedLookAndFeelException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} 
-  }
-  
-  
-  /**
-   * Initialisation de l'interface graphique.
-   */
-  protected void initGui()
-  {
-	  
-	  ConfigurationInterface ci = new ConfigurationInterface(this);
-	  
-    this.mMainView = new TwitupMainView(ci);
-    
-    this.mMainView.showGUI();
-    this.mDatabase.addObserver(this.mMainView);
-  }
+	/**
+	 * Initialisation du controller de view
+	 */
+	protected void initViewController() {
+		this.mViewController = new ViewController(this);
+		this.mViewController.initGui();
+	}
 
 	/**
-	 * Initialisation de l'interface graphique.
+	 * Initialisation du look and feel de l'application.
 	 */
+	protected void initLookAndFeel() {
+
+		// recuperation du look and feel a partir du fichier de conf
+		Properties prop = PropertiesManager
+				.loadProperties(Constants.CONFIGURATION_FILE);
+		String dir = prop
+				.getProperty(Constants.CONFIGURATION_KEY_LOOK_AND_FEEL);
+
+		if (!dir.isEmpty()) {
+
+			try {
+				UIManager.setLookAndFeel(dir);
+			} catch (ClassNotFoundException | InstantiationException
+					| IllegalAccessException | UnsupportedLookAndFeelException e) {
+				initDefaultLookAndFeel();
+				e.printStackTrace();
+			}
+
+		} else {
+			// le properties n'a pas pu etre charge
+			initDefaultLookAndFeel();
+		}
+	}
+
+	protected void initDefaultLookAndFeel() {
+		String directoryLookAndFeel = UIManager.getSystemLookAndFeelClassName();
+		try {
+			UIManager.setLookAndFeel(directoryLookAndFeel);
+		} catch (ClassNotFoundException | InstantiationException
+				| IllegalAccessException | UnsupportedLookAndFeelException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
 
 	/**
 	 * Initialisation du répertoire d'échange (depuis la conf ou depuis un file
@@ -155,23 +129,19 @@ public class Twitup {
 	 * pouvoir utiliser l'application</b>
 	 */
 	protected void initDirectory() {
-		/*
-		 * TODO : pour le moment je passe le directory en dur, par la suite il
-		 * faudra le config par IHM
-		 */
 		Properties prop = PropertiesManager
 				.loadProperties(Constants.CONFIGURATION_FILE);
 		String dir = prop
 				.getProperty(Constants.CONFIGURATION_KEY_EXCHANGE_DIRECTORY);
-		
+
 		if (!dir.isEmpty()) {
 			File directory = new File(dir);
 			if (!isValideExchangeDirectory(directory))
-				dir = this.mMainView.chooseDirPath();
+				dir = this.mViewController.getDirPath();
 		} else {
-			dir = this.mMainView.chooseDirPath();
+			dir = this.mViewController.getDirPath();
 		}
-		
+
 		this.initDirectory(dir);
 	}
 
@@ -214,16 +184,17 @@ public class Twitup {
 		if (directoryPath == null) {
 			System.out.println("Repertoire non renseigné.");
 			if (this.mExchangeDirectoryPath == null)
-				do{
-					directoryPath = this.mMainView.chooseDirPath();
-				}while(directoryPath == null);
+				do {
+					directoryPath = this.mViewController.getDirPath();
+				} while (directoryPath == null);
 			else
 				return;
 		} else {
 			if (this.mWatchableDirectory != null)
 				this.mWatchableDirectory.stopWatching();
 			PropertiesManager.updateProperty(
-					Constants.CONFIGURATION_KEY_EXCHANGE_DIRECTORY, directoryPath);
+					Constants.CONFIGURATION_KEY_EXCHANGE_DIRECTORY,
+					directoryPath);
 		}
 
 		mExchangeDirectoryPath = directoryPath;
@@ -232,5 +203,12 @@ public class Twitup {
 
 		mWatchableDirectory.initWatching();
 		mWatchableDirectory.addObserver(mEntityManager);
+	}
+	
+	/**
+	 * Methode permettant l'ajout d'un observer à la BDD
+	 */
+	public void addDatabaseObserver(IDatabaseObserver observer){
+		this.mDatabase.addObserver(observer);
 	}
 }

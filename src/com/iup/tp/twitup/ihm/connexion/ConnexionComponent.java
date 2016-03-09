@@ -1,10 +1,13 @@
 package com.iup.tp.twitup.ihm.connexion;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -14,7 +17,9 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
-public class TwitupConnexionView extends TwiupChoixConnexion {
+import com.iup.tp.twitup.core.ViewController;
+
+public class ConnexionComponent extends JPanel {
 
 	protected JLabel labelLogin;
 	protected JLabel labelPassword;
@@ -22,38 +27,14 @@ public class TwitupConnexionView extends TwiupChoixConnexion {
 	protected JTextField textPassword;
 	protected JButton validation;
 	
+	protected ViewController viewController;
 	
-	
-
-	public void showGUI() {
-
-		if (labelLogin == null) {
-			this.initGUI();
-		}
+	public ConnexionComponent(ViewController viewController) {
+		this.viewController = viewController;
 		
-		// Affichage dans l'EDT
-		SwingUtilities.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				// Custom de l'affichage
-
-				Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
-				labelLogin.setSize(screenSize.width / 4, screenSize.height / 4);
-				labelPassword.setSize(screenSize.width / 4, screenSize.height / 4);
-				textLogin.setSize(screenSize.width / 4, screenSize.height / 4);
-				textPassword.setSize(screenSize.width / 4, screenSize.height / 4);
-				validation.setSize(screenSize.width / 4, screenSize.height / 4);
-				// Affichage
-
-			}
-		});
-		
-		this.setVisible(true);
-	}
-
-	protected void initGUI() {
 		this.setLayout(new GridBagLayout());
-		this.setVisible(true);
+		this.setBackground(Color.WHITE);
+		
 		labelLogin=new JLabel();
 		labelLogin.setText("Login");
 		labelPassword=new JLabel();
@@ -77,24 +58,12 @@ public class TwitupConnexionView extends TwiupChoixConnexion {
 				GridBagConstraints.CENTER, GridBagConstraints.NONE, new Insets(
 						10, 5, 0, 5), 0, 0));
 		
+		this.validation.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				viewController.onUserLogged();
+			}
+		});
 		
-		
-
-	}
-	
-	public static void main(String[] args) {
-		
-		
-		 JFrame f = new JFrame();
-		    f.setSize( 250, 150);
-		    f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		    f.setVisible(true);
-		   
-		
-		//test du composant 
-		TwitupConnexionView connection= new TwitupConnexionView();
-		connection.initGUI();
-		 f.getContentPane().add(connection);
-		 f.pack();
 	}
 }
