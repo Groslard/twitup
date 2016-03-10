@@ -1,6 +1,7 @@
 package com.iup.tp.twitup.core;
 import java.io.File;
 
+import javax.swing.JComponent;
 import javax.swing.JPanel;
 
 import com.iup.tp.twitup.datamodel.User;
@@ -8,7 +9,7 @@ import com.iup.tp.twitup.ihm.TwitupMainView;
 import com.iup.tp.twitup.ihm.connexion.ConnexionComponent;
 import com.iup.tp.twitup.ihm.connexion.InscriptionComponent;
 import com.iup.tp.twitup.ihm.connexion.AccueilComponent;
-import com.iup.tp.twitup.ihm.contents.TweetsComponent;
+import com.iup.tp.twitup.ihm.contents.TweetsQueueComponent;
 import com.iup.tp.twitup.ihm.contents.NewTweetComponent;
 import com.iup.tp.twitup.ihm.contents.ProfilComponent;
 import com.iup.tp.twitup.ihm.contents.SearchComponent;
@@ -26,7 +27,7 @@ public class ViewController {
 	/** CONTENT COMPONENTS **/
 	protected MenuComponent compMenu;
 	
-	protected TweetsComponent compTweets;
+	protected TweetsQueueComponent compTweetsQueue;
 	protected ProfilComponent compProfil;
 	protected SearchComponent compSearch;
 	protected UsersComponent compUsers;
@@ -43,6 +44,18 @@ public class ViewController {
 	public ViewController(Twitup mTwitUp) {
 		super();
 		this.mTwitUp = mTwitUp;
+	}
+
+	public TweetsQueueComponent getCompTweetsQueue() {
+		return compTweetsQueue;
+	}
+	
+	public SearchComponent getCompSearch() {
+		return compSearch;
+	}
+
+	public NewTweetComponent getCompNewTweet() {
+		return compNewTweet;
 	}
 
 	/**
@@ -63,7 +76,7 @@ public class ViewController {
 		compMenu = new MenuComponent(this);
 		
 		// panel principal / central
-		compTweets = new TweetsComponent();
+		compTweetsQueue = new TweetsQueueComponent();
 		compProfil = new ProfilComponent();
 		compSearch = new SearchComponent();
 		compUsers = new UsersComponent();
@@ -79,7 +92,7 @@ public class ViewController {
 	
 	/** MENU INTERACTION **/
 	public void onMenuAccueilClicked(){
-		changeMainViewPanel(compTweets);
+		changeMainViewPanel(compTweetsQueue);
 	}
 	
 	public void onMenuUsersClicked(){
@@ -116,7 +129,7 @@ public class ViewController {
 	
 	/** CONNECT/DISCONNECT ACTION **/
 	public void onUserLogged(){
-		changeMainViewPanel(compTweets);
+		changeMainViewPanel(compTweetsQueue);
 		changeLeftPanel(compMenu);
 	}
 	
@@ -128,8 +141,8 @@ public class ViewController {
 	
 	
 	/** PANELS UPDATES METHODS **/
-	private void changeMainViewPanel(JPanel jpanel) {
-		this.mMainView.setCenterPan(jpanel);
+	private void changeMainViewPanel(JComponent component) {
+		this.mMainView.setCenterPan(component);
 	}
 	
 	private void changeLeftPanel(JPanel jpanel) {

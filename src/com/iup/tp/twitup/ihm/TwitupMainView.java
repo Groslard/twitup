@@ -12,6 +12,7 @@ import java.io.File;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
+import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -26,7 +27,7 @@ import com.iup.tp.twitup.core.ViewController;
 import com.iup.tp.twitup.datamodel.IDatabaseObserver;
 import com.iup.tp.twitup.datamodel.Twit;
 import com.iup.tp.twitup.datamodel.User;
-import com.iup.tp.twitup.ihm.contents.TweetsComponent;
+import com.iup.tp.twitup.ihm.contents.TweetsQueueComponent;
 import com.iup.tp.twitup.ihm.contents.NewTweetComponent;
 import com.iup.tp.twitup.ihm.contents.ProfilComponent;
 import com.iup.tp.twitup.ihm.contents.SearchComponent;
@@ -123,10 +124,10 @@ public class TwitupMainView implements IDatabaseObserver {
 		ViewController.updatePan(this.leftPan);
 	}
 	
-	public void setCenterPan(JPanel newCenterPan) {
+	public void setCenterPan(JComponent component) {
 		this.centerPan.removeAll();
-		if(newCenterPan != null)
-			this.centerPan.add(newCenterPan,  new GridBagConstraints(0, 0, 1, 1, 1, 1, 
+		if(component != null)
+			this.centerPan.add(component,  new GridBagConstraints(0, 0, 1, 1, 1, 1, 
 					GridBagConstraints.CENTER, GridBagConstraints.BOTH, 
 					new Insets(0, 0, 0, 0), 0, 0));
 		ViewController.updatePan(this.centerPan);

@@ -52,6 +52,8 @@ public class Twitup {
 	protected String mUiClassName;
 
 	protected ViewController mViewController;
+	
+	protected TweetController mTweetController;
 
 	protected UserController mUserController;
 
@@ -70,26 +72,29 @@ public class Twitup {
 			this.initMock();
 		}
 
-		// Initialisation du controller d'user
-		this.initControllers();
-		// Initialisation de l'IHM
+		// Initialisation des controllers
+		this.mViewController = new ViewController(this);
 
 		// Initialisation du répertoire d'échange
 		this.initDirectory();
-	}
-
-	/**
-	 * Initialisation du controller de view
-	 */
-	protected void initControllers() {
-		this.mViewController = new ViewController(this);
-		this.mUserController = new UserController(this.mViewController, this.mEntityManager, this.mDatabase);
-		this.mViewController.initGui();
+		
+		this.initControllers();
 		
 	}
 
+	/**
+	 * Initialisation des différents controllers de l'application
+	 */
+	private void initControllers() {
+		this.mViewController = new ViewController(this);
+		this.mUserController = new UserController(this.mViewController, this.mEntityManager, this.mDatabase);
 	
+		this.mViewController.initGui();
+		
+		this.mTweetController = new TweetController(this.mDatabase, this.mViewController);
+		this.mTweetController.loadTweets();
 	
+	}
 
 	/**
 	 * Initialisation du look and feel de l'application.
@@ -122,7 +127,6 @@ public class Twitup {
 			UIManager.setLookAndFeel(directoryLookAndFeel);
 		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
 				| UnsupportedLookAndFeelException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
