@@ -3,6 +3,7 @@ import java.io.File;
 
 import javax.swing.JPanel;
 
+import com.iup.tp.twitup.datamodel.User;
 import com.iup.tp.twitup.ihm.TwitupMainView;
 import com.iup.tp.twitup.ihm.connexion.ConnexionComponent;
 import com.iup.tp.twitup.ihm.connexion.InscriptionComponent;
@@ -37,6 +38,8 @@ public class ViewController {
 	protected ConnexionComponent compConnexion;
 	protected InscriptionComponent compInscription;
 
+	protected User connectedUser;
+	
 	public ViewController(Twitup mTwitUp) {
 		super();
 		this.mTwitUp = mTwitUp;
@@ -51,8 +54,8 @@ public class ViewController {
 		/** Instanciation des panels **/
 		// connexion
 		compAccueil = new AccueilComponent(this);
-		compConnexion = new ConnexionComponent(this);
-		compInscription = new InscriptionComponent(this);
+		compConnexion = new ConnexionComponent(this.mTwitUp.mUserController);
+		compInscription = new InscriptionComponent(this.mTwitUp.mUserController);
 		
 		changeLogFormPanel(compConnexion);
 		
@@ -118,6 +121,7 @@ public class ViewController {
 	}
 	
 	public void onUserDisconnected(){
+		this.connectedUser=null;
 		changeMainViewPanel(compAccueil);
 		changeLeftPanel(null);
 	}
@@ -162,4 +166,13 @@ public class ViewController {
 		pan.revalidate();
 		pan.repaint();
 	}
+
+	public User getConnectedUser() {
+		return connectedUser;
+	}
+
+	public void setConnectedUser(User connectedUser) {
+		this.connectedUser = connectedUser;
+	}
+	
 }

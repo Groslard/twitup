@@ -17,6 +17,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
+import com.iup.tp.twitup.core.UserController;
 import com.iup.tp.twitup.core.ViewController;
 import com.iup.tp.twitup.ihm.TwitupMainView;
 
@@ -26,6 +27,7 @@ public class SwitchConnexionInscriptionComponent extends JPanel {
 	protected JButton bInscription;
 	
 	protected ViewController viewController;
+	
 
 	public SwitchConnexionInscriptionComponent(ViewController viewController) {
 		this.viewController = viewController;

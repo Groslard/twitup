@@ -53,6 +53,8 @@ public class Twitup {
 
 	protected ViewController mViewController;
 
+	protected UserController mUserController;
+
 	/**
 	 * Constructeur.
 	 */
@@ -68,8 +70,9 @@ public class Twitup {
 			this.initMock();
 		}
 
+		// Initialisation du controller d'user
+		this.initControllers();
 		// Initialisation de l'IHM
-		this.initViewController();
 
 		// Initialisation du répertoire d'échange
 		this.initDirectory();
@@ -78,10 +81,15 @@ public class Twitup {
 	/**
 	 * Initialisation du controller de view
 	 */
-	protected void initViewController() {
+	protected void initControllers() {
 		this.mViewController = new ViewController(this);
+		this.mUserController = new UserController(this.mViewController, this.mEntityManager, this.mDatabase);
 		this.mViewController.initGui();
+		
 	}
+
+	
+	
 
 	/**
 	 * Initialisation du look and feel de l'application.
@@ -89,17 +97,15 @@ public class Twitup {
 	protected void initLookAndFeel() {
 
 		// recuperation du look and feel a partir du fichier de conf
-		Properties prop = PropertiesManager
-				.loadProperties(Constants.CONFIGURATION_FILE);
-		String dir = prop
-				.getProperty(Constants.CONFIGURATION_KEY_LOOK_AND_FEEL);
+		Properties prop = PropertiesManager.loadProperties(Constants.CONFIGURATION_FILE);
+		String dir = prop.getProperty(Constants.CONFIGURATION_KEY_LOOK_AND_FEEL);
 
 		if (!dir.isEmpty()) {
 
 			try {
 				UIManager.setLookAndFeel(dir);
-			} catch (ClassNotFoundException | InstantiationException
-					| IllegalAccessException | UnsupportedLookAndFeelException e) {
+			} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
+					| UnsupportedLookAndFeelException e) {
 				initDefaultLookAndFeel();
 				e.printStackTrace();
 			}
@@ -114,8 +120,8 @@ public class Twitup {
 		String directoryLookAndFeel = UIManager.getSystemLookAndFeelClassName();
 		try {
 			UIManager.setLookAndFeel(directoryLookAndFeel);
-		} catch (ClassNotFoundException | InstantiationException
-				| IllegalAccessException | UnsupportedLookAndFeelException e) {
+		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
+				| UnsupportedLookAndFeelException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -129,10 +135,8 @@ public class Twitup {
 	 * pouvoir utiliser l'application</b>
 	 */
 	protected void initDirectory() {
-		Properties prop = PropertiesManager
-				.loadProperties(Constants.CONFIGURATION_FILE);
-		String dir = prop
-				.getProperty(Constants.CONFIGURATION_KEY_EXCHANGE_DIRECTORY);
+		Properties prop = PropertiesManager.loadProperties(Constants.CONFIGURATION_FILE);
+		String dir = prop.getProperty(Constants.CONFIGURATION_KEY_EXCHANGE_DIRECTORY);
 
 		if (!dir.isEmpty()) {
 			File directory = new File(dir);
@@ -154,8 +158,7 @@ public class Twitup {
 	 */
 	protected boolean isValideExchangeDirectory(File directory) {
 		// Valide si répertoire disponible en lecture et écriture
-		return directory != null && directory.exists()
-				&& directory.isDirectory() && directory.canRead()
+		return directory != null && directory.exists() && directory.isDirectory() && directory.canRead()
 				&& directory.canWrite();
 	}
 
@@ -192,9 +195,7 @@ public class Twitup {
 		} else {
 			if (this.mWatchableDirectory != null)
 				this.mWatchableDirectory.stopWatching();
-			PropertiesManager.updateProperty(
-					Constants.CONFIGURATION_KEY_EXCHANGE_DIRECTORY,
-					directoryPath);
+			PropertiesManager.updateProperty(Constants.CONFIGURATION_KEY_EXCHANGE_DIRECTORY, directoryPath);
 		}
 
 		mExchangeDirectoryPath = directoryPath;
@@ -204,11 +205,28 @@ public class Twitup {
 		mWatchableDirectory.initWatching();
 		mWatchableDirectory.addObserver(mEntityManager);
 	}
-	
+
 	/**
 	 * Methode permettant l'ajout d'un observer à la BDD
 	 */
-	public void addDatabaseObserver(IDatabaseObserver observer){
+	public void addDatabaseObserver(IDatabaseObserver observer) {
 		this.mDatabase.addObserver(observer);
 	}
+
+	public IDatabase getmDatabase() {
+		return mDatabase;
+	}
+
+	public EntityManager getmEntityManager() {
+		return mEntityManager;
+	}
+
+	public ViewController getmViewController() {
+		return mViewController;
+	}
+
+	public UserController getmUserController() {
+		return mUserController;
+	}
+
 }
