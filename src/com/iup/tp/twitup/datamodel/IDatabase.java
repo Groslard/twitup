@@ -137,4 +137,6 @@ public interface IDatabase
    */
   public User getUnknowUser();
 
+public Set<User> getFollowed(User connectedUser);
+
 }

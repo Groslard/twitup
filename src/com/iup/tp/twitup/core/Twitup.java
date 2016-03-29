@@ -88,9 +88,10 @@ public class Twitup {
 	private void initControllers() {
 		this.mViewController = new ViewController(this);
 		this.mUserController = new UserController(this.mViewController, this.mEntityManager, this.mDatabase);
-	
+
 		this.mViewController.initGui();
-		
+
+		this.mUserController.loadUsers();
 		this.mTweetController = new TweetController(this.mDatabase, this.mEntityManager, this.mViewController);
 	
 	}

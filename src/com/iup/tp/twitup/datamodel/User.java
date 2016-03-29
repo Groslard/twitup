@@ -194,7 +194,14 @@ public class User
 
     return equals;
   }
-
+  
+  @Override
+  public int hashCode()
+  {
+    return this.mUuid==null?0:this.mUuid.hashCode();
+  }
+  
+  
   /**
    * {@inheritDoc}
    */

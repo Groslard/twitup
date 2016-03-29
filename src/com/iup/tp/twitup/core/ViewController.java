@@ -14,6 +14,7 @@ import com.iup.tp.twitup.ihm.contents.NewTweetComponent;
 import com.iup.tp.twitup.ihm.contents.ProfilComponent;
 import com.iup.tp.twitup.ihm.contents.SearchComponent;
 import com.iup.tp.twitup.ihm.contents.UsersComponent;
+import com.iup.tp.twitup.ihm.contents.UsersQueueComponent;
 import com.iup.tp.twitup.ihm.menu.MenuComponent;
 
 public class ViewController {
@@ -30,7 +31,7 @@ public class ViewController {
 	protected TweetsQueueComponent compTweetsQueue;
 	protected ProfilComponent compProfil;
 	protected SearchComponent compSearch;
-	protected UsersComponent compUsers;
+	protected UsersQueueComponent compUsersQueue;
 	
 	protected NewTweetComponent compNewTweet;
 	
@@ -45,6 +46,12 @@ public class ViewController {
 		super();
 		this.mTwitUp = mTwitUp;
 	}
+
+	
+	public UsersQueueComponent getCompUsersQueue() {
+		return compUsersQueue;
+	}
+
 
 	public TweetsQueueComponent getCompTweetsQueue() {
 		return compTweetsQueue;
@@ -79,7 +86,7 @@ public class ViewController {
 		compTweetsQueue = new TweetsQueueComponent();
 		compProfil = new ProfilComponent();
 		compSearch = new SearchComponent();
-		compUsers = new UsersComponent();
+		compUsersQueue = new UsersQueueComponent(this.mTwitUp.mUserController);
 		compNewTweet = new NewTweetComponent();
 		
 		this.mMainView.showGUI();
@@ -96,7 +103,7 @@ public class ViewController {
 	}
 	
 	public void onMenuUsersClicked(){
-		changeMainViewPanel(compUsers);
+		changeMainViewPanel(compUsersQueue);
 	}
 	
 	public void onMenuProfilClicked(){

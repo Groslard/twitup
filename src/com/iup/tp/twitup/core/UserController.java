@@ -25,7 +25,6 @@ public class UserController {
 	 */
 	protected Set<User> mUsers;
 
-	protected Twitup mTwitUp;
 
 	public UserController(ViewController mViewController, EntityManager mEntityManager, IDatabase mDatabase) {
 		this.mDatabase = mDatabase;
@@ -35,8 +34,8 @@ public class UserController {
 	}
 
 	public void onUserLogged(String login, String password) {
-		boolean loginOK = true;
-		boolean passwordOK = true;
+		boolean loginKO = true;
+		boolean passwordKO = true;
 		this.mUsers = mDatabase.getUsers();
 		// parcours de sutilisaterurs
 
@@ -45,17 +44,18 @@ public class UserController {
 				if (user.getUserPassword().equals(password)) {
 					this.mViewController.setConnectedUser(user);
 					this.mViewController.onUserLogged();
-					passwordOK = false;
+					this.loadUsers();
+					passwordKO = false;
 				}
-				loginOK = false;
+				loginKO = false;
 
 			}
 		}
 
-		if (passwordOK) {
+		if (passwordKO) {
 			this.mViewController.compConnexion.setErrorMessage("Password incorrect");
 		}
-		if (loginOK) {
+		if (loginKO) {
 			this.mViewController.compConnexion.setErrorMessage("Login incorrect");
 		}
 
@@ -82,11 +82,10 @@ public class UserController {
 			}
 			if (!isPresent) {
 				User userAdd = new User(UUID.randomUUID(), tagEntry, password, login, new HashSet<String>(), "");
-				this.mDatabase.addUser(userAdd);
 				mEntityManager.sendUser(userAdd);
 				this.mViewController.setConnectedUser(userAdd);
 				this.mViewController.onUserLogged();
-
+				this.loadUsers();
 			} else {
 				// gerer affichage tag deja utilise
 				this.mViewController.compInscription.setErrorMessage("Tag déja utilisé");
@@ -94,6 +93,24 @@ public class UserController {
 
 		}
 
+	}
+	
+	public void loadUsers(){
+		this.mUsers = mDatabase.getUsers();
+		System.out.println(mViewController.getConnectedUser());
+		this.mUsers.remove(mViewController.getConnectedUser());
+		mViewController.getCompUsersQueue().showUsersList(this.mUsers);
+	}
+	
+	
+	public void loadUsersFollowed(){
+		System.out.println("taille de la liste de "+mDatabase.getFollowed(mViewController.getConnectedUser()).size());
+		mViewController.getCompUsersQueue().showUsersList(mDatabase.getFollowed(mViewController.getConnectedUser()));
+	}
+	
+	public void followUser(User user){
+		mViewController.getConnectedUser().addFollowing(user.getUserTag());
+		mEntityManager.sendUser(mViewController.getConnectedUser());
 	}
 
 }

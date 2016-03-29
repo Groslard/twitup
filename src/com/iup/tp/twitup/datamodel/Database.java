@@ -278,6 +278,27 @@ public class Database implements IDatabase
     return followers;
   }
 
+  
+  
+ 
+  public Set<User> getFollowed(User user)
+  {
+    Set<User> followers = new HashSet<User>();
+
+    // Parcours de tous les utilisateurs de la base
+    for (User otherUser : this.getUsers())
+    {
+      // Si le l'utilisateur courant suit l'utilisateur donné
+      if (user.getFollows().contains(otherUser.getUserTag()))
+      {
+        followers.add(otherUser);
+      }
+    }
+
+    return followers;
+  }
+  
+  
   /**
    * @{inheritDoc
    */
