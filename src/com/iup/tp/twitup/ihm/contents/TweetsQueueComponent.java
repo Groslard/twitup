@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
@@ -17,42 +19,59 @@ import com.iup.tp.twitup.datamodel.Twit;
 
 public class TweetsQueueComponent extends JScrollPane {
 
-	protected Set<TweetComponent> tweetsComponents; 
+	protected HashMap<Twit, TweetComponent> tweetsComponents; 
 	
 	protected JPanel content;
 	
+	protected GridBagConstraints tweetPlacement;
+
+	private GridBagLayout gridBagLayout;
+	
 	public TweetsQueueComponent(){
-		this.tweetsComponents = new HashSet<TweetComponent>();
+		this.tweetsComponents = new HashMap<Twit, TweetComponent>();
 		this.content = new JPanel();
 		this.content.setBackground(Color.WHITE);
-		this.content.setLayout(new GridBagLayout());
-		
+		gridBagLayout = new GridBagLayout();
+		this.content.setLayout(gridBagLayout);
 		
 		this.setViewportView(this.content);
-		//this.add(this.content);
 		
-		
+		this.tweetPlacement = new GridBagConstraints(0, 0, 1, 1, 1, 1, 
+				GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, 
+				new Insets(0, 70, 5, 70), 0, 0);
 		
 	}
 	
 	
-	public void notifyTwitsUpdated(Set<Twit> tweets){
-		this.content.removeAll();
-		this.tweetsComponents.clear();
-		
+	public void notifyTwitsUpdated(ArrayList<Twit> tweets){
 		int line = 0;
 		Iterator<Twit> iterator = tweets.iterator();
 		
 		while(iterator.hasNext()){
-			TweetComponent tweetComp = new TweetComponent(iterator.next());
-			this.tweetsComponents.add(tweetComp);
+			this.tweetPlacement.gridy = line;
+			Twit twit = iterator.next();
+			
+			TweetComponent tweetComp = this.tweetsComponents.get(twit);
+			
+			if(tweetComp == null){
+				tweetComp = new TweetComponent(twit);
+				this.tweetsComponents.put(twit, tweetComp);
+				this.content.add(tweetComp, this.tweetPlacement);
+			}else{
+				// TODO : mettre a jour la constraint sur le comp si il existe
+				gridBagLayout.setConstraints(tweetComp, this.tweetPlacement);
+			}
 			
 			
-			this.content.add(tweetComp, new GridBagConstraints(0, line, 1, 1, 1, 1, 
-					GridBagConstraints.CENTER, GridBagConstraints.BOTH, 
-					new Insets(0, 70, 5, 70), 0, 0));
 			line++;
 		}
 		ViewController.updatePan(content);
+	}
+	
+	public void notifyTwitUpdated(Twit tweet){
+		// TODO : faire une fonction qui permet de creer un tweetcomponent a partir de tweet,
+		// Qui va l'ajouter en haut et qui va mettre à jour les constraints des autres
+//		this.content.getComponents()
+//		this.content.add(comp, index)
 	}
 }

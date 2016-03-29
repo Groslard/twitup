@@ -98,7 +98,6 @@ public class WatchableDirectory implements IWatchableDirectory
     // Si le répertoire est valide
     if (mDirectory.exists() && mDirectory.isDirectory())
     {
-    	System.out.println("coucou2");
       // Initialisation des fichiers présents
       this.initPresentFiles();
 

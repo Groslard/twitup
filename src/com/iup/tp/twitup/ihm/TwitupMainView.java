@@ -94,7 +94,6 @@ public class TwitupMainView implements IDatabaseObserver {
 
 		// Ajout du menu à la frame
 		mFrame.setJMenuBar(buildMenuBar());
-		mFrame.getLayeredPane().setBackground(Color.BLUE);
 		
 		this.mPan = new JPanel();
 		this.mFrame.setContentPane(mPan);
@@ -205,8 +204,6 @@ public class TwitupMainView implements IDatabaseObserver {
 	@Override
 	public void notifyTwitAdded(Twit addedTwit) {
 		// TODO Auto-generated method stub
-		System.out.println(addedTwit.getTwiter().getName() + "|"
-				+ addedTwit.getText());
 	}
 
 	@Override

@@ -91,8 +91,7 @@ public class Twitup {
 	
 		this.mViewController.initGui();
 		
-		this.mTweetController = new TweetController(this.mDatabase, this.mViewController);
-		this.mTweetController.loadTweets();
+		this.mTweetController = new TweetController(this.mDatabase, this.mEntityManager, this.mViewController);
 	
 	}
 
