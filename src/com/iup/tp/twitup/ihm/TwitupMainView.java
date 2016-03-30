@@ -20,19 +20,12 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.SpringLayout.Constraints;
 import javax.swing.SwingUtilities;
 
 import com.iup.tp.twitup.core.ViewController;
 import com.iup.tp.twitup.datamodel.IDatabaseObserver;
 import com.iup.tp.twitup.datamodel.Twit;
 import com.iup.tp.twitup.datamodel.User;
-import com.iup.tp.twitup.ihm.contents.TweetsQueueComponent;
-import com.iup.tp.twitup.ihm.contents.NewTweetComponent;
-import com.iup.tp.twitup.ihm.contents.ProfilComponent;
-import com.iup.tp.twitup.ihm.contents.SearchComponent;
-import com.iup.tp.twitup.ihm.contents.UsersComponent;
-import com.iup.tp.twitup.ihm.menu.MenuComponent;
 
 /**
  * Classe de la vue principale de l'application.

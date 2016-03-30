@@ -39,25 +39,29 @@ public class UserController {
 		this.mUsers = mDatabase.getUsers();
 		// parcours de sutilisaterurs
 
-		for (User user : this.mUsers) {
-			if (user.getName().equals(login)) {
-				if (user.getUserPassword().equals(password)) {
-					this.mViewController.setConnectedUser(user);
-					this.mViewController.onUserLogged();
-					this.loadUsers();
-					passwordKO = false;
-				}
-				loginKO = false;
-
-			}
-		}
-
-		if (passwordKO) {
-			this.mViewController.compConnexion.setErrorMessage("Password incorrect");
-		}
-		if (loginKO) {
-			this.mViewController.compConnexion.setErrorMessage("Login incorrect");
-		}
+		// TODO code evitant de se logger
+		this.mViewController.setConnectedUser(this.mUsers.iterator().next());
+		this.mViewController.onUserLogged();
+		return;
+		//fin TODO
+//		for (User user : this.mUsers) {
+//			if (user.getName().equals(login)) {
+//				if (user.getUserPassword().equals(password)) {
+//					this.mViewController.setConnectedUser(user);
+//					this.mViewController.onUserLogged();
+//					passwordOK = false;
+//				}
+//				loginOK = false;
+//
+//			}
+//		}
+//
+//		if (passwordOK) {
+//			this.mViewController.compConnexion.setErrorMessage("Password incorrect");
+//		}
+//		if (loginOK) {
+//			this.mViewController.compConnexion.setErrorMessage("Login incorrect");
+//		}
 
 	}
 

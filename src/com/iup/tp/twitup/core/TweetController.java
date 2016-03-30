@@ -60,8 +60,8 @@ public class TweetController implements IDatabaseObserver{
 	}
 
 	public void addTweet(String content){
-		// TODO fonction de creation de tweet
-		//this.mEntityManager.sendTwit(twit);
+		Twit twit = new Twit(mViewController.getConnectedUser(), content);
+		this.mEntityManager.sendTwit(twit);
 	}
 	
 	@Override

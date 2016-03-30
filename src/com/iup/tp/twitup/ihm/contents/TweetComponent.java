@@ -5,8 +5,6 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Image;
 import java.awt.Insets;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -16,7 +14,6 @@ import java.util.Date;
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -31,9 +28,7 @@ public class TweetComponent extends JPanel {
 		this.setBackground(Color.WHITE);
 		this.setLayout(new GridBagLayout());
 		this.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.LIGHT_GRAY));
-		System.out.println(twit.getTwiter().getAvatarPath());
-		
-		
+
 		File img = new File(twit.getTwiter().getAvatarPath());
 		
 		if(!img.exists() || img.isDirectory())
@@ -41,7 +36,6 @@ public class TweetComponent extends JPanel {
 		
 		BufferedImage myPicture;
 		try {
-			
 			myPicture = ImageIO.read(img);
 			// TODO Ressortir le resize img dans un environnement plus global et réutilisable
 			ImageIcon resizedImg = new ImageIcon(myPicture.getScaledInstance(40, 40, Image.SCALE_DEFAULT));

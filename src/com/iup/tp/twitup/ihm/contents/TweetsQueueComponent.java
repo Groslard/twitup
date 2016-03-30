@@ -34,7 +34,7 @@ public class TweetsQueueComponent extends JScrollPane {
 		this.content.setLayout(gridBagLayout);
 		
 		this.setViewportView(this.content);
-		
+		this.getVerticalScrollBar().setUnitIncrement(10);
 		this.tweetPlacement = new GridBagConstraints(0, 0, 1, 1, 1, 1, 
 				GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, 
 				new Insets(0, 70, 5, 70), 0, 0);

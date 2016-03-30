@@ -13,7 +13,6 @@ import com.iup.tp.twitup.ihm.contents.TweetsQueueComponent;
 import com.iup.tp.twitup.ihm.contents.NewTweetComponent;
 import com.iup.tp.twitup.ihm.contents.ProfilComponent;
 import com.iup.tp.twitup.ihm.contents.SearchComponent;
-import com.iup.tp.twitup.ihm.contents.UsersComponent;
 import com.iup.tp.twitup.ihm.contents.UsersQueueComponent;
 import com.iup.tp.twitup.ihm.menu.MenuComponent;
 
@@ -34,6 +33,7 @@ public class ViewController {
 	protected UsersQueueComponent compUsersQueue;
 	
 	protected NewTweetComponent compNewTweet;
+	protected Boolean newTweetIsShow;
 	
 	/** Component for log in pan **/
 	protected AccueilComponent compAccueil;
@@ -45,6 +45,7 @@ public class ViewController {
 	public ViewController(Twitup mTwitUp) {
 		super();
 		this.mTwitUp = mTwitUp;
+		this.newTweetIsShow = false;
 	}
 
 	
@@ -87,7 +88,7 @@ public class ViewController {
 		compProfil = new ProfilComponent();
 		compSearch = new SearchComponent();
 		compUsersQueue = new UsersQueueComponent(this.mTwitUp.mUserController);
-		compNewTweet = new NewTweetComponent();
+		compNewTweet = new NewTweetComponent(this.connectedUser, this.mTwitUp.mTweetController);
 		
 		this.mMainView.showGUI();
 		
@@ -111,7 +112,15 @@ public class ViewController {
 	}
 	
 	public void onMenuNewTweetClicked(){
-		changeMainViewPanel(compNewTweet);
+		if(newTweetIsShow){
+			changeRightPanel(null);
+			newTweetIsShow = false;
+		}else{
+			changeRightPanel(compNewTweet);
+			newTweetIsShow = true;
+		}
+			
+		
 	}
 	
 	public void onMenuRechercheClicked(){
@@ -154,6 +163,10 @@ public class ViewController {
 	
 	private void changeLeftPanel(JPanel jpanel) {
 		this.mMainView.setLeftPan(jpanel);
+	}
+	
+	private void changeRightPanel(JPanel jpanel) {
+		this.mMainView.setRightPan(jpanel);
 	}
 	
 	private void changeLogFormPanel(JPanel jpanel){

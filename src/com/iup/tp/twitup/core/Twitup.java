@@ -44,7 +44,7 @@ public class Twitup {
 	/**
 	 * Idnique si le mode bouchoné est activé.
 	 */
-	protected boolean mIsMockEnabled = false;
+	protected boolean mIsMockEnabled = true;
 
 	/**
 	 * Nom de la classe de l'UI.
@@ -85,15 +85,18 @@ public class Twitup {
 	/**
 	 * Initialisation des différents controllers de l'application
 	 */
-	private void initControllers() {
+	public void initControllers() {
 		this.mViewController = new ViewController(this);
 		this.mUserController = new UserController(this.mViewController, this.mEntityManager, this.mDatabase);
-
-		this.mViewController.initGui();
+		this.mTweetController = new TweetController(this.mDatabase, this.mEntityManager, this.mViewController);
 
 		this.mUserController.loadUsers();
-		this.mTweetController = new TweetController(this.mDatabase, this.mEntityManager, this.mViewController);
+		
 	
+	}
+	
+	public void initGui() {
+		this.mViewController.initGui();
 	}
 
 	/**
