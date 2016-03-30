@@ -5,9 +5,11 @@ import java.util.Set;
 import java.util.UUID;
 
 import com.iup.tp.twitup.datamodel.IDatabase;
+import com.iup.tp.twitup.datamodel.IDatabaseObserver;
+import com.iup.tp.twitup.datamodel.Twit;
 import com.iup.tp.twitup.datamodel.User;
 
-public class UserController {
+public class UserController implements IDatabaseObserver {
 
 	protected ViewController mViewController;
 	/**
@@ -26,7 +28,7 @@ public class UserController {
 	protected Set<User> mUsers;
 
 
-	public UserController(ViewController mViewController, EntityManager mEntityManager, IDatabase mDatabase) {
+	public UserController(ViewController mViewController, EntityManager mEntityManager, IDatabase mDatabase)  {
 		this.mDatabase = mDatabase;
 		this.mEntityManager = mEntityManager;
 		this.mViewController = mViewController;
@@ -115,6 +117,46 @@ public class UserController {
 	public void followUser(User user){
 		mViewController.getConnectedUser().addFollowing(user.getUserTag());
 		mEntityManager.sendUser(mViewController.getConnectedUser());
+	}
+
+	@Override
+	public void notifyTwitAdded(Twit addedTwit) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void notifyTwitDeleted(Twit deletedTwit) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void notifyTwitModified(Twit modifiedTwit) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void notifyUserAdded(User addedUser) {
+		
+		this.mUsers.add(addedUser);
+		//this.sortTweets();
+		mViewController.getCompUsersQueue().showUsersList(this.mUsers);
+		
+	}
+
+	@Override
+	public void notifyUserDeleted(User deletedUser) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void notifyUserModified(User modifiedUser) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
