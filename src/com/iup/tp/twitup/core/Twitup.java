@@ -45,7 +45,7 @@ public class Twitup {
 	/**
 	 * Idnique si le mode bouchoné est activé.
 	 */
-	protected boolean mIsMockEnabled = true;
+	protected boolean mIsMockEnabled = false;
 
 	/**
 	 * Nom de la classe de l'UI.
@@ -77,9 +77,7 @@ public class Twitup {
 		this.mViewController = new ViewController(this);
 
 		// Initialisation du répertoire d'échange
-		this.initDirectory();
 		
-		this.initControllers();
 		
 	}
 
@@ -96,6 +94,7 @@ public class Twitup {
 	
 	public void initGui() {
 		this.mViewController.initGui();
+		this.initDirectory();
 		this.mTweetController.showTweets();
 	}
 

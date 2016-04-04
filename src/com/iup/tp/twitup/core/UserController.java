@@ -33,6 +33,7 @@ public class UserController implements IDatabaseObserver {
 		this.mEntityManager = mEntityManager;
 		this.mViewController = mViewController;
 		this.mUsers = new HashSet<>();
+		this.mDatabase.addObserver(this);
 	}
 
 	public void onUserLogged(String login, String password) {

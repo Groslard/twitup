@@ -21,6 +21,7 @@ public class TwitupLauncher
     Twitup twitup = new Twitup();
     twitup.initControllers();
     twitup.initGui();
+    
   }
 
 }

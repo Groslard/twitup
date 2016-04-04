@@ -183,6 +183,7 @@ public class ViewController {
 	}
 
 	public String getDirPath() {
+		System.out.println(this.mMainView);
 		File filePath = this.mMainView.showGuiDirPath();
 		if (filePath != null) {
 			// On recupere le path selectionné
