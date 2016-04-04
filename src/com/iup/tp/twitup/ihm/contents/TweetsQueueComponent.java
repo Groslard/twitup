@@ -15,6 +15,7 @@ import javax.swing.JScrollPane;
 
 import com.iup.tp.twitup.core.ViewController;
 import com.iup.tp.twitup.datamodel.Twit;
+import com.iup.tp.twitup.datamodel.User;
 
 public class TweetsQueueComponent extends JScrollPane {
 
@@ -43,6 +44,14 @@ public class TweetsQueueComponent extends JScrollPane {
 	
 	
 	public void notifyTwitsUpdated(ArrayList<Twit> tweets){
+//		Set<Twit> temp = tweetsComponents.keySet();
+//		temp.removeAll(tweets);
+//		for (Twit twit : temp) {
+//			TweetComponent twitComponent = this.tweetsComponents.get(twit);
+//			this.content.remove(twitComponent);
+//			this.tweetsComponents.remove(twit);
+//		}
+		
 		int line = 0;
 		Iterator<Twit> iterator = tweets.iterator();
 		
@@ -67,10 +76,4 @@ public class TweetsQueueComponent extends JScrollPane {
 		ViewController.updatePan(content);
 	}
 	
-	public void notifyTwitUpdated(Twit tweet){
-		// TODO : faire une fonction qui permet de creer un tweetcomponent a partir de tweet,
-		// Qui va l'ajouter en haut et qui va mettre à jour les constraints des autres
-//		this.content.getComponents()
-//		this.content.add(comp, index)
-	}
 }

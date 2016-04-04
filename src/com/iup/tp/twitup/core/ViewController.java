@@ -145,6 +145,8 @@ public class ViewController {
 	
 	/** CONNECT/DISCONNECT ACTION **/
 	public void onUserLogged(){
+		this.mTwitUp.mUserController.showUsers();
+		this.mTwitUp.mTweetController.showTweets();
 		changeMainViewPanel(compTweetsQueue);
 		changeLeftPanel(compMenu);
 	}
@@ -206,6 +208,7 @@ public class ViewController {
 
 	public void setConnectedUser(User connectedUser) {
 		this.connectedUser = connectedUser;
+		this.onUserLogged();
 	}
 	
 }

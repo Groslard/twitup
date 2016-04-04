@@ -14,6 +14,7 @@ import com.iup.tp.twitup.datamodel.IDatabaseObserver;
 import com.iup.tp.twitup.events.file.IWatchableDirectory;
 import com.iup.tp.twitup.events.file.WatchableDirectory;
 import com.iup.tp.twitup.ihm.TwitupMock;
+import com.iup.tp.twitup.mock.MockController;
 
 /**
  * Classe principale l'application.
@@ -89,14 +90,13 @@ public class Twitup {
 		this.mViewController = new ViewController(this);
 		this.mUserController = new UserController(this.mViewController, this.mEntityManager, this.mDatabase);
 		this.mTweetController = new TweetController(this.mDatabase, this.mEntityManager, this.mViewController);
-
-		this.mUserController.loadUsers();
 		
 	
 	}
 	
 	public void initGui() {
 		this.mViewController.initGui();
+		this.mTweetController.showTweets();
 	}
 
 	/**
@@ -174,6 +174,7 @@ public class Twitup {
 	 */
 	protected void initMock() {
 		TwitupMock mock = new TwitupMock(this.mDatabase, this.mEntityManager);
+		new MockController(this.mDatabase).startMock();
 		mock.showGUI();
 	}
 

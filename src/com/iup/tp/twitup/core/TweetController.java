@@ -58,6 +58,12 @@ public class TweetController implements IDatabaseObserver{
 			}
 		});
 	}
+	
+	public void showTweets(){
+		this.sortTweets();
+		if(mViewController.getCompTweetsQueue() != null)
+			mViewController.getCompTweetsQueue().notifyTwitsUpdated(this.tweets);
+	}
 
 	public void addTweet(String content){
 		Twit twit = new Twit(mViewController.getConnectedUser(), content);
@@ -67,8 +73,7 @@ public class TweetController implements IDatabaseObserver{
 	@Override
 	public void notifyTwitAdded(Twit addedTwit) {
 		this.tweets.add(addedTwit);
-		this.sortTweets();
-		mViewController.getCompTweetsQueue().notifyTwitsUpdated(this.tweets);
+		this.showTweets();
 	}
 
 	@Override
