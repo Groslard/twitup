@@ -24,11 +24,16 @@ public class TwitupLauncherFx extends Application
 	    
     @Override
     public void start(Stage stage) throws Exception {
-        Parent root = FXMLLoader.load(new File("./src/com/iup/tp/twitup/core/SceneConnexion.fxml").toURL());
+
         
-        stage.setTitle("FXML Welcome");
-        stage.setScene(new Scene(root, 300, 275));
+        Twitup twitup = new Twitup();
+        twitup.initControllers();
+		twitup.initGui();
+        stage.setTitle("TwitUp");
+		stage.setScene(new Scene(twitup.getRoot(), 300, 275));
         stage.show();
     }
+    
+    
 
 }

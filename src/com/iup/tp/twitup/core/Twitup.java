@@ -1,20 +1,46 @@
 package com.iup.tp.twitup.core;
 
 import java.io.File;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.util.ArrayList;
 import java.util.Properties;
+import java.util.Set;
 
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
 import com.iup.tp.twitup.common.Constants;
 import com.iup.tp.twitup.common.PropertiesManager;
+import com.iup.tp.twitup.core.viewControllers.LogController;
+import com.iup.tp.twitup.core.viewControllers.MainController;
+import com.iup.tp.twitup.core.viewControllers.NewTweetController;
+import com.iup.tp.twitup.core.viewControllers.TweetsQueuController;
+import com.iup.tp.twitup.core.viewControllers.UsersQueuController;
 import com.iup.tp.twitup.datamodel.Database;
 import com.iup.tp.twitup.datamodel.IDatabase;
 import com.iup.tp.twitup.datamodel.IDatabaseObserver;
+import com.iup.tp.twitup.datamodel.Twit;
+import com.iup.tp.twitup.datamodel.User;
 import com.iup.tp.twitup.events.file.IWatchableDirectory;
 import com.iup.tp.twitup.events.file.WatchableDirectory;
 import com.iup.tp.twitup.ihm.TwitupMock;
 import com.iup.tp.twitup.mock.MockController;
+
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
+import javafx.util.Pair;
 
 /**
  * Classe principale l'application.
@@ -52,14 +78,31 @@ public class Twitup {
 	 */
 	protected String mUiClassName;
 
-	protected ViewController mViewController;
-	
 	protected TweetController mTweetController;
 
 	protected UserController mUserController;
+	
+	private SharedService sharedService;
+	
+	/**
+	 * Controlers graphiques
+	 */
+	private Parent root;
+	
+	private LogController mLogController;
+	
+	private MainController mMainController;
+	
+	private TweetsQueuController mTweetsQueuController;
+	
+	private UsersQueuController mUsersQueuController;
+	
+	private NewTweetController mNewTweetController;
+		
 
 	/**
 	 * Constructeur.
+	 * @param stage 
 	 */
 	public Twitup() {
 		// Init du look and feel de l'application
@@ -67,36 +110,57 @@ public class Twitup {
 
 		// Initialisation de la base de données
 		this.initDatabase();
+		
+		this.sharedService = new SharedService();
 
 		if (this.mIsMockEnabled) {
 			// Initialisation du bouchon de travail
 			this.initMock();
 		}
-
-		// Initialisation des controllers
-		this.mViewController = new ViewController(this);
-
-		// Initialisation du répertoire d'échange
-		
-		
 	}
 
 	/**
 	 * Initialisation des différents controllers de l'application
+	 * @return 
 	 */
 	public void initControllers() {
-		this.mViewController = new ViewController(this);
-		this.mUserController = new UserController(this.mViewController, this.mEntityManager, this.mDatabase);
-		this.mTweetController = new TweetController(this.mDatabase, this.mEntityManager, this.mViewController);
-		
-	
-	}
-	
-	public void initGui() {
-		this.mViewController.initGui();
+		initGraphicControllers();
 		this.initDirectory();
-		this.mTweetController.showTweets();
+//		this.mUserController = new UserController(this.mUsersQueuController, this.mEntityManager, this.mDatabase, this.sharedService);
+//		this.mTweetController = new TweetController(this.mDatabase, this.mEntityManager, this.mTweetsQueuController, this.sharedService);
+		
 	}
+	
+	public void initGui(){
+		this.mMainController.setCenter(this.mLogController.getComponent());
+	}
+	
+	public void initGraphicControllers(){
+		this.mMainController = customLoad(MainController.class, "./src/com/iup/tp/twitup/core/ViewAccueil.fxml").getKey();
+		this.setRoot(customLoad(MainController.class, "./src/com/iup/tp/twitup/core/ViewAccueil.fxml").getValue());
+		
+		this.mLogController = customLoad(LogController.class, "./src/com/iup/tp/twitup/core/ViewConnexion.fxml").getKey();
+		this.mTweetsQueuController = customLoad(TweetsQueuController.class, "./src/com/iup/tp/twitup/core/ViewTweets.fxml").getKey();
+		this.mUsersQueuController = customLoad(UsersQueuController.class, "./src/com/iup/tp/twitup/core/ViewUsers.fxml").getKey();
+		this.mNewTweetController = customLoad(NewTweetController.class, "./src/com/iup/tp/twitup/core/ViewNewTweet.fxml").getKey();
+	}
+	
+	public <T> Pair<T, Parent> customLoad(Class<T> classType, String path){
+		FXMLLoader loader;
+		try {
+			loader = new FXMLLoader(new File(path).toURL());
+			Parent root = loader.load();
+			T ctrlInstance = loader.getController();
+			return new Pair<T, Parent>(ctrlInstance, root);
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+			return null;
+		} catch (IOException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
 
 	/**
 	 * Initialisation du look and feel de l'application.
@@ -147,9 +211,9 @@ public class Twitup {
 		if (!dir.isEmpty()) {
 			File directory = new File(dir);
 			if (!isValideExchangeDirectory(directory))
-				dir = this.mViewController.getDirPath();
+				dir = getDirPath();
 		} else {
-			dir = this.mViewController.getDirPath();
+			dir = getDirPath();
 		}
 
 		this.initDirectory(dir);
@@ -195,7 +259,7 @@ public class Twitup {
 			System.out.println("Repertoire non renseigné.");
 			if (this.mExchangeDirectoryPath == null)
 				do {
-					directoryPath = this.mViewController.getDirPath();
+					directoryPath = getDirPath();
 				} while (directoryPath == null);
 			else
 				return;
@@ -213,6 +277,11 @@ public class Twitup {
 		mWatchableDirectory.addObserver(mEntityManager);
 	}
 
+	private String getDirPath() {
+		new FileChooser();
+		return null;
+	}
+
 	/**
 	 * Methode permettant l'ajout d'un observer à la BDD
 	 */
@@ -228,12 +297,27 @@ public class Twitup {
 		return mEntityManager;
 	}
 
-	public ViewController getmViewController() {
-		return mViewController;
-	}
-
 	public UserController getmUserController() {
 		return mUserController;
 	}
+
+	
+	/**
+	 * GRAPHICS METHODS
+	 */
+	public void onUserLogged() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public Parent getRoot() {
+		return root;
+	}
+
+	public void setRoot(Parent root) {
+		this.root = root;
+	}
+	
+
 
 }

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+
+
+<AnchorPane fx:id="ResearchComponent" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.iup.tp.twitup.core.viewControllers.ResearchController">
+   <children>
+      <Button fx:id="btnResearch" layoutX="483.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="119.0" text="Button" />
+      <TextField fx:id="TextFieldResearch" layoutX="-1.0" prefHeight="40.0" prefWidth="484.0" />
+   </children>
+</AnchorPane>
