@@ -25,9 +25,9 @@
             <Button fx:id="btnAccueil" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onBtnAccueilAction" prefHeight="76.0" prefWidth="139.0" text="Accueil" GridPane.hgrow="ALWAYS" />
             <Button fx:id="btnUsers" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onBtnUtsersAction" prefHeight="78.0" prefWidth="149.0" text="Utilisateurs" GridPane.rowIndex="1" />
             <Button fx:id="btnProfile" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onBtnProfileAction" prefHeight="98.0" prefWidth="170.0" text="Profil" GridPane.rowIndex="2" />
-            <Button fx:id="btnNewTweet" mnemonicParsing="false" onAction="#onBtnNewTweetAction" prefHeight="123.0" prefWidth="222.0" text="Nouveau tweet" GridPane.rowIndex="3" />
-            <Button fx:id="btnResearch" mnemonicParsing="false" onAction="#onBtnResearchAction" prefHeight="145.0" prefWidth="246.0" text="Rechercher" GridPane.rowIndex="4" />
-            <Button fx:id="btnDisconnect" mnemonicParsing="false" onAction="#onBtnDisconnectAction" prefHeight="189.0" prefWidth="258.0" text="Deconnexion" GridPane.rowIndex="5" />
+            <Button fx:id="btnNewTweet" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onBtnNewTweetAction" prefHeight="123.0" prefWidth="222.0" text="Nouveau tweet" GridPane.rowIndex="3" />
+            <Button fx:id="btnResearch" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onBtnResearchAction" prefHeight="145.0" prefWidth="246.0" text="Rechercher" GridPane.rowIndex="4" />
+            <Button fx:id="btnDisconnect" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onBtnDisconnectAction" prefHeight="189.0" prefWidth="258.0" text="Deconnexion" GridPane.rowIndex="5" />
          </children>
       </GridPane>
    </left>
