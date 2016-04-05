@@ -28,10 +28,8 @@ public class TwitupLauncherFx extends Application
         
         Twitup twitup = new Twitup();
         twitup.initControllers();
-		twitup.initGui();
-        stage.setTitle("TwitUp");
-		stage.setScene(new Scene(twitup.getRoot(), 300, 275));
-        stage.show();
+		twitup.initGui(stage);
+        
     }
     
     

@@ -38,7 +38,9 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
+import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
@@ -87,6 +89,8 @@ public class Twitup {
 	/**
 	 * Controlers graphiques
 	 */
+	private Stage stage;
+	
 	private Parent root;
 	
 	private LogController mLogController;
@@ -131,8 +135,12 @@ public class Twitup {
 		
 	}
 	
-	public void initGui(){
+	public void initGui(Stage stage){
 		this.mMainController.setCenter(this.mLogController.getComponent());
+		this.stage = stage;
+		stage.setTitle("TwitUp");
+		stage.setScene(new Scene(getRoot(), 300, 275));
+        stage.show();
 	}
 	
 	public void initGraphicControllers(){
@@ -211,9 +219,9 @@ public class Twitup {
 		if (!dir.isEmpty()) {
 			File directory = new File(dir);
 			if (!isValideExchangeDirectory(directory))
-				dir = getDirPath();
+				dir = null;
 		} else {
-			dir = getDirPath();
+			dir = null;
 		}
 
 		this.initDirectory(dir);
@@ -257,10 +265,12 @@ public class Twitup {
 	public void initDirectory(String directoryPath) {
 		if (directoryPath == null) {
 			System.out.println("Repertoire non renseigné.");
-			if (this.mExchangeDirectoryPath == null)
+			if (this.mExchangeDirectoryPath == null){
 				do {
 					directoryPath = getDirPath();
 				} while (directoryPath == null);
+				PropertiesManager.updateProperty(Constants.CONFIGURATION_KEY_EXCHANGE_DIRECTORY, directoryPath);
+			}
 			else
 				return;
 		} else {
@@ -278,8 +288,14 @@ public class Twitup {
 	}
 
 	private String getDirPath() {
-		new FileChooser();
-		return null;
+		DirectoryChooser directoryChooser = new DirectoryChooser();
+		 directoryChooser.setTitle("Open Resource File");
+		 
+		 File selectedFile = directoryChooser.showDialog(stage);
+		 if(selectedFile != null)
+			 return selectedFile.getAbsolutePath();
+		 else
+			 return null;
 	}
 
 	/**
