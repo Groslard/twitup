@@ -63,28 +63,29 @@ public class TwitupMainViewFx implements IDatabaseObserver {
 
 	public void showGUI() {
 		// Init auto de l'IHM
-		
+		if(mPan==null){
+			initGUI();
+		}
 
-		// Création des composants graphiques JavaFX
-	
-		mPan=new BorderPane();
-		Scene scene = new Scene(mPan, 350, 350);
-		stage.setScene(scene);
 		
-	
+		GridPane paneitermediaire=viewController.getCompAccueil();
+		paneitermediaire.setVisible(true);
+		
+		System.out.println("On met en rouge pour verifier qu'il saffiche");
+		mPan.setStyle("-fx-background: #CE2E2E;");
+		  Scene scene = new Scene(mPan, 900, 900);
+		
+		this.stage.setScene(scene);
+		
+		mPan.setCenter(paneitermediaire);
 	}
 
 	/**
 	 * Initialisation de l'IHM
 	 */
 	protected void initGUI() {
-		// Création de la fenetre principale
 		
-
-		// Ajout du menu à la frame
-	
-		
-		
+		mPan=new BorderPane();
 		
 		leftPan = new GridPane();
 		centerPan =new GridPane();
