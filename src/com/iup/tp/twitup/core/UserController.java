@@ -4,7 +4,6 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-import com.iup.tp.twitup.core.viewControllers.UsersQueuController;
 import com.iup.tp.twitup.datamodel.IDatabase;
 import com.iup.tp.twitup.datamodel.IDatabaseObserver;
 import com.iup.tp.twitup.datamodel.Twit;
@@ -12,7 +11,7 @@ import com.iup.tp.twitup.datamodel.User;
 
 public class UserController implements IDatabaseObserver {
 
-	protected UsersQueuController userQueu;
+	protected ViewController mViewController;
 	/**
 	 * Base de donénes de l'application.
 	 */
@@ -28,15 +27,12 @@ public class UserController implements IDatabaseObserver {
 	 */
 	protected Set<User> mUsers;
 
-	protected SharedService sharedService;
 
-	public UserController(UsersQueuController twitup, EntityManager mEntityManager, IDatabase mDatabase, SharedService sharedService)  {
+	public UserController(ViewController mViewController, EntityManager mEntityManager, IDatabase mDatabase)  {
 		this.mDatabase = mDatabase;
 		this.mEntityManager = mEntityManager;
-		this.userQueu = twitup;
+		this.mViewController = mViewController;
 		this.mUsers = new HashSet<>();
-		this.mDatabase.addObserver(this);
-		this.sharedService = sharedService;
 	}
 
 	public void onUserLogged(String login, String password) {
@@ -48,7 +44,7 @@ public class UserController implements IDatabaseObserver {
 			if (user.getName().equals(login)) {
 				loginOK = true;
 				if (user.getUserPassword().equals(password)) {
-					this.sharedService.setConnectedUser(user);
+					this.mViewController.setConnectedUser(user);
 					passwordOK = true;
 					break;
 				}
@@ -56,14 +52,14 @@ public class UserController implements IDatabaseObserver {
 		}
 
 		if (!passwordOK) {
-			this.userQueu.setConnexionErrorMessage("Password incorrect");
+			this.mViewController.compConnexion.setErrorMessage("Password incorrect");
 		}else{
-			this.userQueu.setConnexionErrorMessage("");
+			this.mViewController.compConnexion.setErrorMessage("");
 		}
 		if (!loginOK) {
-			this.userQueu.setConnexionErrorMessage("Login incorrect");
+			this.mViewController.compConnexion.setErrorMessage("Login incorrect");
 		}else{
-			this.userQueu.setConnexionErrorMessage("");
+			this.mViewController.compConnexion.setErrorMessage("");
 		}
 
 	}
@@ -71,12 +67,12 @@ public class UserController implements IDatabaseObserver {
 	public void onUserRegister(String login, String password, String tagEntry) {
 		boolean isPresent = false;
 		if (login.isEmpty()) {
-			this.userQueu.setInscriptionErrorMessage("Veuillez remplir le login");
+			this.mViewController.compInscription.setErrorMessage("Veuillez remplir le login");
 		} else if (password.isEmpty()) {
-			this.userQueu.setInscriptionErrorMessage("Veuillez remplir le password");
+			this.mViewController.compInscription.setErrorMessage("Veuillez remplir le password");
 		} else if (tagEntry.isEmpty()) {
 
-			this.userQueu.setInscriptionErrorMessage("Veuillez remplir le tag");
+			this.mViewController.compInscription.setErrorMessage("Veuillez remplir le tag");
 		} else {
 
 			this.mUsers = mDatabase.getUsers();
@@ -90,29 +86,29 @@ public class UserController implements IDatabaseObserver {
 			if (!isPresent) {
 				User userAdd = new User(UUID.randomUUID(), tagEntry, password, login, new HashSet<String>(), "");
 				mEntityManager.sendUser(userAdd);
-				this.sharedService.setConnectedUser(userAdd);
-				//this.userQueu.onUserLogged();
+				this.mViewController.setConnectedUser(userAdd);
+				this.mViewController.onUserLogged();
 			} else {
 				// gerer affichage tag deja utilise
-				this.userQueu.setInscriptionErrorMessage("Tag déja utilisé");
+				this.mViewController.compInscription.setErrorMessage("Tag déja utilisé");
 			}
 		}
 	}
 	
 	public void showUsers(){
-		this.mUsers.remove(this.sharedService.getConnectedUser());
-		userQueu.notifyUsersUpdated(this.mUsers);
+		this.mUsers.remove(this.mViewController.getConnectedUser());
+		mViewController.getCompUsersQueue().notifyUsersUpdated(this.mUsers);
 	}
 	
 	
 	public void loadUsersFollowed(){
-		System.out.println("taille de la liste de "+mDatabase.getFollowed(sharedService.getConnectedUser()).size());
-		userQueu.notifyUsersUpdated(mDatabase.getFollowed(sharedService.getConnectedUser()));
+		System.out.println("taille de la liste de "+mDatabase.getFollowed(mViewController.getConnectedUser()).size());
+		mViewController.getCompUsersQueue().notifyUsersUpdated(mDatabase.getFollowed(mViewController.getConnectedUser()));
 	}
 	
 	public void followUser(User user){
-		sharedService.getConnectedUser().addFollowing(user.getUserTag());
-		mEntityManager.sendUser(sharedService.getConnectedUser());
+		mViewController.getConnectedUser().addFollowing(user.getUserTag());
+		mEntityManager.sendUser(mViewController.getConnectedUser());
 	}
 
 	@Override
@@ -136,10 +132,10 @@ public class UserController implements IDatabaseObserver {
 
 	@Override
 	public void notifyUserAdded(User addedUser) {
-		if(addedUser != sharedService.getConnectedUser())
+		if(addedUser != mViewController.getConnectedUser())
 			this.mUsers.add(addedUser);
 		
-		if(this.sharedService.getConnectedUser() != null)
+		if(this.mViewController.getConnectedUser() != null)
 			this.showUsers();
 		
 	}

@@ -5,7 +5,6 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.iup.tp.twitup.core.viewControllers.TweetsQueuController;
 import com.iup.tp.twitup.datamodel.IDatabase;
 import com.iup.tp.twitup.datamodel.IDatabaseObserver;
 import com.iup.tp.twitup.datamodel.Twit;
@@ -29,34 +28,32 @@ public class TweetController implements IDatabaseObserver{
 	/**
 	 * Tweets views
 	 */
-	protected TweetsQueuController tweetsQueu;
-	
-	protected SharedService sharedService;
+	protected ViewController mViewController;
 
-	public TweetController(IDatabase mDatabase, EntityManager mEntityManager, TweetsQueuController tweetsQueu, SharedService sharedService) {
+	public TweetController(IDatabase mDatabase, EntityManager mEntityManager, ViewController mViewController) {
 		super();
 		this.mEntityManager = mEntityManager;
 		this.mDatabase = mDatabase;
-		this.tweetsQueu = tweetsQueu;
+		this.mViewController = mViewController;
 		
 		this.tweets = new ArrayList<Twit>();
 		
 		this.mDatabase.addObserver(this);
-		
-		this.sharedService = sharedService;
 	}
 
 	public void loadTweetsFromDb(){
+		// TODO Lors de recherce de tweet, ne pas tout supprimer et rajouter, mais supprimer ceux qui ne correspondent pas
 		this.tweets.clear();
 		this.tweets.addAll(mDatabase.getTwits());
 		sortTweets();
-		tweetsQueu.notifyTwitsUpdated(this.tweets);
+		mViewController.getCompTweetsQueue().notifyTwitsUpdated(this.tweets);
 	}
 
 	private void sortTweets() {
 		this.tweets.sort(new Comparator<Twit>() {
 			@Override
 			public int compare(Twit o1, Twit o2) {
+				// TODO Auto-generated method stub
 				return (int) (o2.getEmissionDate() - o1.getEmissionDate());
 			}
 		});
@@ -64,11 +61,12 @@ public class TweetController implements IDatabaseObserver{
 	
 	public void showTweets(){
 		this.sortTweets();
-		tweetsQueu.notifyTwitsUpdated(this.tweets);
+		if(mViewController.getCompTweetsQueue() != null)
+			mViewController.getCompTweetsQueue().notifyTwitsUpdated(this.tweets);
 	}
 
 	public void addTweet(String content){
-		Twit twit = new Twit(sharedService.getConnectedUser(), content);
+		Twit twit = new Twit(mViewController.getConnectedUser(), content);
 		this.mEntityManager.sendTwit(twit);
 	}
 	

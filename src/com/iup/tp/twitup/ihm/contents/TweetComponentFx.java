@@ -44,16 +44,16 @@ public class TweetComponentFx extends GridPane {
 		try {
 			myPicture = ImageIO.read(img);
 			// TODO Ressortir le resize img dans un environnement plus global et réutilisable
-			ImageIcon resizedImg = new ImageIcon(myPicture.getScaledInstance(40, 40, Image.SCALE_DEFAULT));
-			Label picLabel = new Label(resizedImg);
-			
-			Image pic = new Image(getClass().getResourceAsStream("roses.jpg"));
-			Pane p = new Pane();
-			p.setOpaque(false);
-			p.add(picLabel);
-			this.add(p, new GridBagConstraints(0, 0, 1, 1, 0, 0, 
-					GridBagConstraints.LINE_START, GridBagConstraints.NONE, 
-					new Insets(5, 2, 2, 2), 0, 0));
+	//		ImageIcon resizedImg = new ImageIcon(myPicture.getScaledInstance(40, 40, Image.SCALE_DEFAULT));
+//			Label picLabel = new Label(resizedImg);
+//			
+//			Image pic = new Image(getClass().getResourceAsStream("roses.jpg"));
+//			Pane p = new Pane();
+//			p.setOpaque(false);
+//			p.add(picLabel);
+//			this.add(p, new GridBagConstraints(0, 0, 1, 1, 0, 0, 
+//					GridBagConstraints.LINE_START, GridBagConstraints.NONE, 
+//					new Insets(5, 2, 2, 2), 0, 0));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -83,10 +83,10 @@ public class TweetComponentFx extends GridPane {
         		GridBagConstraints.WEST, GridBagConstraints.NONE, 
         		new Insets(15, 2, 15, 2), 0, 0));
         
-        this.add(msgPan,new GridBagConstraints(1, 0, 1, 1, 1, 1, 
-				GridBagConstraints.WEST
-				, GridBagConstraints.BOTH, 
-				new Insets(2, 2, 2, 2), 0, 0));
+//        this.add(msgPan,new GridBagConstraints(1, 0, 1, 1, 1, 1, 
+//				GridBagConstraints.WEST
+//				, GridBagConstraints.BOTH, 
+//				new Insets(2, 2, 2, 2), 0, 0));
         
 		
 		

@@ -23,57 +23,62 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 import com.iup.tp.twitup.core.ViewController;
+import com.iup.tp.twitup.core.ViewControllerJfx;
 import com.iup.tp.twitup.datamodel.IDatabaseObserver;
 import com.iup.tp.twitup.datamodel.Twit;
 import com.iup.tp.twitup.datamodel.User;
+import com.iup.tp.twitup.mock.jfx.MockTwitListComponentJFX;
+import com.iup.tp.twitup.mock.jfx.MockTwitSearchComponentJFX;
+
+import javafx.application.Platform;
+import javafx.embed.swing.JFXPanel;
+import javafx.scene.Scene;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 
 /**
  * Classe de la vue principale de l'application.
  */
 public class TwitupMainViewFx implements IDatabaseObserver {
-	private ViewController viewController;
+	private ViewControllerJfx viewController;
 
-	protected JFrame mFrame;
+	protected JFXPanel mJFXpanel;
 	
-	protected JPanel mPan;
+	protected BorderPane mPan;
 	
-	protected JPanel leftPan;
-	protected JPanel centerPan;
-	protected JPanel rightPan;
+	protected GridPane leftPan;
+	protected GridPane centerPan;
+	protected GridPane rightPan;
 	
 	/** Menu Bar **/
-	JMenuBar menuBar;
-	JMenu ficMenu, helpMenu;
-	JMenuItem aPropos, quitter, changeDirectory;
+//	JMenuBar menuBar;
+//	JMenu ficMenu, helpMenu;
+//	JMenuItem aPropos, quitter, changeDirectory;
 
-	public TwitupMainViewFx(ViewController viewController) {
+	public TwitupMainViewFx(ViewControllerJfx viewController) {
 		this.viewController = viewController;
 	}
 
 	public void showGUI() {
 		// Init auto de l'IHM
-		if (mFrame == null) {
+		if (mJFXpanel == null) {
 			this.initGUI();
 		}
 
-		// Affichage dans l'EDT
-		SwingUtilities.invokeLater(new Runnable() {
+		mJFXpanel = new JFXPanel();
+
+		// Création des composants graphiques JavaFX
+	
+		mPan=new BorderPane();
+	
+		
+		// Création du pont entre JavaFX et SWING
+		Platform.runLater(new Runnable() {
+			
 			@Override
 			public void run() {
-				// Custom de l'affichage
-				JFrame frame = TwitupMainViewFx.this.mFrame;
-				Dimension screenSize = java.awt.Toolkit.getDefaultToolkit()
-						.getScreenSize();
-				frame.setLocation((screenSize.width - frame.getWidth()) / 6,
-						(screenSize.height - frame.getHeight()) / 4);
-
-				mFrame.setMinimumSize(new Dimension(screenSize.width / 2,
-						screenSize.height / 2));
-
-				// Affichage
-				TwitupMainViewFx.this.mFrame.setVisible(true);
-
-				TwitupMainViewFx.this.mFrame.pack();
+				Scene scene = new Scene(mPan, 350, 350);
+				mJFXpanel.setScene(scene);
 			}
 		});
 	}
@@ -83,32 +88,26 @@ public class TwitupMainViewFx implements IDatabaseObserver {
 	 */
 	protected void initGUI() {
 		// Création de la fenetre principale
-		mFrame = new JFrame("twItUP");
+		
 
 		// Ajout du menu à la frame
-		mFrame.setJMenuBar(buildMenuBar());
+	
 		
-		this.mPan = new JPanel();
-		this.mFrame.setContentPane(mPan);
 		
-		mPan.setLayout(new BorderLayout());
 		
-		leftPan = new JPanel();
-		leftPan.setLayout(new GridBagLayout());
-		centerPan = new JPanel();
-		centerPan.setLayout(new GridBagLayout());
-		rightPan = new JPanel();
-		rightPan.setLayout(new GridBagLayout());
+		leftPan = new GridPane();
+		centerPan =new GridPane();
+		rightPan =new GridPane();
 		
-		mPan.add(leftPan, BorderLayout.WEST);
-		mPan.add(centerPan, BorderLayout.CENTER);
-		mPan.add(rightPan, BorderLayout.EAST);
+		mPan.setCenter(centerPan);
+		mPan.setLeft(leftPan);
+		mPan.setRight(rightPan);
 	}
 	
 	
 
-	public void setLeftPan(JPanel newLeftPan) {
-		this.leftPan.removeAll();
+	public void setLeftPan(Gridpane newLeftPan) {
+		this.leftPan.
 		if(newLeftPan != null)
 			this.leftPan.add(newLeftPan,  new GridBagConstraints(0, 0, 1, 1, 1, 1, 
 					GridBagConstraints.CENTER, GridBagConstraints.BOTH, 
@@ -116,7 +115,7 @@ public class TwitupMainViewFx implements IDatabaseObserver {
 		ViewController.updatePan(this.leftPan);
 	}
 	
-	public void setCenterPan(JComponent component) {
+	public void setCenterPan(GridPane component) {
 		this.centerPan.removeAll();
 		if(component != null)
 			this.centerPan.add(component,  new GridBagConstraints(0, 0, 1, 1, 1, 1, 
