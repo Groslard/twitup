@@ -35,6 +35,7 @@ import javafx.embed.swing.JFXPanel;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.stage.Stage;
 
 /**
  * Classe de la vue principale de l'application.
@@ -42,7 +43,6 @@ import javafx.scene.layout.GridPane;
 public class TwitupMainViewFx implements IDatabaseObserver {
 	private ViewControllerJfx viewController;
 
-	protected JFXPanel mJFXpanel;
 	
 	protected BorderPane mPan;
 	
@@ -50,6 +50,7 @@ public class TwitupMainViewFx implements IDatabaseObserver {
 	protected GridPane centerPan;
 	protected GridPane rightPan;
 	
+	protected Stage stage;
 	/** Menu Bar **/
 //	JMenuBar menuBar;
 //	JMenu ficMenu, helpMenu;
@@ -57,30 +58,20 @@ public class TwitupMainViewFx implements IDatabaseObserver {
 
 	public TwitupMainViewFx(ViewControllerJfx viewController) {
 		this.viewController = viewController;
+		this.stage=this.viewController.getStage();
 	}
 
 	public void showGUI() {
 		// Init auto de l'IHM
-		if (mJFXpanel == null) {
-			this.initGUI();
-		}
-
-		mJFXpanel = new JFXPanel();
+		
 
 		// Création des composants graphiques JavaFX
 	
 		mPan=new BorderPane();
-	
+		Scene scene = new Scene(mPan, 350, 350);
+		stage.setScene(scene);
 		
-		// Création du pont entre JavaFX et SWING
-		Platform.runLater(new Runnable() {
-			
-			@Override
-			public void run() {
-				Scene scene = new Scene(mPan, 350, 350);
-				mJFXpanel.setScene(scene);
-			}
-		});
+	
 	}
 
 	/**
@@ -106,84 +97,75 @@ public class TwitupMainViewFx implements IDatabaseObserver {
 	
 	
 
-	public void setLeftPan(Gridpane newLeftPan) {
-		this.leftPan.
+	public void setLeftPan(GridPane newLeftPan) {
+		this.leftPan.getChildren().clear();
 		if(newLeftPan != null)
-			this.leftPan.add(newLeftPan,  new GridBagConstraints(0, 0, 1, 1, 1, 1, 
-					GridBagConstraints.CENTER, GridBagConstraints.BOTH, 
-					new Insets(5, 5, 5, 5), 0, 0));
-		ViewController.updatePan(this.leftPan);
+			this.leftPan.getChildren().add(newLeftPan);
 	}
 	
 	public void setCenterPan(GridPane component) {
-		this.centerPan.removeAll();
+		this.centerPan.getChildren().clear();
 		if(component != null)
-			this.centerPan.add(component,  new GridBagConstraints(0, 0, 1, 1, 1, 1, 
-					GridBagConstraints.CENTER, GridBagConstraints.BOTH, 
-					new Insets(0, 0, 0, 0), 0, 0));
-		ViewController.updatePan(this.centerPan);
+			this.centerPan.getChildren().add(component);
 	}
 	
-	public void setRightPan(JPanel newRightPan) {
-		this.rightPan.removeAll();
+	public void setRightPan(GridPane newRightPan) {
+		this.rightPan.getChildren().clear();
 		if(newRightPan != null)
-			this.rightPan.add(newRightPan,  new GridBagConstraints(0, 0, 1, 1, 1, 1, 
-					GridBagConstraints.CENTER, GridBagConstraints.BOTH, 
-					new Insets(5, 5, 5, 5), 0, 0));
-		ViewController.updatePan(this.rightPan);
+			this.rightPan.getChildren().add(newRightPan);
 	}
 	
 	
 	
-	public JMenuBar buildMenuBar() {
-		// Menu Fichier
-		menuBar = new JMenuBar();
-
-		ficMenu = new JMenu("Fichier");
-
-		changeDirectory = new JMenuItem("Change Directory");
-		changeDirectory.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				TwitupMainViewFx.this.viewController.updateExchangeDirectory();
-			}
-		});
-
-		quitter = new JMenuItem("Quitter", new ImageIcon(
-				"./src/resources/images/exitIcon_20.png"));
-		quitter.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				System.exit(0);
-			}
-		});
-
-		ficMenu.add(changeDirectory);
-		ficMenu.add(quitter);
-
-		// Menu Aide
-		helpMenu = new JMenu("Aide");
-		aPropos = new JMenuItem("A Propos");
-		helpMenu.add(aPropos);
-
-		String text = "UBO M2-TIIL 2016\nDépartement Informatique";
-		String title = "A propos";
-		Icon icon = new ImageIcon("./src/resources/images/logoIUP_50.jpg");
-
-		aPropos.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				JOptionPane.showMessageDialog(mFrame, text, title,
-						JOptionPane.INFORMATION_MESSAGE, icon);
-			}
-		});
-
-		// Ajout des menu à la menu bar
-		menuBar.add(ficMenu);
-		menuBar.add(helpMenu);
-		
-		return menuBar;
-	}
+//	public JMenuBar buildMenuBar() {
+//		// Menu Fichier
+//		menuBar = new JMenuBar();
+//
+//		ficMenu = new JMenu("Fichier");
+//
+//		changeDirectory = new JMenuItem("Change Directory");
+//		changeDirectory.addActionListener(new ActionListener() {
+//			@Override
+//			public void actionPerformed(ActionEvent arg0) {
+//				TwitupMainViewFx.this.viewController.updateExchangeDirectory();
+//			}
+//		});
+//
+//		quitter = new JMenuItem("Quitter", new ImageIcon(
+//				"./src/resources/images/exitIcon_20.png"));
+//		quitter.addActionListener(new ActionListener() {
+//			@Override
+//			public void actionPerformed(ActionEvent arg0) {
+//				System.exit(0);
+//			}
+//		});
+//
+//		ficMenu.add(changeDirectory);
+//		ficMenu.add(quitter);
+//
+//		// Menu Aide
+//		helpMenu = new JMenu("Aide");
+//		aPropos = new JMenuItem("A Propos");
+//		helpMenu.add(aPropos);
+//
+//		String text = "UBO M2-TIIL 2016\nDépartement Informatique";
+//		String title = "A propos";
+//		Icon icon = new ImageIcon("./src/resources/images/logoIUP_50.jpg");
+//
+//		aPropos.addActionListener(new ActionListener() {
+//			@Override
+//			public void actionPerformed(ActionEvent arg0) {
+//				JOptionPane.showMessageDialog(mFrame, text, title,
+//						JOptionPane.INFORMATION_MESSAGE, icon);
+//			}
+//		});
+//
+//		// Ajout des menu à la menu bar
+//		menuBar.add(ficMenu);
+//		menuBar.add(helpMenu);
+//		
+//		return menuBar;
+//	}
 
 	
 	public File showGuiDirPath() {

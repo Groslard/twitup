@@ -18,6 +18,7 @@ import com.iup.tp.twitup.ihm.connexion.AccueilComponentFx;
 import com.iup.tp.twitup.ihm.contents.TweetsQueueComponent;
 import com.iup.tp.twitup.ihm.contents.TweetsQueueComponentFx;
 import com.iup.tp.twitup.ihm.contents.NewTweetComponent;
+import com.iup.tp.twitup.ihm.contents.NewTweetComponentFx;
 import com.iup.tp.twitup.ihm.contents.ProfilComponent;
 import com.iup.tp.twitup.ihm.contents.SearchComponent;
 import com.iup.tp.twitup.ihm.contents.UsersQueueComponent;
@@ -30,10 +31,11 @@ import javafx.embed.swing.SwingNode;
 import javafx.scene.Scene;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
+import javafx.stage.Stage;
 
 public class ViewControllerJfx {
 
-	protected Twitup mTwitUp;
+	protected TwitupFx mTwitUp;
 	/**
 	 * Vue principale de l'application.
 	 */
@@ -47,7 +49,7 @@ public class ViewControllerJfx {
 	protected SearchComponent compSearch;
 	protected UsersQueueComponent compUsersQueue;
 
-	protected NewTweetComponent compNewTweet;
+	protected NewTweetComponentFx compNewTweet;
 	protected Boolean newTweetIsShow;
 
 	/** Component for log in pan **/
@@ -56,29 +58,18 @@ public class ViewControllerJfx {
 	protected InscriptionComponentFx compInscription;
 
 	protected User connectedUser;
-	private JFXPanel compTweetsContainer;
+	private GridPane compTweetsContainer;
 
-	public ViewControllerJfx(Twitup mTwitUp) {
+	protected static Stage stage;
+
+	public ViewControllerJfx(TwitupFx mTwitUp) {
 		super();
 		this.mTwitUp = mTwitUp;
 		this.newTweetIsShow = false;
+		this.stage=this.mTwitUp.getStage();
 	}
 
-	public UsersQueueComponent getCompUsersQueue() {
-		return compUsersQueue;
-	}
 
-	public TweetsQueueComponentFx getCompTweetsQueue() {
-		return compTweetsQueue;
-	}
-
-	public SearchComponent getCompSearch() {
-		return compSearch;
-	}
-
-	public NewTweetComponent getCompNewTweet() {
-		return compNewTweet;
-	}
 
 	/**
 	 * Initialisation de l'interface graphique.
@@ -98,14 +89,14 @@ public class ViewControllerJfx {
 		compMenu = new MenuComponentFx(this);
 
 		// panel principal / central
-		compTweetsContainer = new JFXPanel();
+		compTweetsContainer = new GridPane();
 		compTweetsQueue = new TweetsQueueComponentFx();
 		initAndShowGUI(compTweetsContainer, compTweetsQueue);
 
 		compProfil = new ProfilComponent();
 		compSearch = new SearchComponent();
 		compUsersQueue = new UsersQueueComponent(this.mTwitUp.mUserController);
-		compNewTweet = new NewTweetComponent(this.connectedUser,
+		compNewTweet = new NewTweetComponentFx(this.connectedUser,
 				this.mTwitUp.mTweetController);
 
 		this.mMainView.showGUI();
@@ -116,16 +107,11 @@ public class ViewControllerJfx {
 		this.mTwitUp.addDatabaseObserver(this.mMainView);
 	}
 
-	protected static void initAndShowGUI(JFXPanel fxPanel,
+	protected static void initAndShowGUI(GridPane fxPanel,
 			TweetsQueueComponentFx tweetQueue) {
 		// JavaFX thread
-		Platform.runLater(new Runnable() {
-			@Override
-			public void run() {
-				Scene scene = new Scene(tweetQueue, 350, 250);
-				fxPanel.setScene(scene);
-			}
-		});
+		Scene scene = new Scene(tweetQueue, 350, 250);
+		stage.setScene(scene);
 	}
 
 	/** MENU INTERACTION **/
@@ -137,8 +123,10 @@ public class ViewControllerJfx {
 		changeMainViewPanel(compUsersQueue);
 	}
 
+	
+	// a faire composant profil en jx
 	public void onMenuProfilClicked() {
-		changeMainViewPanel(compProfil);
+//		changeMainViewPanel(compProfil);
 	}
 
 	public void onMenuNewTweetClicked() {
@@ -151,9 +139,9 @@ public class ViewControllerJfx {
 		}
 
 	}
-
+// a faire composant x pour la recherceh
 	public void onMenuRechercheClicked() {
-		changeMainViewPanel(compSearch);
+//		changeMainViewPanel(compSearch);
 	}
 
 	public void onMenuDisconnectClicked() {
@@ -184,18 +172,16 @@ public class ViewControllerJfx {
 	}
 
 	/** PANELS UPDATES METHODS **/
-	private void changeMainViewPanel(JComponent component) {
-		this.mMainView.setCenterPan(component);
-	}
+
 	private void changeMainViewPanel(GridPane component) {
 		this.mMainView.setCenterPan(component);
 	}
 	
-	private void changeLeftPanel(JPanel jpanel) {
+	private void changeLeftPanel(GridPane jpanel) {
 		this.mMainView.setLeftPan(jpanel);
 	}
 
-	private void changeRightPanel(JPanel jpanel) {
+	private void changeRightPanel(GridPane jpanel) {
 		this.mMainView.setRightPan(jpanel);
 	}
 
@@ -237,5 +223,32 @@ public class ViewControllerJfx {
 		this.connectedUser = connectedUser;
 		this.onUserLogged();
 	}
+	public UsersQueueComponent getCompUsersQueue() {
+		return compUsersQueue;
+	}
 
+	public TweetsQueueComponentFx getCompTweetsQueue() {
+		return compTweetsQueue;
+	}
+
+	public SearchComponent getCompSearch() {
+		return compSearch;
+	}
+
+	public NewTweetComponentFx getCompNewTweet() {
+		return compNewTweet;
+	}
+
+
+
+	public Stage getStage() {
+		return stage;
+	}
+
+
+
+	public void setStage(Stage stage) {
+		this.stage = stage;
+	}
+	
 }

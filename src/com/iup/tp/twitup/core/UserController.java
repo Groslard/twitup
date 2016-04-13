@@ -11,7 +11,7 @@ import com.iup.tp.twitup.datamodel.User;
 
 public class UserController implements IDatabaseObserver {
 
-	protected ViewController mViewController;
+	protected ViewControllerJfx mViewController;
 	/**
 	 * Base de donénes de l'application.
 	 */
@@ -28,7 +28,7 @@ public class UserController implements IDatabaseObserver {
 	protected Set<User> mUsers;
 
 
-	public UserController(ViewController mViewController, EntityManager mEntityManager, IDatabase mDatabase)  {
+	public UserController(ViewControllerJfx mViewController, EntityManager mEntityManager, IDatabase mDatabase)  {
 		this.mDatabase = mDatabase;
 		this.mEntityManager = mEntityManager;
 		this.mViewController = mViewController;

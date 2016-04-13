@@ -16,8 +16,9 @@ import com.iup.tp.twitup.core.ViewController;
 import com.iup.tp.twitup.datamodel.User;
 
 import javafx.scene.control.ScrollPane;
+import javafx.scene.layout.GridPane;
 
-public class UsersQueueComponentFx extends ScrollPane {
+public class UsersQueueComponentFx extends GridPane {
 
 	protected HashMap<User, UsersComponent> usersComponents; 
 
@@ -74,7 +75,7 @@ public class UsersQueueComponentFx extends ScrollPane {
 			}			
 			line++;
 		}
-		ViewController.updatePan(content);
+		//ViewController.updatePan(content);
 		
 		
 		

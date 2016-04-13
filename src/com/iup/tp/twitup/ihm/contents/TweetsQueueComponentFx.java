@@ -73,9 +73,9 @@ public class TweetsQueueComponentFx extends ScrollPane {
 			if(tweetComp == null){
 				tweetComp = new TweetComponent(twit);
 				this.tweetsComponents.put(twit, tweetComp);
-				this.content.add(tweetComp, 0, line);
+				//this.content.add(tweetComp, 0, line);
 			}else{
-				GridPane.setRowIndex(tweetComp, line);
+				//GridPane.setRowIndex(tweetComp, line);
 				// TODO : mettre a jour la constraint sur le comp si il existe
 //				gridBagLayout.setConstraints(tweetComp, this.tweetPlacement);
 			}

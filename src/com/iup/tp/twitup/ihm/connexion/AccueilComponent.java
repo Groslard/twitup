@@ -58,7 +58,7 @@ public class AccueilComponent extends JPanel {
 		this.formPan.add(newFormPan,  new GridBagConstraints(0, 0, 1, 1, 1, 1, 
 				GridBagConstraints.CENTER, GridBagConstraints.BOTH, 
 				new Insets(0, 0, 0, 0), 0, 0));
-		ViewController.updatePan(this);
+		//ViewController.updatePan(this);
 	}
 
 }

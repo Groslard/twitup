@@ -9,6 +9,7 @@ import javafx.stage.Stage;
 import java.io.File;
 
 import com.iup.tp.twitup.core.Twitup;
+import com.iup.tp.twitup.core.TwitupFx;
 
 /**
  * Classe de lancement de l'application.
@@ -21,16 +22,16 @@ public class TwitupLauncherFx extends Application
 	 public static void main(String[] args) {
         launch(args);
     }
-	    
-    @Override
-    public void start(Stage stage) throws Exception {
+	 @Override
+	    public void start(Stage primaryStage) {
+	        primaryStage.setTitle("JavaFX Welcome");
+	        TwitupFx twitup = new TwitupFx(primaryStage);
+	        twitup.initControllers();
+	        primaryStage.show();
+	    }
+ 
 
-        
-        Twitup twitup = new Twitup();
-        twitup.initControllers();
-		twitup.initGui(stage);
-        
-    }
+    
     
     
 

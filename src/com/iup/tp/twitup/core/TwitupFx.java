@@ -16,9 +16,6 @@ import com.iup.tp.twitup.events.file.WatchableDirectory;
 import com.iup.tp.twitup.ihm.TwitupMock;
 import com.iup.tp.twitup.mock.MockController;
 
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 /**
@@ -32,9 +29,6 @@ public class TwitupFx {
 	 */
 	protected IDatabase mDatabase;
 
-	private Stage stage;
-	
-	private Parent root;
 	/**
 	 * Gestionnaire des entités contenu de la base de données.
 	 */
@@ -53,7 +47,7 @@ public class TwitupFx {
 	/**
 	 * Idnique si le mode bouchoné est activé.
 	 */
-	protected boolean mIsMockEnabled = true;
+	protected boolean mIsMockEnabled = false;
 
 	/**
 	 * Nom de la classe de l'UI.
@@ -65,12 +59,18 @@ public class TwitupFx {
 	protected TweetController mTweetController;
 
 	protected UserController mUserController;
+	
+	protected Stage stage;
 
 	/**
 	 * Constructeur.
 	 */
-	public TwitupFx() {
+	public TwitupFx(Stage stage) {
+		
+		this.stage=stage;
 		// Init du look and feel de l'application
+		
+		
 		this.initLookAndFeel();
 
 		// Initialisation de la base de données
@@ -85,7 +85,9 @@ public class TwitupFx {
 		this.mViewController = new ViewControllerJfx(this);
 
 		// Initialisation du répertoire d'échange
+		this.initDirectory();
 		
+		this.initControllers();
 		
 	}
 
@@ -100,20 +102,8 @@ public class TwitupFx {
 	
 	}
 	
-	public void initGui(Stage stage){
-		initControllers();
-		this.stage = stage;
-		this.root= new Pane();
-		stage.setTitle("TwitUp");
-		stage.setScene(new Scene(getRoot(), 300, 275));
-        stage.show();
-//        this.mViewController.initGui();
-		this.initDirectory();
-		this.mTweetController.showTweets();
-	}
 	public void initGui() {
 		this.mViewController.initGui();
-		this.initDirectory();
 		this.mTweetController.showTweets();
 	}
 
@@ -254,11 +244,13 @@ public class TwitupFx {
 	public UserController getmUserController() {
 		return mUserController;
 	}
-	public Parent getRoot() {
-		return root;
+
+	public Stage getStage() {
+		return stage;
 	}
 
-	public void setRoot(Parent root) {
-		this.root = root;
+	public void setStage(Stage stage) {
+		this.stage = stage;
 	}
+
 }

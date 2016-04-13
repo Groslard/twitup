@@ -28,9 +28,9 @@ public class TweetController implements IDatabaseObserver{
 	/**
 	 * Tweets views
 	 */
-	protected ViewController mViewController;
+	protected ViewControllerJfx mViewController;
 
-	public TweetController(IDatabase mDatabase, EntityManager mEntityManager, ViewController mViewController) {
+	public TweetController(IDatabase mDatabase, EntityManager mEntityManager, ViewControllerJfx mViewController) {
 		super();
 		this.mEntityManager = mEntityManager;
 		this.mDatabase = mDatabase;

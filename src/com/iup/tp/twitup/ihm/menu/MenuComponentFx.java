@@ -12,7 +12,9 @@ import javax.swing.JPanel;
 import com.iup.tp.twitup.core.ViewController;
 import com.iup.tp.twitup.core.ViewControllerJfx;
 
-public class MenuComponentFx extends JPanel {
+import javafx.scene.layout.GridPane;
+
+public class MenuComponentFx extends GridPane {
 
 	protected ViewControllerJfx viewController;
 	
@@ -35,30 +37,30 @@ public class MenuComponentFx extends JPanel {
 		this.rechercheButton = new JButton("Rechercher");
 		this.disconnectButton = new JButton("Deconnexion");
 		
-		this.setLayout(new GridBagLayout());
-		this.add(this.accueilButton, new GridBagConstraints(0, 0, 1, 1, 1, 1, 
-				GridBagConstraints.CENTER, GridBagConstraints.BOTH, 
-				new Insets(5, 5, 5, 5), 0, 0));
-		
-		this.add(this.usersButton, new GridBagConstraints(0, 1, 1, 1, 1, 1, 
-				GridBagConstraints.CENTER, GridBagConstraints.BOTH, 
-				new Insets(5, 5, 5, 5), 0, 0));
-		
-		this.add(this.profilButton, new GridBagConstraints(0, 2, 1, 1, 1, 1, 
-				GridBagConstraints.CENTER, GridBagConstraints.BOTH, 
-				new Insets(5, 5, 5, 5), 0, 0));
-		
-		this.add(this.newTweetButton, new GridBagConstraints(0, 3, 1, 1, 1, 1, 
-				GridBagConstraints.CENTER, GridBagConstraints.BOTH, 
-				new Insets(5, 5, 5, 5), 0, 0));
-		
-		this.add(this.rechercheButton, new GridBagConstraints(0, 4, 1, 1, 1, 1, 
-				GridBagConstraints.CENTER, GridBagConstraints.BOTH, 
-				new Insets(5, 5, 5, 5), 0, 0));
-		
-		this.add(this.disconnectButton, new GridBagConstraints(0, 5, 1, 1, 1, 1, 
-				GridBagConstraints.CENTER, GridBagConstraints.BOTH, 
-				new Insets(5, 5, 5, 5), 0, 0));
+//		this.setLayout(new GridBagLayout());
+//		this.add(this.accueilButton, new GridBagConstraints(0, 0, 1, 1, 1, 1, 
+//				GridBagConstraints.CENTER, GridBagConstraints.BOTH, 
+//				new Insets(5, 5, 5, 5), 0, 0));
+//		
+//		this.add(this.usersButton, new GridBagConstraints(0, 1, 1, 1, 1, 1, 
+//				GridBagConstraints.CENTER, GridBagConstraints.BOTH, 
+//				new Insets(5, 5, 5, 5), 0, 0));
+//		
+//		this.add(this.profilButton, new GridBagConstraints(0, 2, 1, 1, 1, 1, 
+//				GridBagConstraints.CENTER, GridBagConstraints.BOTH, 
+//				new Insets(5, 5, 5, 5), 0, 0));
+//		
+//		this.add(this.newTweetButton, new GridBagConstraints(0, 3, 1, 1, 1, 1, 
+//				GridBagConstraints.CENTER, GridBagConstraints.BOTH, 
+//				new Insets(5, 5, 5, 5), 0, 0));
+//		
+//		this.add(this.rechercheButton, new GridBagConstraints(0, 4, 1, 1, 1, 1, 
+//				GridBagConstraints.CENTER, GridBagConstraints.BOTH, 
+//				new Insets(5, 5, 5, 5), 0, 0));
+//		
+//		this.add(this.disconnectButton, new GridBagConstraints(0, 5, 1, 1, 1, 1, 
+//				GridBagConstraints.CENTER, GridBagConstraints.BOTH, 
+//				new Insets(5, 5, 5, 5), 0, 0));
 		
 		accueilButton.addActionListener(new ActionListener() {
 			@Override

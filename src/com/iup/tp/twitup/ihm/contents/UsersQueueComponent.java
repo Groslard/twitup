@@ -15,7 +15,9 @@ import com.iup.tp.twitup.core.UserController;
 import com.iup.tp.twitup.core.ViewController;
 import com.iup.tp.twitup.datamodel.User;
 
-public class UsersQueueComponent extends JScrollPane {
+import javafx.scene.layout.GridPane;
+
+public class UsersQueueComponent extends GridPane {
 
 	protected HashMap<User, UsersComponent> usersComponents; 
 
@@ -35,8 +37,8 @@ public class UsersQueueComponent extends JScrollPane {
 		gridBagLayout = new GridBagLayout();
 		this.content.setLayout(gridBagLayout);
 		
-		this.setViewportView(this.content);
-		this.getVerticalScrollBar().setUnitIncrement(10);
+//		this.setViewportView(this.content);
+//		this.getVerticalScrollBar().setUnitIncrement(10);
 		
 		this.userPlacement = new GridBagConstraints(0, 0, 1, 1, 1, 1, 
 				GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, 
@@ -72,7 +74,7 @@ public class UsersQueueComponent extends JScrollPane {
 			}			
 			line++;
 		}
-		ViewController.updatePan(content);
+		//ViewController.updatePan(content);
 		
 		
 		

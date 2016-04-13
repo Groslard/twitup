@@ -16,6 +16,8 @@ import com.iup.tp.twitup.ihm.contents.SearchComponent;
 import com.iup.tp.twitup.ihm.contents.UsersQueueComponent;
 import com.iup.tp.twitup.ihm.menu.MenuComponent;
 
+import javafx.scene.layout.GridPane;
+
 public class ViewController {
 
 	protected Twitup mTwitUp;
@@ -198,9 +200,8 @@ public class ViewController {
 	 * Static method used to refresh pan on application
 	 * @param pan
 	 */
-	public static void updatePan(JPanel pan){
-		pan.revalidate();
-		pan.repaint();
+	public static void updatePan(GridPane pan){
+	
 	}
 
 	public User getConnectedUser() {
