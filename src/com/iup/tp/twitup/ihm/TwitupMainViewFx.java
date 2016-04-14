@@ -49,16 +49,14 @@ public class TwitupMainViewFx implements IDatabaseObserver {
 
 	protected BorderPane root;
 
+	/** Menu Bar **/
 	protected GridPane leftPan;
 	protected GridPane centerPan;
 	protected GridPane rightPan;
 
 	protected Stage stage;
 
-	/** Menu Bar **/
-	// JMenuBar menuBar;
-	// JMenu ficMenu, helpMenu;
-	// JMenuItem aPropos, quitter, changeDirectory;
+
 
 	public TwitupMainViewFx(ViewControllerJfx viewController) {
 		this.viewController = viewController;
@@ -69,13 +67,11 @@ public class TwitupMainViewFx implements IDatabaseObserver {
 	public void showGUI() {
 
 		final Scene scene = new Scene(root, 400, 300);
-
 		this.stage.setScene(scene);
 	}
 
 	public void setLeftPan(Node newLeftPan) {
 		this.root.setLeft(newLeftPan);
-
 	}
 
 	public void setCenterPan(Node component) {
@@ -85,56 +81,6 @@ public class TwitupMainViewFx implements IDatabaseObserver {
 	public void setRightPan(Node newRightPan) {
 		this.root.setRight(newRightPan);
 	}
-
-	// public JMenuBar buildMenuBar() {
-	// // Menu Fichier
-	// menuBar = new JMenuBar();
-	//
-	// ficMenu = new JMenu("Fichier");
-	//
-	// changeDirectory = new JMenuItem("Change Directory");
-	// changeDirectory.addActionListener(new ActionListener() {
-	// @Override
-	// public void actionPerformed(ActionEvent arg0) {
-	// TwitupMainViewFx.this.viewController.updateExchangeDirectory();
-	// }
-	// });
-	//
-	// quitter = new JMenuItem("Quitter", new ImageIcon(
-	// "./src/resources/images/exitIcon_20.png"));
-	// quitter.addActionListener(new ActionListener() {
-	// @Override
-	// public void actionPerformed(ActionEvent arg0) {
-	// System.exit(0);
-	// }
-	// });
-	//
-	// ficMenu.add(changeDirectory);
-	// ficMenu.add(quitter);
-	//
-	// // Menu Aide
-	// helpMenu = new JMenu("Aide");
-	// aPropos = new JMenuItem("A Propos");
-	// helpMenu.add(aPropos);
-	//
-	// String text = "UBO M2-TIIL 2016\nDépartement Informatique";
-	// String title = "A propos";
-	// Icon icon = new ImageIcon("./src/resources/images/logoIUP_50.jpg");
-	//
-	// aPropos.addActionListener(new ActionListener() {
-	// @Override
-	// public void actionPerformed(ActionEvent arg0) {
-	// JOptionPane.showMessageDialog(mFrame, text, title,
-	// JOptionPane.INFORMATION_MESSAGE, icon);
-	// }
-	// });
-	//
-	// // Ajout des menu à la menu bar
-	// menuBar.add(ficMenu);
-	// menuBar.add(helpMenu);
-	//
-	// return menuBar;
-	// }
 
 	public File showGuiDirPath() {
 		final JFileChooser fc = new JFileChooser();

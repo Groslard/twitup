@@ -1,88 +1,128 @@
 package com.iup.tp.twitup.ihm.contents;
 
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
+import java.util.List;
+import java.util.Map;
 
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-
-import com.iup.tp.twitup.core.ViewController;
 import com.iup.tp.twitup.datamodel.Twit;
-import com.iup.tp.twitup.datamodel.User;
+import com.iup.tp.twitup.ihm.ITwitListObserver;
 
+import javafx.application.Platform;
+import javafx.geometry.HPos;
+import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
 
-public class TweetsQueueComponentFx extends ScrollPane {
+public class TweetsQueueComponentFx extends ScrollPane implements ITwitListObserver {
 
-	protected HashMap<Twit, TweetComponent> tweetsComponents; 
+	protected Map<Twit, TweetComponentFx> twitMap = new HashMap<Twit, TweetComponentFx>(); 
 	
-	protected GridPane content;
-	
-	protected GridBagConstraints tweetPlacement;
-
-	private GridBagLayout gridBagLayout;
+	protected GridPane contentPane;
 	
 	public TweetsQueueComponentFx(){
-		this.tweetsComponents = new HashMap<Twit, TweetComponent>();
-		
-		
-		
-		this.content = new GridPane();
-//		this.content.setBackground(Color.WHITE);
-		gridBagLayout = new GridBagLayout();
-//		this.content.setLayout(gridBagLayout);
-		
-		this.setContent(this.content);
-//		this.getVerticalScrollBar().setUnitIncrement(10);
-//		this.tweetPlacement = new GridBagConstraints(0, 0, 1, 1, 1, 1, 
-//				GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, 
-//				new Insets(0, 70, 5, 70), 0, 0);
-//		
-//		
-//		GridPane.setRowIndex(nw, y);
-//		content.setr
+		this.contentPane = new GridPane();
+		this.setContent(this.contentPane);
+		this.setVbarPolicy(ScrollBarPolicy.ALWAYS);
 	}
 	
 	
-	public void notifyTwitsUpdated(ArrayList<Twit> tweets){
-//		Set<Twit> temp = tweetsComponents.keySet();
-//		temp.removeAll(tweets);
-//		for (Twit twit : temp) {
-//			TweetComponent twitComponent = this.tweetsComponents.get(twit);
-//			this.content.remove(twitComponent);
-//			this.tweetsComponents.remove(twit);
-//		}
-		
-		int line = 0;
-		Iterator<Twit> iterator = tweets.iterator();
-		
-		while(iterator.hasNext()){
-			Twit twit = iterator.next();
-			
-			TweetComponent tweetComp = this.tweetsComponents.get(twit);
-			
-			if(tweetComp == null){
-				tweetComp = new TweetComponent(twit);
-				this.tweetsComponents.put(twit, tweetComp);
-				//this.content.add(tweetComp, 0, line);
-			}else{
-				//GridPane.setRowIndex(tweetComp, line);
-				// TODO : mettre a jour la constraint sur le comp si il existe
-//				gridBagLayout.setConstraints(tweetComp, this.tweetPlacement);
+	@Override
+	public synchronized void notifyTwitListHasChanged(List<Twit> twits) {
+		System.out.println("Twit list changed");
+		List<TweetComponentFx> newTwits = new ArrayList<TweetComponentFx>();
+		for (Twit twit : twits) {
+
+			TweetComponentFx component = twitMap.get(twit);
+
+			// Nouveau twit
+			if (component == null) {
+				TweetComponentFx newTwitComponent = this
+						.createTwitComponent(twit);
+				this.addTwitComponent(twit, newTwitComponent);
+				newTwits.add(newTwitComponent);
 			}
-			
-			
-			line++;
 		}
-//		ViewController.updatePan(content);
+
+		List<TweetComponentFx> deletedTwits = new ArrayList<TweetComponentFx>();
+		List<Twit> toRemove = new ArrayList<Twit>();
+		for (Twit oldTwit : twitMap.keySet()) {
+			if (twits.contains(oldTwit) == false) {
+				TweetComponentFx oldTwitComponent = twitMap.get(oldTwit);
+				if (oldTwitComponent != null) {
+					deletedTwits.add(oldTwitComponent);
+				}
+				toRemove.add(oldTwit);
+			}
+		}
+		for (Twit remove : toRemove) {
+			twitMap.remove(remove);
+		}
+
+		Runnable r = new Runnable() {
+
+			@Override
+			public void run() {
+				updateTwitsComponents(deletedTwits, newTwits);
+			}
+		};
+
+		Thread t = new Thread(r);
+		t.start();
+	}
+
+	protected void updateTwitsComponents(
+			List<TweetComponentFx> deletedTwits,
+			List<TweetComponentFx> newTwits) {
+		Platform.runLater(new Runnable() {
+
+			@Override
+			public void run() {
+				for (TweetComponentFx oldTwitComponent : deletedTwits) {
+					oldTwitComponent.hideTwit();
+				}
+
+				replaceTwit(new ArrayList<Twit>(twitMap.keySet()));
+
+				for (TweetComponentFx newTwitComponent : newTwits) {
+					newTwitComponent.showTwit();
+				}
+			}
+		});
+	}
+
+	private void replaceTwit(List<Twit> twits) {
+
+		int posY = 0;
+
+		for (Twit twit : twits) {
+			TweetComponentFx component = twitMap.get(twit);
+
+			if (component != null) {
+				GridPane.setConstraints(component, 0, posY);
+				posY++;
+			}
+		}
+	}
+
+	protected void addTwitComponent(Twit twit, TweetComponentFx component) {
+		twitMap.put(twit, component);
+		Platform.runLater(new Runnable() {
+
+			@Override
+			public void run() {
+				contentPane.add(component, 0, 0);
+				GridPane.setFillWidth(component, true);
+				GridPane.setHalignment(component, HPos.LEFT);
+			}
+		});
+	}
+
+	protected TweetComponentFx createTwitComponent(Twit twit) {
+		TweetComponentFx mockTwitComponent = new TweetComponentFx(twit);
+		mockTwitComponent.setVisible(false);
+
+		return mockTwitComponent;
 	}
 	
 }

@@ -9,46 +9,66 @@ import com.iup.tp.twitup.datamodel.IDatabase;
 import com.iup.tp.twitup.datamodel.IDatabaseObserver;
 import com.iup.tp.twitup.datamodel.Twit;
 import com.iup.tp.twitup.datamodel.User;
-
+import com.iup.tp.twitup.ihm.ITwitListObserver;
 public class TweetController implements IDatabaseObserver{
 	/**
 	 * BDD
 	 */
-	protected IDatabase mDatabase;
+	protected IDatabase database;
 	
 	/**
 	 * Gestionnaire de bdd et de fichier.
 	 */
 	protected EntityManager mEntityManager;
 	
-	protected Set<Twit> _tweets;
+	protected final Set<ITwitListObserver> mObservers = new HashSet<ITwitListObserver>();
 	
-	protected ArrayList<Twit> tweets;
+	protected ArrayList<Twit> tweets = new ArrayList<Twit>();
 	
-	/**
-	 * Tweets views
-	 */
-	protected ViewControllerJfx mViewController;
 
 	public TweetController(IDatabase mDatabase, EntityManager mEntityManager, ViewControllerJfx mViewController) {
-		super();
 		this.mEntityManager = mEntityManager;
-		this.mDatabase = mDatabase;
-		this.mViewController = mViewController;
-		
-		this.tweets = new ArrayList<Twit>();
-		
-		this.mDatabase.addObserver(this);
+		this.database = mDatabase;
+		this.database.addObserver(this);
 	}
-
-	public void loadTweetsFromDb(){
-		// TODO Lors de recherce de tweet, ne pas tout supprimer et rajouter, mais supprimer ceux qui ne correspondent pas
-		this.tweets.clear();
-		this.tweets.addAll(mDatabase.getTwits());
-		sortTweets();
-		mViewController.getCompTweetsQueue().notifyTwitsUpdated(this.tweets);
+	
+	/**
+	 * @param text
+	 */
+	public void searchTwits(String text) {
+		ArrayList<Twit> newTwitList = new ArrayList<Twit>();
+		
+		// Récupération des twits à filtrer
+		Set<Twit> databaseTwits = this.database.getTwits();
+		if (text == null || text.isEmpty())
+		{
+			newTwitList = new ArrayList<Twit>(databaseTwits);
+		}
+		else
+		{
+			for (Twit twit : databaseTwits) {
+				if (twit.getText().contains(text))
+				{
+					newTwitList.add(twit);
+				}
+			}
+		}
+		
+		// Ajout de la nouvelle liste
+		this.tweets = newTwitList;
+		this.notifyObservers();
 	}
-
+	
+	public void addObserver(ITwitListObserver observer) {
+		this.mObservers.add(observer);
+	}
+	
+	private void notifyObservers() {
+		for (ITwitListObserver observer : mObservers) {
+			observer.notifyTwitListHasChanged(tweets);
+		}
+	}
+	
 	private void sortTweets() {
 		this.tweets.sort(new Comparator<Twit>() {
 			@Override
@@ -59,25 +79,22 @@ public class TweetController implements IDatabaseObserver{
 		});
 	}
 	
-	public void showTweets(){
-		this.sortTweets();
-		if(mViewController.getCompTweetsQueue() != null)
-			mViewController.getCompTweetsQueue().notifyTwitsUpdated(this.tweets);
-	}
 
 	public void addTweet(String content){
-		Twit twit = new Twit(mViewController.getConnectedUser(), content);
-		this.mEntityManager.sendTwit(twit);
+//		Twit twit = new Twit(mViewController.getConnectedUser(), content);
+//		this.mEntityManager.sendTwit(twit);
 	}
 	
 	@Override
 	public void notifyTwitAdded(Twit addedTwit) {
-		this.tweets.add(addedTwit);
-		this.showTweets();
+		tweets.add(addedTwit);
+		notifyObservers();
 	}
 
 	@Override
 	public void notifyTwitDeleted(Twit deletedTwit) {
+		tweets.remove(deletedTwit);
+		this.notifyObservers();
 	}
 
 	@Override

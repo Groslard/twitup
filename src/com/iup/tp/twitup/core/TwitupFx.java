@@ -84,9 +84,6 @@ public class TwitupFx {
 		// Initialisation des controllers
 		this.mViewController = new ViewControllerJfx(this);
 
-		// Initialisation du répertoire d'échange
-		this.initDirectory();
-		
 		this.initControllers();
 		
 	}
@@ -98,13 +95,12 @@ public class TwitupFx {
 		this.mViewController = new ViewControllerJfx(this);
 		this.mUserController = new UserController(this.mViewController, this.mEntityManager, this.mDatabase);
 		this.mTweetController = new TweetController(this.mDatabase, this.mEntityManager, this.mViewController);
-		
-	
 	}
 	
 	public void initGui() {
 		this.mViewController.initGui();
-		this.mTweetController.showTweets();
+		this.mTweetController.addObserver(this.mViewController.compTweetsQueue);
+		this.initDirectory();
 	}
 
 	/**

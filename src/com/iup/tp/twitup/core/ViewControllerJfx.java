@@ -19,9 +19,9 @@ import com.iup.tp.twitup.ihm.menu.MenuComponentFx;
 
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.SplitPane;
-import javafx.scene.layout.BorderPane;
+import javafx.scene.control.Control;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 public class ViewControllerJfx {
@@ -50,7 +50,6 @@ public class ViewControllerJfx {
 	protected SwitchConnexionInscriptionComponentFx switchCompAccueil;
 
 	protected User connectedUser;
-	private GridPane compTweetsContainer;
 
 	protected Stage stage;
 
@@ -81,7 +80,6 @@ public class ViewControllerJfx {
 		this.compMenu = new MenuComponentFx(this);
 
 		// panel principal / central
-		this.compTweetsContainer = new GridPane();
 		this.compTweetsQueue = new TweetsQueueComponentFx();
 
 		// initAndShowGUI(this.stage, compTweetsQueue);
@@ -108,7 +106,7 @@ public class ViewControllerJfx {
 
 	/** MENU INTERACTION **/
 	public void onMenuAccueilClicked() {
-		changeMainViewPanel(compTweetsContainer);
+		changeMainViewPanel(compTweetsQueue);
 	}
 
 	public void onMenuUsersClicked() {
@@ -151,10 +149,7 @@ public class ViewControllerJfx {
 
 	/** CONNECT/DISCONNECT ACTION **/
 	public void onUserLogged() {
-		this.mTwitUp.mUserController.showUsers();
-		this.mTwitUp.mTweetController.showTweets();
-		changeMainViewPanel(null);
-		changeMainViewPanel(compTweetsContainer);
+		changeMainViewPanel(compTweetsQueue);
 		changeLeftPanel(compMenu);
 	}
 
@@ -166,15 +161,16 @@ public class ViewControllerJfx {
 
 	/** PANELS UPDATES METHODS **/
 
-	private void changeMainViewPanel(GridPane component) {
+
+	private void changeMainViewPanel(Node component) {
 		this.mMainView.setCenterPan(component);
 	}
 
-	private void changeLeftPanel(GridPane component) {
+	private void changeLeftPanel(Node component) {
 		this.mMainView.setLeftPan(component);
 	}
 
-	private void changeRightPanel(GridPane jpanel) {
+	private void changeRightPanel(Node jpanel) {
 		this.mMainView.setRightPan(jpanel);
 	}
 
@@ -191,21 +187,12 @@ public class ViewControllerJfx {
 	public String getDirPath() {
 		File filePath = this.mMainView.showGuiDirPath();
 		if (filePath != null) {
+			
 			// On recupere le path selectionné
 			return filePath.getAbsolutePath();
 		} else {
 			return null;
 		}
-	}
-
-	/**
-	 * Static method used to refresh pan on application
-	 * 
-	 * @param pan
-	 */
-	public static void updatePan(JPanel pan) {
-		pan.revalidate();
-		pan.repaint();
 	}
 
 	public User getConnectedUser() {

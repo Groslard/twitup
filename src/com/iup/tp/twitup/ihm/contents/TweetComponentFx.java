@@ -1,96 +1,124 @@
 package com.iup.tp.twitup.ihm.contents;
 
-import java.awt.Color;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
+import javafx.animation.FadeTransition;
+import javafx.animation.ParallelTransition;
+import javafx.animation.ScaleTransition;
+import javafx.animation.TranslateTransition;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
-
-import javax.imageio.ImageIO;
-import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
+import javafx.util.Duration;
 
 import com.iup.tp.twitup.datamodel.Twit;
 
 public class TweetComponentFx extends GridPane {
-	static String dateFormat = "dd/MM/yy HH:mm:ss";
-	static String defaultIcon = "./src/resources/images/lamaIcon.png";
-	
-	public TweetComponentFx(Twit twit){
-		super();
-//		this.setBackground(new Background()));
-//		this.setBackground(Color.WHITE);
-//		this.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.LIGHT_GRAY));
 
-		File img = new File(twit.getTwiter().getAvatarPath());
+	public TweetComponentFx(Twit twit) {
+
+		//this.setMinSize(370, 50);
+
+		this.setStyle("-fx-background-color: #FFFFFF; -fx-border-color: black;");
+
+		Label tagLabel = new Label(twit.getTwiter().getUserTag());
+		Label message = new Label(twit.getText().substring(0,
+				Math.min(twit.getText().length(), 50)));
+
+		this.add(tagLabel, 0, 0);
+		this.add(message, 0, 1);
 		
-		if(!img.exists() || img.isDirectory())
-			img = new File(defaultIcon);
+		this.setOnMouseEntered(new EventHandler<MouseEvent>() {
+
+			@Override
+			public void handle(MouseEvent arg0) {
+				setScaleX(1.025);
+				setScaleY(1.025);
+			}
+		});
 		
-		BufferedImage myPicture;
-		try {
-			myPicture = ImageIO.read(img);
-			// TODO Ressortir le resize img dans un environnement plus global et réutilisable
-	//		ImageIcon resizedImg = new ImageIcon(myPicture.getScaledInstance(40, 40, Image.SCALE_DEFAULT));
-//			Label picLabel = new Label(resizedImg);
-//			
-//			Image pic = new Image(getClass().getResourceAsStream("roses.jpg"));
-//			Pane p = new Pane();
-//			p.setOpaque(false);
-//			p.add(picLabel);
-//			this.add(p, new GridBagConstraints(0, 0, 1, 1, 0, 0, 
-//					GridBagConstraints.LINE_START, GridBagConstraints.NONE, 
-//					new Insets(5, 2, 2, 2), 0, 0));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-		JPanel msgPan = new JPanel();
-		msgPan.setLayout(new GridBagLayout());
-		msgPan.setOpaque(false);
-		
-		msgPan.add(new JLabel(twit.getTwiter().getName()), new GridBagConstraints(0, 0, 1, 1, 1, 1, 
-				GridBagConstraints.WEST, GridBagConstraints.NONE, 
-				new Insets(2, 2, 2, 2), 0, 0));
-		
-		msgPan.add(new JLabel("@"+twit.getTwiter().getUserTag()), new GridBagConstraints(0, 1, 1, 1, 1, 1, 
-				GridBagConstraints.WEST, GridBagConstraints.NONE, 
-				new Insets(2, 2, 2, 2), 0, 0));
-		
-        Date date=new Date(twit.getEmissionDate());
-        SimpleDateFormat df2 = new SimpleDateFormat(dateFormat);
-        String dateText = df2.format(date);
-        
-        msgPan.add(new JLabel(dateText), new GridBagConstraints(1, 0, 1, 2, 1, 1, 
-				GridBagConstraints.EAST, GridBagConstraints.NONE, 
-				new Insets(2, 2, 2, 2), 0, 0));
-		
-        
-        msgPan.add(new JLabel(twit.getText()), new GridBagConstraints(0, 2, 2, 1, 1, 1, 
-        		GridBagConstraints.WEST, GridBagConstraints.NONE, 
-        		new Insets(15, 2, 15, 2), 0, 0));
-        
-//        this.add(msgPan,new GridBagConstraints(1, 0, 1, 1, 1, 1, 
-//				GridBagConstraints.WEST
-//				, GridBagConstraints.BOTH, 
-//				new Insets(2, 2, 2, 2), 0, 0));
-        
-		
-		
+		this.setOnMouseExited(new EventHandler<MouseEvent>() {
+			
+			@Override
+			public void handle(MouseEvent arg0) {
+				setScaleX(1);
+				setScaleY(1);
+			}
+		});
 	}
-	
-	
+
+	public void hideTwit() {
+		FadeTransition fadeTransition = new FadeTransition(
+				Duration.millis(250), this);
+		fadeTransition.setFromValue(1.0f);
+		fadeTransition.setToValue(0.5f);
+		fadeTransition.setAutoReverse(true);
+
+		TranslateTransition translateTransition = new TranslateTransition(
+				Duration.millis(250), this);
+		translateTransition.setFromX(0);
+		translateTransition.setToX(-getWidth()  /2 );
+		
+		ScaleTransition scaleTransition = new ScaleTransition(
+				Duration.millis(250), this);
+		scaleTransition.setFromX(1);
+		scaleTransition.setToX(0);
+		scaleTransition.setOnFinished(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent arg0) {
+				setVisible(false);
+			}
+		});
+
+		ParallelTransition parallelTransition = new ParallelTransition();
+		parallelTransition.getChildren()
+				.addAll(fadeTransition, translateTransition, scaleTransition);
+		parallelTransition.play();
+	}
+
+	public void showTwit() {
+		this.setVisible(true);
+
+		FadeTransition fadeTransition = new FadeTransition(
+				Duration.millis(500), this);
+		fadeTransition.setFromValue(0f);
+		fadeTransition.setToValue(1.0f);
+		fadeTransition.setAutoReverse(true);
+
+		ScaleTransition thirdScaleTransition = new ScaleTransition(
+				Duration.millis(100), this);
+		thirdScaleTransition.setFromY(0.8);
+		thirdScaleTransition.setToY(1);
+
+		ScaleTransition secondScaleTransition = new ScaleTransition(
+				Duration.millis(100), this);
+		secondScaleTransition.setFromY(1.2);
+		secondScaleTransition.setToY(0.8);
+		secondScaleTransition.setOnFinished(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent arg0) {
+				thirdScaleTransition.play();
+			}
+		});
+
+		ScaleTransition firstScaleTransition = new ScaleTransition(
+				Duration.millis(200), this);
+		firstScaleTransition.setFromY(0);
+		firstScaleTransition.setToY(1.2);
+		firstScaleTransition.setOnFinished(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent arg0) {
+				secondScaleTransition.play();
+			}
+		});
+
+		ParallelTransition parallelTransition = new ParallelTransition();
+		parallelTransition.getChildren().addAll(fadeTransition,
+				firstScaleTransition);
+		parallelTransition.play();
+	}
+
 }
