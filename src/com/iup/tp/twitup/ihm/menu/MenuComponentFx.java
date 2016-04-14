@@ -29,16 +29,22 @@ public class MenuComponentFx extends GridPane {
 
 		this.accueilButton = new Button("Accueil");
 		this.add(accueilButton, 0, 1);
+		this.accueilButton.setMinWidth(100);
 		this.usersButton = new Button("Utilisateurs");
 		this.add(usersButton, 0, 2);
+		this.usersButton.setMinWidth(100);
 		this.profilButton = new Button("Profil");
 		this.add(profilButton, 0, 3);
+		this.profilButton.setMinWidth(100);
 		this.newTweetButton = new Button("Nouveau Tweet");
 		this.add(newTweetButton, 0, 4);
+		this.newTweetButton.setMinWidth(100);
 		this.rechercheButton = new Button("Rechercher");
 		this.add(rechercheButton, 0, 5);
+		this.rechercheButton.setMinWidth(100);
 		this.disconnectButton = new Button("Deconnexion");
 		this.add(disconnectButton, 0, 6);
+		this.disconnectButton.setMinWidth(100);
 
 		accueilButton.setOnAction(new EventHandler<ActionEvent>() {
 

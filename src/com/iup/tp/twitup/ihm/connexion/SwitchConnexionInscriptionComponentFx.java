@@ -27,6 +27,7 @@ public class SwitchConnexionInscriptionComponentFx extends GridPane {
 	protected Button btnInscritpion;
 
 	public SwitchConnexionInscriptionComponentFx(ViewControllerJfx viewControlle) {
+		
 		this.viewController= viewControlle;
 		this.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
 		this.btnConnexion = new Button("Connexion");
@@ -35,6 +36,7 @@ public class SwitchConnexionInscriptionComponentFx extends GridPane {
 		this.btnInscritpion.setMinSize(60, 30);
 		GridPane.setConstraints(btnConnexion, 0, 0, 1, 1, HPos.CENTER, VPos.CENTER);
 		GridPane.setConstraints(btnInscritpion, 0, 1, 1, 1, HPos.CENTER, VPos.CENTER);
+		this.setAlignment(Pos.CENTER);
 		this.getChildren().setAll(btnConnexion,btnInscritpion);
 		btnConnexion.setOnAction(new EventHandler<ActionEvent>() {
 

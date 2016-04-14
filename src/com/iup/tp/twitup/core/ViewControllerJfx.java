@@ -153,6 +153,7 @@ public class ViewControllerJfx {
 	public void onUserLogged() {
 		this.mTwitUp.mUserController.showUsers();
 		this.mTwitUp.mTweetController.showTweets();
+		changeMainViewPanel(null);
 		changeMainViewPanel(compTweetsContainer);
 		changeLeftPanel(compMenu);
 	}
@@ -165,12 +166,12 @@ public class ViewControllerJfx {
 
 	/** PANELS UPDATES METHODS **/
 
-	private void changeMainViewPanel(Node component) {
+	private void changeMainViewPanel(GridPane component) {
 		this.mMainView.setCenterPan(this.compAccueil);
 	}
 
-	private void changeLeftPanel(GridPane jpanel) {
-		this.mMainView.setLeftPan(jpanel);
+	private void changeLeftPanel(GridPane component) {
+		this.mMainView.setLeftPan(component);
 	}
 
 	private void changeRightPanel(GridPane jpanel) {
