@@ -22,6 +22,9 @@ public class TweetsQueueComponentFx extends ScrollPane implements ITwitListObser
 	
 	public TweetsQueueComponentFx(){
 		this.contentPane = new GridPane();
+		this.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+		this.contentPane.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+		
 		this.setContent(this.contentPane);
 		this.setVbarPolicy(ScrollBarPolicy.ALWAYS);
 	}
@@ -113,7 +116,8 @@ public class TweetsQueueComponentFx extends ScrollPane implements ITwitListObser
 			public void run() {
 				contentPane.add(component, 0, 0);
 				GridPane.setFillWidth(component, true);
-				GridPane.setHalignment(component, HPos.LEFT);
+				
+				GridPane.setHalignment(component, HPos.CENTER);
 			}
 		});
 	}

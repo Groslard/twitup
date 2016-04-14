@@ -6,28 +6,53 @@ import javafx.animation.ScaleTransition;
 import javafx.animation.TranslateTransition;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.HPos;
+import javafx.geometry.VPos;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.util.Duration;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import com.iup.tp.twitup.datamodel.Twit;
 
 public class TweetComponentFx extends GridPane {
-
+	static String dateFormat = "dd/MM/yy HH:mm:ss";
 	public TweetComponentFx(Twit twit) {
 
 		//this.setMinSize(370, 50);
 
 		this.setStyle("-fx-background-color: #FFFFFF; -fx-border-color: black;");
-
+		this.setMaxWidth(Double.MAX_VALUE);
 		Label tagLabel = new Label(twit.getTwiter().getUserTag());
 		Label message = new Label(twit.getText().substring(0,
 				Math.min(twit.getText().length(), 50)));
 
-		this.add(tagLabel, 0, 0);
-		this.add(message, 0, 1);
 		
+		HBox hbox = new HBox();
+	    //Replace the image you want to put up
+	    Image image = new Image(getClass().getResourceAsStream("lamaIcon.png"), 25, 25, false, false);
+	    Label label = new Label();
+	    label.setGraphic(new ImageView(image));
+	    hbox.setSpacing(10);
+	    hbox.getChildren().add((label));
+		
+	    //gestion date
+	    Date date=new Date(twit.getEmissionDate());
+        SimpleDateFormat df2 = new SimpleDateFormat(dateFormat);
+        String dateText = df2.format(date);
+	    Label labelDate=new Label(dateText);
+	    GridPane.setConstraints(hbox, 0, 0, 1, 1, HPos.LEFT, VPos.CENTER);
+	    GridPane.setConstraints(labelDate, 1, 0, 1, 1, HPos.RIGHT, VPos.CENTER);
+	    GridPane.setConstraints(tagLabel, 0, 1, 1, 1, HPos.LEFT, VPos.CENTER);
+	    GridPane.setConstraints(message, 0, 2, 1, 1, HPos.LEFT, VPos.CENTER);
+		this.minWidth(250);
+		this.getChildren().setAll(hbox, labelDate, tagLabel,message);
 		this.setOnMouseEntered(new EventHandler<MouseEvent>() {
 
 			@Override

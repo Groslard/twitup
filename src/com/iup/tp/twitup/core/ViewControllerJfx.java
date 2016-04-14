@@ -163,6 +163,7 @@ public class ViewControllerJfx {
 
 
 	private void changeMainViewPanel(Node component) {
+		
 		this.mMainView.setCenterPan(component);
 	}
 
