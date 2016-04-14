@@ -3,102 +3,93 @@ package com.iup.tp.twitup.ihm.menu;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-import javax.swing.JButton;
-import javax.swing.JPanel;
 
 import com.iup.tp.twitup.core.ViewController;
 import com.iup.tp.twitup.core.ViewControllerJfx;
 
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
 
 public class MenuComponentFx extends GridPane {
 
 	protected ViewControllerJfx viewController;
-	
-	protected JButton accueilButton;
-	protected JButton usersButton;
-	protected JButton profilButton;
-	
-	protected JButton newTweetButton;
-	protected JButton rechercheButton;
-	protected JButton disconnectButton;
-	
-	public MenuComponentFx(ViewControllerJfx viewController){
+
+	protected Button accueilButton;
+	protected Button usersButton;
+	protected Button profilButton;
+
+	protected Button newTweetButton;
+	protected Button rechercheButton;
+	protected Button disconnectButton;
+
+	public MenuComponentFx(ViewControllerJfx viewController) {
 		this.viewController = viewController;
-		
-		this.accueilButton = new JButton("Accueil");
-		this.usersButton = new JButton("Utilisateurs");
-		this.profilButton = new JButton("Profil");
-		
-		this.newTweetButton = new JButton("Nouveau Tweet");
-		this.rechercheButton = new JButton("Rechercher");
-		this.disconnectButton = new JButton("Deconnexion");
-		
-//		this.setLayout(new GridBagLayout());
-//		this.add(this.accueilButton, new GridBagConstraints(0, 0, 1, 1, 1, 1, 
-//				GridBagConstraints.CENTER, GridBagConstraints.BOTH, 
-//				new Insets(5, 5, 5, 5), 0, 0));
-//		
-//		this.add(this.usersButton, new GridBagConstraints(0, 1, 1, 1, 1, 1, 
-//				GridBagConstraints.CENTER, GridBagConstraints.BOTH, 
-//				new Insets(5, 5, 5, 5), 0, 0));
-//		
-//		this.add(this.profilButton, new GridBagConstraints(0, 2, 1, 1, 1, 1, 
-//				GridBagConstraints.CENTER, GridBagConstraints.BOTH, 
-//				new Insets(5, 5, 5, 5), 0, 0));
-//		
-//		this.add(this.newTweetButton, new GridBagConstraints(0, 3, 1, 1, 1, 1, 
-//				GridBagConstraints.CENTER, GridBagConstraints.BOTH, 
-//				new Insets(5, 5, 5, 5), 0, 0));
-//		
-//		this.add(this.rechercheButton, new GridBagConstraints(0, 4, 1, 1, 1, 1, 
-//				GridBagConstraints.CENTER, GridBagConstraints.BOTH, 
-//				new Insets(5, 5, 5, 5), 0, 0));
-//		
-//		this.add(this.disconnectButton, new GridBagConstraints(0, 5, 1, 1, 1, 1, 
-//				GridBagConstraints.CENTER, GridBagConstraints.BOTH, 
-//				new Insets(5, 5, 5, 5), 0, 0));
-		
-		accueilButton.addActionListener(new ActionListener() {
+
+		this.accueilButton = new Button("Accueil");
+		this.add(accueilButton, 0, 1);
+		this.usersButton = new Button("Utilisateurs");
+		this.add(usersButton, 0, 2);
+		this.profilButton = new Button("Profil");
+		this.add(profilButton, 0, 3);
+		this.newTweetButton = new Button("Nouveau Tweet");
+		this.add(newTweetButton, 0, 4);
+		this.rechercheButton = new Button("Rechercher");
+		this.add(rechercheButton, 0, 5);
+		this.disconnectButton = new Button("Deconnexion");
+		this.add(disconnectButton, 0, 6);
+
+		accueilButton.setOnAction(new EventHandler<ActionEvent>() {
+
 			@Override
-			public void actionPerformed(ActionEvent arg0) {
+			public void handle(ActionEvent event) {
 				MenuComponentFx.this.viewController.onMenuAccueilClicked();
+
 			}
 		});
-		usersButton.addActionListener(new ActionListener() {
+
+		usersButton.setOnAction(new EventHandler<ActionEvent>() {
+
 			@Override
-			public void actionPerformed(ActionEvent arg0) {
+			public void handle(ActionEvent event) {
 				MenuComponentFx.this.viewController.onMenuUsersClicked();
+
 			}
 		});
-		profilButton.addActionListener(new ActionListener() {
+		profilButton.setOnAction(new EventHandler<ActionEvent>() {
+
 			@Override
-			public void actionPerformed(ActionEvent arg0) {
+			public void handle(ActionEvent event) {
 				MenuComponentFx.this.viewController.onMenuProfilClicked();
+
 			}
 		});
-		newTweetButton.addActionListener(new ActionListener() {
+		newTweetButton.setOnAction(new EventHandler<ActionEvent>() {
+
 			@Override
-			public void actionPerformed(ActionEvent arg0) {
+			public void handle(ActionEvent event) {
 				MenuComponentFx.this.viewController.onMenuNewTweetClicked();
+
 			}
 		});
-		rechercheButton.addActionListener(new ActionListener() {
+		rechercheButton.setOnAction(new EventHandler<ActionEvent>() {
+
 			@Override
-			public void actionPerformed(ActionEvent arg0) {
+			public void handle(ActionEvent event) {
 				MenuComponentFx.this.viewController.onMenuRechercheClicked();
+
 			}
 		});
-		disconnectButton.addActionListener(new ActionListener() {
+		disconnectButton.setOnAction(new EventHandler<ActionEvent>() {
+
 			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				MenuComponentFx.this.viewController.onMenuDisconnectClicked();
+			public void handle(ActionEvent event) {
+				MenuComponentFx.this.viewController.onUserDisconnected();
+
 			}
 		});
-		
+
 	}
-	
+
 }

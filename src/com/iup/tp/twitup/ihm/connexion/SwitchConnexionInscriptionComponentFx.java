@@ -1,69 +1,58 @@
 package com.iup.tp.twitup.ihm.connexion;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.GridLayout;
-import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JPasswordField;
-import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
-
 import com.iup.tp.twitup.core.UserController;
-import com.iup.tp.twitup.core.ViewController;
 import com.iup.tp.twitup.core.ViewControllerJfx;
-import com.iup.tp.twitup.ihm.TwitupMainView;
 
-public class SwitchConnexionInscriptionComponentFx extends JPanel {
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.geometry.HPos;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.geometry.VPos;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
 
-	protected JButton bConnexion;
-	protected JButton bInscription;
-	
+public class SwitchConnexionInscriptionComponentFx extends GridPane {
+
 	protected ViewControllerJfx viewController;
-	
+	protected Button btnConnexion;
+	protected Button btnInscritpion;
 
-	public SwitchConnexionInscriptionComponentFx(ViewControllerJfx viewController) {
-		this.viewController = viewController;
-		
-		this.setLayout(new GridBagLayout());
-		this.setBackground(Color.WHITE);
-		
-		this.bConnexion = new JButton("Connexion");
-		this.bInscription = new JButton("Inscription");
-		this.bConnexion.setPreferredSize(new Dimension(100, 50));
-		this.bInscription.setPreferredSize(new Dimension(100, 50));
+	public SwitchConnexionInscriptionComponentFx(ViewControllerJfx viewControlle) {
+		this.viewController= viewControlle;
+		this.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+		this.btnConnexion = new Button("Connexion");
+		this.btnInscritpion = new Button("Inscription");
+		this.btnConnexion.setMinSize(60, 30);
+		this.btnInscritpion.setMinSize(60, 30);
+		GridPane.setConstraints(btnConnexion, 0, 0, 1, 1, HPos.CENTER, VPos.CENTER);
+		GridPane.setConstraints(btnInscritpion, 0, 1, 1, 1, HPos.CENTER, VPos.CENTER);
+		this.getChildren().setAll(btnConnexion,btnInscritpion);
+		btnConnexion.setOnAction(new EventHandler<ActionEvent>() {
 
-		this.bInscription.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent arg0) {
+			public void handle(ActionEvent e) {
+				viewController.onLogConnexionClicked();
+			}
+		});
+
+		btnInscritpion.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent e) {
 				viewController.onLogInscriptionClicked();
 			}
 		});
 		
-		this.bConnexion.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				viewController.onLogConnexionClicked();
-			}
-		});
-		
-		
-		this.add(bConnexion, new GridBagConstraints(0, 0, 2, 1, 1, 1,
-				GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(
-						5, 5, 5, 5), 0, 0));
-		this.add(bInscription, new GridBagConstraints(0, 2, 2, 1, 1, 1, GridBagConstraints.CENTER,
-				GridBagConstraints.BOTH, new Insets(5, 5, 5, 5), 0, 0));
-		
+
 	}
-
-
 
 }

@@ -27,12 +27,16 @@ import com.iup.tp.twitup.core.ViewControllerJfx;
 import com.iup.tp.twitup.datamodel.IDatabaseObserver;
 import com.iup.tp.twitup.datamodel.Twit;
 import com.iup.tp.twitup.datamodel.User;
+import com.iup.tp.twitup.ihm.connexion.AccueilComponentFx;
 import com.iup.tp.twitup.mock.jfx.MockTwitListComponentJFX;
 import com.iup.tp.twitup.mock.jfx.MockTwitSearchComponentJFX;
 
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
+import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
+import javafx.scene.control.SplitPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
@@ -43,132 +47,95 @@ import javafx.stage.Stage;
 public class TwitupMainViewFx implements IDatabaseObserver {
 	private ViewControllerJfx viewController;
 
-	
-	protected BorderPane mPan;
-	
+	protected BorderPane root;
+
 	protected GridPane leftPan;
 	protected GridPane centerPan;
 	protected GridPane rightPan;
-	
+
 	protected Stage stage;
+
 	/** Menu Bar **/
-//	JMenuBar menuBar;
-//	JMenu ficMenu, helpMenu;
-//	JMenuItem aPropos, quitter, changeDirectory;
+	// JMenuBar menuBar;
+	// JMenu ficMenu, helpMenu;
+	// JMenuItem aPropos, quitter, changeDirectory;
 
 	public TwitupMainViewFx(ViewControllerJfx viewController) {
 		this.viewController = viewController;
-		this.stage=this.viewController.getStage();
+		this.stage = this.viewController.getStage();
+		this.root = new BorderPane();
 	}
 
 	public void showGUI() {
-		// Init auto de l'IHM
-		if(mPan==null){
-			initGUI();
-		}
 
-		
-		GridPane paneitermediaire=viewController.getCompAccueil();
-		paneitermediaire.setVisible(true);
-		
-		System.out.println("On met en rouge pour verifier qu'il saffiche");
-		mPan.setStyle("-fx-background: #CE2E2E;");
-		  Scene scene = new Scene(mPan, 900, 900);
-		
+		final Scene scene = new Scene(root, 400, 300);
+
 		this.stage.setScene(scene);
-		
-		mPan.setCenter(paneitermediaire);
 	}
 
-	/**
-	 * Initialisation de l'IHM
-	 */
-	protected void initGUI() {
-		
-		mPan=new BorderPane();
-		
-		leftPan = new GridPane();
-		centerPan =new GridPane();
-		rightPan =new GridPane();
-		
-		mPan.setCenter(centerPan);
-		mPan.setLeft(leftPan);
-		mPan.setRight(rightPan);
-	}
-	
-	
+	public void setLeftPan(Node newLeftPan) {
+		this.root.setLeft(newLeftPan);
 
-	public void setLeftPan(GridPane newLeftPan) {
-		this.leftPan.getChildren().clear();
-		if(newLeftPan != null)
-			this.leftPan.getChildren().add(newLeftPan);
 	}
-	
-	public void setCenterPan(GridPane component) {
-		this.centerPan.getChildren().clear();
-		if(component != null)
-			this.centerPan.getChildren().add(component);
-	}
-	
-	public void setRightPan(GridPane newRightPan) {
-		this.rightPan.getChildren().clear();
-		if(newRightPan != null)
-			this.rightPan.getChildren().add(newRightPan);
-	}
-	
-	
-	
-//	public JMenuBar buildMenuBar() {
-//		// Menu Fichier
-//		menuBar = new JMenuBar();
-//
-//		ficMenu = new JMenu("Fichier");
-//
-//		changeDirectory = new JMenuItem("Change Directory");
-//		changeDirectory.addActionListener(new ActionListener() {
-//			@Override
-//			public void actionPerformed(ActionEvent arg0) {
-//				TwitupMainViewFx.this.viewController.updateExchangeDirectory();
-//			}
-//		});
-//
-//		quitter = new JMenuItem("Quitter", new ImageIcon(
-//				"./src/resources/images/exitIcon_20.png"));
-//		quitter.addActionListener(new ActionListener() {
-//			@Override
-//			public void actionPerformed(ActionEvent arg0) {
-//				System.exit(0);
-//			}
-//		});
-//
-//		ficMenu.add(changeDirectory);
-//		ficMenu.add(quitter);
-//
-//		// Menu Aide
-//		helpMenu = new JMenu("Aide");
-//		aPropos = new JMenuItem("A Propos");
-//		helpMenu.add(aPropos);
-//
-//		String text = "UBO M2-TIIL 2016\nDépartement Informatique";
-//		String title = "A propos";
-//		Icon icon = new ImageIcon("./src/resources/images/logoIUP_50.jpg");
-//
-//		aPropos.addActionListener(new ActionListener() {
-//			@Override
-//			public void actionPerformed(ActionEvent arg0) {
-//				JOptionPane.showMessageDialog(mFrame, text, title,
-//						JOptionPane.INFORMATION_MESSAGE, icon);
-//			}
-//		});
-//
-//		// Ajout des menu à la menu bar
-//		menuBar.add(ficMenu);
-//		menuBar.add(helpMenu);
-//		
-//		return menuBar;
-//	}
 
-	
+	public void setCenterPan(Node component) {
+		this.root.setCenter(component);
+	}
+
+	public void setRightPan(Node newRightPan) {
+		this.root.setRight(newRightPan);
+	}
+
+	// public JMenuBar buildMenuBar() {
+	// // Menu Fichier
+	// menuBar = new JMenuBar();
+	//
+	// ficMenu = new JMenu("Fichier");
+	//
+	// changeDirectory = new JMenuItem("Change Directory");
+	// changeDirectory.addActionListener(new ActionListener() {
+	// @Override
+	// public void actionPerformed(ActionEvent arg0) {
+	// TwitupMainViewFx.this.viewController.updateExchangeDirectory();
+	// }
+	// });
+	//
+	// quitter = new JMenuItem("Quitter", new ImageIcon(
+	// "./src/resources/images/exitIcon_20.png"));
+	// quitter.addActionListener(new ActionListener() {
+	// @Override
+	// public void actionPerformed(ActionEvent arg0) {
+	// System.exit(0);
+	// }
+	// });
+	//
+	// ficMenu.add(changeDirectory);
+	// ficMenu.add(quitter);
+	//
+	// // Menu Aide
+	// helpMenu = new JMenu("Aide");
+	// aPropos = new JMenuItem("A Propos");
+	// helpMenu.add(aPropos);
+	//
+	// String text = "UBO M2-TIIL 2016\nDépartement Informatique";
+	// String title = "A propos";
+	// Icon icon = new ImageIcon("./src/resources/images/logoIUP_50.jpg");
+	//
+	// aPropos.addActionListener(new ActionListener() {
+	// @Override
+	// public void actionPerformed(ActionEvent arg0) {
+	// JOptionPane.showMessageDialog(mFrame, text, title,
+	// JOptionPane.INFORMATION_MESSAGE, icon);
+	// }
+	// });
+	//
+	// // Ajout des menu à la menu bar
+	// menuBar.add(ficMenu);
+	// menuBar.add(helpMenu);
+	//
+	// return menuBar;
+	// }
+
 	public File showGuiDirPath() {
 		final JFileChooser fc = new JFileChooser();
 		fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
@@ -210,6 +177,5 @@ public class TwitupMainViewFx implements IDatabaseObserver {
 		// TODO Auto-generated method stub
 
 	}
-
 
 }

@@ -8,6 +8,7 @@ import com.iup.tp.twitup.datamodel.User;
 import com.iup.tp.twitup.ihm.TwitupMainViewFx;
 import com.iup.tp.twitup.ihm.connexion.ConnexionComponentFx;
 import com.iup.tp.twitup.ihm.connexion.InscriptionComponentFx;
+import com.iup.tp.twitup.ihm.connexion.SwitchConnexionInscriptionComponentFx;
 import com.iup.tp.twitup.ihm.connexion.AccueilComponentFx;
 import com.iup.tp.twitup.ihm.contents.TweetsQueueComponentFx;
 import com.iup.tp.twitup.ihm.contents.NewTweetComponentFx;
@@ -16,7 +17,9 @@ import com.iup.tp.twitup.ihm.contents.SearchComponent;
 import com.iup.tp.twitup.ihm.contents.UsersQueueComponent;
 import com.iup.tp.twitup.ihm.menu.MenuComponentFx;
 
+import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.SplitPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
@@ -44,64 +47,60 @@ public class ViewControllerJfx {
 	protected AccueilComponentFx compAccueil;
 	protected ConnexionComponentFx compConnexion;
 	protected InscriptionComponentFx compInscription;
+	protected SwitchConnexionInscriptionComponentFx switchCompAccueil;
 
 	protected User connectedUser;
 	private GridPane compTweetsContainer;
 
-	protected  Stage stage;
+	protected Stage stage;
 
 	public ViewControllerJfx(TwitupFx mTwitUp) {
 		super();
 		this.mTwitUp = mTwitUp;
 		this.newTweetIsShow = false;
-		this.stage=this.mTwitUp.getStage();
+		this.stage = this.mTwitUp.getStage();
 	}
-
-
 
 	/**
 	 * Initialisation de l'interface graphique.
 	 */
 	protected void initGui() {
-		
+
 		this.mMainView = new TwitupMainViewFx(this);
-		
+
 		/** Instanciation des panels **/
 		// connexion
-		compAccueil = new AccueilComponentFx(this);
-		compConnexion = new ConnexionComponentFx(this.mTwitUp.mUserController);
-		compInscription = new InscriptionComponentFx(this.mTwitUp.mUserController);
+		this.compConnexion = new ConnexionComponentFx(this.mTwitUp.mUserController);
+		this.compInscription = new InscriptionComponentFx(this.mTwitUp.mUserController);
+		this.switchCompAccueil = new SwitchConnexionInscriptionComponentFx(this);
+		this.compAccueil = new AccueilComponentFx(this);
 
-	//	changeLogFormPanel(compConnexion);
-		
+		// changeLogFormPanel(compConnexion);
+
 		// menu
-		compMenu = new MenuComponentFx(this);
+		this.compMenu = new MenuComponentFx(this);
 
 		// panel principal / central
-		compTweetsContainer = new GridPane();
-		compTweetsQueue = new TweetsQueueComponentFx();
-		
-		
+		this.compTweetsContainer = new GridPane();
+		this.compTweetsQueue = new TweetsQueueComponentFx();
 
-		
-		//initAndShowGUI(this.stage, compTweetsQueue);
+		// initAndShowGUI(this.stage, compTweetsQueue);
 
-		compProfil = new ProfilComponent();
-		compSearch = new SearchComponent();
-		compUsersQueue = new UsersQueueComponent(this.mTwitUp.mUserController);
-		compNewTweet = new NewTweetComponentFx(this.connectedUser,
-				this.mTwitUp.mTweetController);
+		this.compProfil = new ProfilComponent();
+		this.compSearch = new SearchComponent();
+		this.compUsersQueue = new UsersQueueComponent(this.mTwitUp.mUserController);
+		this.compNewTweet = new NewTweetComponentFx(this.connectedUser, this.mTwitUp.mTweetController);
 
 		this.mMainView.showGUI();
 
 		/** POSITIONNEMENT DES PREMIERS COMPOSANTS **/
-		this.changeMainViewPanel(compAccueil);
-
+		this.changeMainViewPanel(this.compAccueil);
+		this.compAccueil.setFormPan(this.compConnexion);
+		this.compAccueil.setSwitchConnexion(this.switchCompAccueil);
 		this.mTwitUp.addDatabaseObserver(this.mMainView);
 	}
 
-	protected static void initAndShowGUI(Stage stage,
-			TweetsQueueComponentFx tweetQueue) {
+	protected static void initAndShowGUI(Stage stage, TweetsQueueComponentFx tweetQueue) {
 		// JavaFX thread
 		Scene scene = new Scene(tweetQueue, 350, 250);
 		stage.setScene(scene);
@@ -116,10 +115,9 @@ public class ViewControllerJfx {
 		changeMainViewPanel(compUsersQueue);
 	}
 
-	
 	// a faire composant profil en jx
 	public void onMenuProfilClicked() {
-//		changeMainViewPanel(compProfil);
+		// changeMainViewPanel(compProfil);
 	}
 
 	public void onMenuNewTweetClicked() {
@@ -132,9 +130,10 @@ public class ViewControllerJfx {
 		}
 
 	}
-// a faire composant x pour la recherceh
+
+	// a faire composant x pour la recherceh
 	public void onMenuRechercheClicked() {
-//		changeMainViewPanel(compSearch);
+		// changeMainViewPanel(compSearch);
 	}
 
 	public void onMenuDisconnectClicked() {
@@ -166,10 +165,10 @@ public class ViewControllerJfx {
 
 	/** PANELS UPDATES METHODS **/
 
-	private void changeMainViewPanel(GridPane component) {
-		this.mMainView.setCenterPan(component);
+	private void changeMainViewPanel(Node component) {
+		this.mMainView.setCenterPan(this.compAccueil);
 	}
-	
+
 	private void changeLeftPanel(GridPane jpanel) {
 		this.mMainView.setLeftPan(jpanel);
 	}
@@ -216,6 +215,7 @@ public class ViewControllerJfx {
 		this.connectedUser = connectedUser;
 		this.onUserLogged();
 	}
+
 	public UsersQueueComponent getCompUsersQueue() {
 		return compUsersQueue;
 	}
@@ -232,28 +232,44 @@ public class ViewControllerJfx {
 		return compNewTweet;
 	}
 
-
-
 	public Stage getStage() {
 		return stage;
 	}
-
-
 
 	public AccueilComponentFx getCompAccueil() {
 		return compAccueil;
 	}
 
-
-
 	public void setCompAccueil(AccueilComponentFx compAccueil) {
 		this.compAccueil = compAccueil;
 	}
 
-
-
 	public void setStage(Stage stage) {
 		this.stage = stage;
 	}
-	
+
+	public ConnexionComponentFx getCompConnexion() {
+		return compConnexion;
+	}
+
+	public void setCompConnexion(ConnexionComponentFx compConnexion) {
+		this.compConnexion = compConnexion;
+	}
+
+	public InscriptionComponentFx getCompInscription() {
+		return compInscription;
+	}
+
+	public void setCompInscription(InscriptionComponentFx compInscription) {
+		this.compInscription = compInscription;
+	}
+
+	public SwitchConnexionInscriptionComponentFx getSwitchCompAccueil() {
+		return switchCompAccueil;
+	}
+
+	public void setSwitchCompAccueil(SwitchConnexionInscriptionComponentFx switchCompAccueil) {
+		this.switchCompAccueil = switchCompAccueil;
+	}
+
 }

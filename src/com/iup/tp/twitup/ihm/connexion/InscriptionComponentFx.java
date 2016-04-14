@@ -1,93 +1,87 @@
 package com.iup.tp.twitup.ihm.connexion;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JPasswordField;
-import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
-
 import com.iup.tp.twitup.core.UserController;
-import com.iup.tp.twitup.core.ViewController;
+import com.iup.tp.twitup.core.ViewControllerJfx;
 
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.geometry.HPos;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
 
-public class InscriptionComponentFx extends GridPane{
-	protected JLabel labelTag;
-	protected JTextField textTag;
-	
-	protected JLabel labelError;
-	protected JLabel labelLogin;
-	protected JLabel labelPassword;
-	protected JTextField textLogin;
-	protected JTextField textPassword;
-	protected JButton validation;
-	
-	
+public class InscriptionComponentFx extends GridPane {
+
+	protected Text scenetitle;
+	protected Label login;
 	protected UserController userController;
-	public InscriptionComponentFx( UserController userController) {
+	protected TextField loginTextField;
+	protected Label tag ;
+	protected TextField tagTextField;
+	protected Label pw;
+	protected Label labelError;
+	protected PasswordField pwBox;
+	protected Button btnConnexion;
+	public InscriptionComponentFx(UserController userController) {
+
+		this.setAlignment(Pos.CENTER);
+		this.setHgap(10);
+		this.setVgap(10);
+		this.setPadding(new Insets(25, 25, 25, 25));
+
+		this.scenetitle = new Text("Inscription");
+		this.scenetitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
+		this.add(scenetitle, 0, 0, 2, 1);
+
 		
-		this.userController=userController;
-//		this.setLayout(new GridBagLayout());
-//		this.setBackground(Color.WHITE);
-		labelError=new JLabel();
-		labelLogin=new JLabel();
-		labelLogin.setText("Login");
-		labelTag=new JLabel();
-		labelTag.setText("Tag");
-		labelPassword=new JLabel();
-		labelPassword.setText("Password");
-		validation=new JButton("Inscription");
-		textLogin=new JTextField(15);
-		textTag=new JTextField(15);
-		textPassword=  new JPasswordField(15);
-		
-//		this.add(labelError, new GridBagConstraints(5, 0, 2, 1, 1, 1, GridBagConstraints.CENTER,
-//				GridBagConstraints.NONE, new Insets(5, 5, 0, 5), 0, 0));
-//		this.add(labelLogin, new GridBagConstraints(0, 1, 2, 1, 1, 1, GridBagConstraints.CENTER,
-//				GridBagConstraints.NONE, new Insets(5, 5, 0, 5), 0, 0));
-//		this.add(textLogin, new GridBagConstraints(5, 1, 2, 1, 1, 1, GridBagConstraints.CENTER,
-//				GridBagConstraints.HORIZONTAL, new Insets(5, 5, 0, 10), 0, 0));
-//	
-//		this.add(labelTag,new GridBagConstraints(0, 2, 2, 1, 1, 1,
-//				GridBagConstraints.CENTER, GridBagConstraints.NONE, new Insets(
-//						10, 5, 0, 5), 0, 0));
-//		this.add(textTag,new GridBagConstraints(5, 2, 2, 1, 1, 1,
-//				GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, new Insets(
-//						10, 5, 0, 10), 0, 0));
-//		
-//		
-//		this.add(labelPassword,new GridBagConstraints(0, 3, 2, 1, 1, 1,
-//				GridBagConstraints.CENTER, GridBagConstraints.NONE, new Insets(
-//						10, 5, 0, 5), 0, 0));
-//		this.add(textPassword,new GridBagConstraints(5, 3, 2, 1, 1, 1,
-//				GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, new Insets(
-//						10, 5, 0, 10), 0, 0));
-//		this.add(validation,new GridBagConstraints(5, 4, 2, 1, 1, 1,
-//				GridBagConstraints.CENTER, GridBagConstraints.NONE, new Insets(
-//						10, 5, 0, 5), 0, 0));
-		
-		this.validation.addActionListener(new ActionListener() {
+		this.labelError = new Label();
+		this.add(labelError, 1, 1);
+		this.login = new Label("Login:");
+		this.add(login, 0, 2);
+
+		this.loginTextField = new TextField();
+		this.add(loginTextField, 1, 2);
+
+		this.tag = new Label("Tag:");
+		this.add(tag, 0, 3);
+
+		this.tagTextField = new TextField();
+		this.add(tagTextField, 1, 3);
+
+		this.pw = new Label("Password:");
+		this.add(pw, 0, 4);
+
+		this.pwBox = new PasswordField();
+		this.add(pwBox, 1, 4);
+
+		this.btnConnexion = new Button("Connexion");
+		HBox hbBtn = new HBox(10);
+		hbBtn.setAlignment(Pos.BOTTOM_RIGHT);
+		hbBtn.getChildren().add(btnConnexion);
+		this.add(hbBtn, 1, 5);
+
+
+		btnConnexion.setOnAction(new EventHandler<ActionEvent>() {
+
 			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				
-				userController.onUserRegister(textLogin.getText(),textPassword.getText(),textTag.getText());
+			public void handle(ActionEvent e) {
+				userController.onUserRegister(loginTextField.getText(), pwBox.getText(), tagTextField.getText());
 			}
 		});
-		
-	}
-	public void setErrorMessage(String errorMessage){
-		this.labelError.setText(errorMessage);
-		this.labelError.setForeground(Color.red);
-	}
 
+		
+
+	}
+	public void setErrorMessage(String errorMessage) {
+		this.labelError.setText(errorMessage);
+		// this.labelError.setStyle(Color.RED);
+	}
 }
