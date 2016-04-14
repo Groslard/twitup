@@ -19,9 +19,7 @@ import com.iup.tp.twitup.ihm.menu.MenuComponentFx;
 
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Control;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 public class ViewControllerJfx {
@@ -49,15 +47,16 @@ public class ViewControllerJfx {
 	protected InscriptionComponentFx compInscription;
 	protected SwitchConnexionInscriptionComponentFx switchCompAccueil;
 
-	protected User connectedUser;
+	protected SharedService shared;
 
 	protected Stage stage;
 
-	public ViewControllerJfx(TwitupFx mTwitUp) {
+	public ViewControllerJfx(TwitupFx mTwitUp, SharedService shared) {
 		super();
 		this.mTwitUp = mTwitUp;
 		this.newTweetIsShow = false;
 		this.stage = this.mTwitUp.getStage();
+		this.shared = shared;
 	}
 
 	/**
@@ -87,7 +86,7 @@ public class ViewControllerJfx {
 		this.compProfil = new ProfilComponent();
 		this.compSearch = new SearchComponent();
 		this.compUsersQueue = new UsersQueueComponent(this.mTwitUp.mUserController);
-		this.compNewTweet = new NewTweetComponentFx(this.connectedUser, this.mTwitUp.mTweetController);
+		this.compNewTweet = new NewTweetComponentFx(this.shared.getConnectedUser(), this.mTwitUp.mTweetController);
 
 		this.mMainView.showGUI();
 
@@ -147,14 +146,16 @@ public class ViewControllerJfx {
 		changeLogFormPanel(compInscription);
 	}
 
-	/** CONNECT/DISCONNECT ACTION **/
-	public void onUserLogged() {
+	/** CONNECT/DISCONNECT ACTION 
+	 * @param user **/
+	public void onUserLogged(User user) {
+		this.shared.setConnectedUser(user);
 		changeMainViewPanel(compTweetsQueue);
 		changeLeftPanel(compMenu);
 	}
 
 	public void onUserDisconnected() {
-		this.connectedUser = null;
+		this.shared.setConnectedUser(null);
 		changeMainViewPanel(compAccueil);
 		changeLeftPanel(null);
 	}
@@ -196,14 +197,6 @@ public class ViewControllerJfx {
 		}
 	}
 
-	public User getConnectedUser() {
-		return connectedUser;
-	}
-
-	public void setConnectedUser(User connectedUser) {
-		this.connectedUser = connectedUser;
-		this.onUserLogged();
-	}
 
 	public UsersQueueComponent getCompUsersQueue() {
 		return compUsersQueue;

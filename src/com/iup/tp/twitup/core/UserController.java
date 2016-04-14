@@ -26,13 +26,16 @@ public class UserController implements IDatabaseObserver {
 	 * Liste des utilisateurs enregistrés.
 	 */
 	protected Set<User> mUsers;
+	
+	protected SharedService shared;
 
 
-	public UserController(ViewControllerJfx mViewController, EntityManager mEntityManager, IDatabase mDatabase)  {
+	public UserController(ViewControllerJfx mViewController, EntityManager mEntityManager, IDatabase mDatabase, SharedService shared)  {
 		this.mDatabase = mDatabase;
 		this.mEntityManager = mEntityManager;
 		this.mViewController = mViewController;
 		this.mUsers = new HashSet<>();
+		this.shared = shared;
 	}
 
 	public void onUserLogged(String login, String password) {
@@ -44,7 +47,7 @@ public class UserController implements IDatabaseObserver {
 			if (user.getName().equals(login)) {
 				loginOK = true;
 				if (user.getUserPassword().equals(password)) {
-					this.mViewController.setConnectedUser(user);
+					this.mViewController.onUserLogged(user);
 					passwordOK = true;
 					break;
 				}
@@ -86,8 +89,7 @@ public class UserController implements IDatabaseObserver {
 			if (!isPresent) {
 				User userAdd = new User(UUID.randomUUID(), tagEntry, password, login, new HashSet<String>(), "");
 				mEntityManager.sendUser(userAdd);
-				this.mViewController.setConnectedUser(userAdd);
-				this.mViewController.onUserLogged();
+				this.mViewController.onUserLogged(userAdd);
 			} else {
 				// gerer affichage tag deja utilise
 				this.mViewController.compInscription.setErrorMessage("Tag déja utilisé");
@@ -96,19 +98,19 @@ public class UserController implements IDatabaseObserver {
 	}
 	
 	public void showUsers(){
-		this.mUsers.remove(this.mViewController.getConnectedUser());
+		this.mUsers.remove(shared.getConnectedUser());
 		mViewController.getCompUsersQueue().notifyUsersUpdated(this.mUsers);
 	}
 	
 	
 	public void loadUsersFollowed(){
-		System.out.println("taille de la liste de "+mDatabase.getFollowed(mViewController.getConnectedUser()).size());
-		mViewController.getCompUsersQueue().notifyUsersUpdated(mDatabase.getFollowed(mViewController.getConnectedUser()));
+		System.out.println("taille de la liste de "+mDatabase.getFollowed(shared.getConnectedUser()).size());
+		mViewController.getCompUsersQueue().notifyUsersUpdated(mDatabase.getFollowed(shared.getConnectedUser()));
 	}
 	
 	public void followUser(User user){
-		mViewController.getConnectedUser().addFollowing(user.getUserTag());
-		mEntityManager.sendUser(mViewController.getConnectedUser());
+		shared.getConnectedUser().addFollowing(user.getUserTag());
+		mEntityManager.sendUser(shared.getConnectedUser());
 	}
 
 	@Override
@@ -132,10 +134,10 @@ public class UserController implements IDatabaseObserver {
 
 	@Override
 	public void notifyUserAdded(User addedUser) {
-		if(addedUser != mViewController.getConnectedUser())
+		if(addedUser != shared.getConnectedUser())
 			this.mUsers.add(addedUser);
 		
-		if(this.mViewController.getConnectedUser() != null)
+		if(this.shared.getConnectedUser() != null)
 			this.showUsers();
 		
 	}

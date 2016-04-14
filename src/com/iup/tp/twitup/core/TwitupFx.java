@@ -61,6 +61,8 @@ public class TwitupFx {
 	protected UserController mUserController;
 	
 	protected Stage stage;
+	
+	protected SharedService shared = new SharedService();
 
 	/**
 	 * Constructeur.
@@ -81,9 +83,6 @@ public class TwitupFx {
 			this.initMock();
 		}
 
-		// Initialisation des controllers
-		this.mViewController = new ViewControllerJfx(this);
-
 		this.initControllers();
 		
 	}
@@ -92,9 +91,9 @@ public class TwitupFx {
 	 * Initialisation des différents controllers de l'application
 	 */
 	public void initControllers() {
-		this.mViewController = new ViewControllerJfx(this);
-		this.mUserController = new UserController(this.mViewController, this.mEntityManager, this.mDatabase);
-		this.mTweetController = new TweetController(this.mDatabase, this.mEntityManager, this.mViewController);
+		this.mViewController = new ViewControllerJfx(this, shared);
+		this.mUserController = new UserController(this.mViewController, this.mEntityManager, this.mDatabase, shared);
+		this.mTweetController = new TweetController(this.mDatabase, this.mEntityManager, shared);
 	}
 	
 	public void initGui() {

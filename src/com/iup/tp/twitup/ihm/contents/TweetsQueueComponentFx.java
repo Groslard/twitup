@@ -1,22 +1,27 @@
 package com.iup.tp.twitup.ihm.contents;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import com.iup.tp.twitup.datamodel.Twit;
 import com.iup.tp.twitup.ihm.ITwitListObserver;
 
 import javafx.application.Platform;
 import javafx.geometry.HPos;
-import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.GridPane;
 
 public class TweetsQueueComponentFx extends ScrollPane implements ITwitListObserver {
-
-	protected Map<Twit, TweetComponentFx> twitMap = new HashMap<Twit, TweetComponentFx>(); 
+	protected Map<Twit, TweetComponentFx> twitMap = new TreeMap<Twit, TweetComponentFx>(new Comparator<Twit>() {
+		@Override
+		public int compare(Twit o1, Twit o2) {
+			return (int) (o2.getEmissionDate() - o1.getEmissionDate());
+		}
+	}); 
 	
 	protected GridPane contentPane;
 	
@@ -26,13 +31,13 @@ public class TweetsQueueComponentFx extends ScrollPane implements ITwitListObser
 		this.contentPane.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
 		
 		this.setContent(this.contentPane);
-		this.setVbarPolicy(ScrollBarPolicy.ALWAYS);
+		this.setVbarPolicy(ScrollBarPolicy.AS_NEEDED);
+		this.setHbarPolicy(ScrollBarPolicy.AS_NEEDED);
 	}
 	
 	
 	@Override
 	public synchronized void notifyTwitListHasChanged(List<Twit> twits) {
-		System.out.println("Twit list changed");
 		List<TweetComponentFx> newTwits = new ArrayList<TweetComponentFx>();
 		for (Twit twit : twits) {
 
@@ -61,6 +66,8 @@ public class TweetsQueueComponentFx extends ScrollPane implements ITwitListObser
 		for (Twit remove : toRemove) {
 			twitMap.remove(remove);
 		}
+		
+		
 
 		Runnable r = new Runnable() {
 
@@ -73,6 +80,8 @@ public class TweetsQueueComponentFx extends ScrollPane implements ITwitListObser
 		Thread t = new Thread(r);
 		t.start();
 	}
+	
+
 
 	protected void updateTwitsComponents(
 			List<TweetComponentFx> deletedTwits,
