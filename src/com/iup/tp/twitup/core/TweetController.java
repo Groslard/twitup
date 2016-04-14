@@ -10,8 +10,9 @@ import com.iup.tp.twitup.datamodel.IDatabaseObserver;
 import com.iup.tp.twitup.datamodel.Twit;
 import com.iup.tp.twitup.datamodel.User;
 import com.iup.tp.twitup.ihm.ITwitListObserver;
+import com.iup.tp.twitup.ihm.ITwitSearchObserver;
 
-public class TweetController implements IDatabaseObserver {
+public class TweetController implements IDatabaseObserver, ITwitSearchObserver {
 	/**
 	 * BDD
 	 */
@@ -28,6 +29,10 @@ public class TweetController implements IDatabaseObserver {
 
 	protected SharedService shared;
 
+	protected boolean isTagSearch = false;
+	protected boolean isUserSearch = false;
+	protected String currentSearch = "";
+
 	public TweetController(IDatabase mDatabase, EntityManager mEntityManager, SharedService shared) {
 		this.mEntityManager = mEntityManager;
 		this.database = mDatabase;
@@ -39,9 +44,8 @@ public class TweetController implements IDatabaseObserver {
 	 * @param text
 	 */
 	public void searchTwits(String text) {
-		boolean isTagSearch = false;
-		boolean isUserSearch = false;
-
+		isTagSearch = false;
+		isUserSearch = false;
 		if (text.startsWith("#")) {
 			isTagSearch = true;
 			text = text.substring(1);
@@ -52,43 +56,49 @@ public class TweetController implements IDatabaseObserver {
 			isTagSearch = true;
 			isUserSearch = true;
 		}
+		currentSearch = text.toLowerCase();
 
 		ArrayList<Twit> newTwitList = new ArrayList<Twit>();
 
-		User user = this.shared.getConnectedUser();
-
 		// Récupération des twits à filtrer
 		Set<Twit> databaseTwits = this.database.getTwits();
-		if (text == null || text.isEmpty()) {
-			for (Twit twit : databaseTwits) {
-				if (user.isFollowing(twit.getTwiter()) || twit.getText().contains("@" + user.getUserTag())) {
-					newTwitList.add(twit);
-				}
-			}
-		} else {
-			if (isTagSearch) {
-				for (Twit twit : databaseTwits) {
-					if (!newTwitList.contains(twit) && twit.getText().contains("#" + text)) {
-						newTwitList.add(twit);
-					}
-				}
-			}
 
-			if (isUserSearch) {
-				for (Twit twit : databaseTwits) {
-					if (!newTwitList.contains(twit)
-							&& (twit.getTwiter().getUserTag().equals(text) || twit.getText().contains("@" + text))) {
-						newTwitList.add(twit);
-					}
-				}
+		for (Twit twit : databaseTwits) {
+			if(isSearched(twit) && !newTwitList.contains(twit)){
+				newTwitList.add(twit);
 			}
-
 		}
 
 		// Ajout de la nouvelle liste
 		this.tweets = newTwitList;
 		this.sortTweets();
 		this.notifyObservers();
+	}
+
+	private boolean isSearched(Twit twit) {
+		User user = this.shared.getConnectedUser();
+
+		if (currentSearch == null || currentSearch.isEmpty()) {
+			if (user.isFollowing(twit.getTwiter()) || user == twit.getTwiter()
+					|| twit.getText().contains("@" + user.getUserTag())) {
+				return true;
+			}
+		} else {
+			if (isTagSearch) {
+				if (twit.getText().toLowerCase().contains("#" + currentSearch)) {
+					return true;
+				}
+			}
+
+			if (isUserSearch) {
+				if ((twit.getTwiter().getUserTag().toLowerCase().equals(currentSearch)
+						|| twit.getText().toLowerCase().contains("@" + currentSearch))) {
+					return true;
+				}
+			}
+		}
+		
+		return false;
 	}
 
 	private void sortTweets() {
@@ -117,7 +127,12 @@ public class TweetController implements IDatabaseObserver {
 
 	@Override
 	public void notifyTwitAdded(Twit addedTwit) {
-		tweets.add(addedTwit);
+		if(this.shared.getConnectedUser() == null){
+			return;
+		}
+		if (isSearched(addedTwit)) {
+			tweets.add(addedTwit);
+		}
 		this.sortTweets();
 		notifyObservers();
 	}
@@ -149,6 +164,12 @@ public class TweetController implements IDatabaseObserver {
 	@Override
 	public void notifyUserModified(User modifiedUser) {
 		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void notifyTwitSearched(String text) {
+		this.searchTwits(text);
 
 	}
 

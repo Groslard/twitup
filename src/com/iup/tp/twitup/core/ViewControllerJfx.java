@@ -76,6 +76,7 @@ public class ViewControllerJfx {
 
 		// panel principal / central
 		this.compTweetsQueue = new TweetsQueueComponentFx();
+		this.compTweetsQueue.getSearchComponent().addObserver(this.mTwitUp.mTweetController);
 
 		// initAndShowGUI(this.stage, compTweetsQueue);
 
@@ -147,6 +148,7 @@ public class ViewControllerJfx {
 		this.shared.setConnectedUser(user);
 		compConnexion.clear();
 		compInscription.clear();
+		mTwitUp.mTweetController.searchTwits("");
 		changeMainViewPanel(compTweetsQueue);
 		changeLeftPanel(compMenu);
 	}

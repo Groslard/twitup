@@ -2,7 +2,6 @@ package com.iup.tp.twitup.ihm.contents;
 
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -16,26 +15,34 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.GridPane;
 
 public class TweetsQueueComponentFx extends ScrollPane implements ITwitListObserver {
+
 	protected Map<Twit, TweetComponentFx> twitMap = new TreeMap<Twit, TweetComponentFx>(new Comparator<Twit>() {
 		@Override
 		public int compare(Twit o1, Twit o2) {
 			return (int) (o2.getEmissionDate() - o1.getEmissionDate());
 		}
-	}); 
-	
-	protected GridPane contentPane;
-	
-	public TweetsQueueComponentFx(){
-		this.contentPane = new GridPane();
+	});
+
+	protected GridPane contentPane = new GridPane();;
+	protected SearchComponent searchComponent = new SearchComponent();
+	protected GridPane twitsPane = new GridPane();;
+
+	public TweetsQueueComponentFx() {
 		this.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
 		this.contentPane.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-		
+
 		this.setContent(this.contentPane);
+		this.contentPane.setVgap(5);
+		this.contentPane.add(searchComponent, 0, 0);
+		this.contentPane.add(twitsPane, 0, 1);
 		this.setVbarPolicy(ScrollBarPolicy.AS_NEEDED);
 		this.setHbarPolicy(ScrollBarPolicy.AS_NEEDED);
 	}
-	
-	
+
+	public SearchComponent getSearchComponent() {
+		return searchComponent;
+	}
+
 	@Override
 	public synchronized void notifyTwitListHasChanged(List<Twit> twits) {
 		List<TweetComponentFx> newTwits = new ArrayList<TweetComponentFx>();
@@ -45,8 +52,7 @@ public class TweetsQueueComponentFx extends ScrollPane implements ITwitListObser
 
 			// Nouveau twit
 			if (component == null) {
-				TweetComponentFx newTwitComponent = this
-						.createTwitComponent(twit);
+				TweetComponentFx newTwitComponent = this.createTwitComponent(twit);
 				this.addTwitComponent(twit, newTwitComponent);
 				newTwits.add(newTwitComponent);
 			}
@@ -66,8 +72,6 @@ public class TweetsQueueComponentFx extends ScrollPane implements ITwitListObser
 		for (Twit remove : toRemove) {
 			twitMap.remove(remove);
 		}
-		
-		
 
 		Runnable r = new Runnable() {
 
@@ -80,12 +84,8 @@ public class TweetsQueueComponentFx extends ScrollPane implements ITwitListObser
 		Thread t = new Thread(r);
 		t.start();
 	}
-	
 
-
-	protected void updateTwitsComponents(
-			List<TweetComponentFx> deletedTwits,
-			List<TweetComponentFx> newTwits) {
+	protected void updateTwitsComponents(List<TweetComponentFx> deletedTwits, List<TweetComponentFx> newTwits) {
 		Platform.runLater(new Runnable() {
 
 			@Override
@@ -123,9 +123,9 @@ public class TweetsQueueComponentFx extends ScrollPane implements ITwitListObser
 
 			@Override
 			public void run() {
-				contentPane.add(component, 0, 0);
+				twitsPane.add(component, 0, 0);
 				GridPane.setFillWidth(component, true);
-				
+
 				GridPane.setHalignment(component, HPos.CENTER);
 			}
 		});
@@ -137,5 +137,5 @@ public class TweetsQueueComponentFx extends ScrollPane implements ITwitListObser
 
 		return mockTwitComponent;
 	}
-	
+
 }
