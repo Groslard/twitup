@@ -14,9 +14,11 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 
 public class InscriptionComponentFx extends GridPane {
 
@@ -39,6 +41,7 @@ public class InscriptionComponentFx extends GridPane {
 
 		this.scenetitle = new Text("Inscription");
 		this.scenetitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
+		this.scenetitle.setTextAlignment(TextAlignment.CENTER);
 		this.add(scenetitle, 0, 0, 2, 1);
 
 		
@@ -62,7 +65,7 @@ public class InscriptionComponentFx extends GridPane {
 		this.pwBox = new PasswordField();
 		this.add(pwBox, 1, 4);
 
-		this.btnConnexion = new Button("Connexion");
+		this.btnConnexion = new Button("Inscription");
 		HBox hbBtn = new HBox(10);
 		hbBtn.setAlignment(Pos.BOTTOM_RIGHT);
 		hbBtn.getChildren().add(btnConnexion);
@@ -82,6 +85,7 @@ public class InscriptionComponentFx extends GridPane {
 	}
 	public void setErrorMessage(String errorMessage) {
 		this.labelError.setText(errorMessage);
-		// this.labelError.setStyle(Color.RED);
+		this.labelError.setTextFill(Color.RED);
+
 	}
 }

@@ -11,6 +11,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Priority;
 
 public class MenuComponentFx extends GridPane {
 
@@ -26,26 +27,55 @@ public class MenuComponentFx extends GridPane {
 
 	public MenuComponentFx(ViewControllerJfx viewController) {
 		this.viewController = viewController;
-
+		
 		this.accueilButton = new Button("Accueil");
 		this.add(accueilButton, 0, 1);
 		this.accueilButton.setMinWidth(100);
+		this.accueilButton.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+		GridPane.setHgrow(accueilButton, Priority.ALWAYS);
+		GridPane.setVgrow(accueilButton, Priority.ALWAYS);
+		
+		
 		this.usersButton = new Button("Utilisateurs");
 		this.add(usersButton, 0, 2);
 		this.usersButton.setMinWidth(100);
+		this.usersButton.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+		GridPane.setHgrow(usersButton, Priority.ALWAYS);
+		GridPane.setVgrow(usersButton, Priority.ALWAYS);
+		
 		this.profilButton = new Button("Profil");
 		this.add(profilButton, 0, 3);
 		this.profilButton.setMinWidth(100);
+		this.profilButton.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+		GridPane.setHgrow(profilButton, Priority.ALWAYS);
+		GridPane.setVgrow(profilButton, Priority.ALWAYS);
+		
+		
 		this.newTweetButton = new Button("Nouveau Tweet");
 		this.add(newTweetButton, 0, 4);
 		this.newTweetButton.setMinWidth(100);
+		this.newTweetButton.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+		GridPane.setHgrow(newTweetButton, Priority.ALWAYS);
+		GridPane.setVgrow(newTweetButton, Priority.ALWAYS);
+		
+		
 		this.rechercheButton = new Button("Rechercher");
 		this.add(rechercheButton, 0, 5);
 		this.rechercheButton.setMinWidth(100);
+		this.rechercheButton.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+		GridPane.setHgrow(rechercheButton, Priority.ALWAYS);
+		GridPane.setVgrow(rechercheButton, Priority.ALWAYS);
+		
 		this.disconnectButton = new Button("Deconnexion");
 		this.add(disconnectButton, 0, 6);
 		this.disconnectButton.setMinWidth(100);
+		this.disconnectButton.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+		GridPane.setHgrow(disconnectButton, Priority.ALWAYS);
+		GridPane.setVgrow(disconnectButton, Priority.ALWAYS);
 
+		
+		
+		
 		accueilButton.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override

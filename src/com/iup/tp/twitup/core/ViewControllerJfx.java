@@ -167,7 +167,7 @@ public class ViewControllerJfx {
 	/** PANELS UPDATES METHODS **/
 
 	private void changeMainViewPanel(GridPane component) {
-		this.mMainView.setCenterPan(this.compAccueil);
+		this.mMainView.setCenterPan(component);
 	}
 
 	private void changeLeftPanel(GridPane component) {

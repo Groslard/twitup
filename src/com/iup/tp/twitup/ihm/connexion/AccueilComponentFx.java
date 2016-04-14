@@ -7,6 +7,8 @@ import javafx.geometry.VPos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Priority;
+import javafx.scene.text.Font;
 
 public class AccueilComponentFx extends GridPane {
 	protected Label labelTextAccueil;
@@ -17,9 +19,19 @@ public class AccueilComponentFx extends GridPane {
 	protected Label messageAccueil;
 
 	public AccueilComponentFx(ViewControllerJfx viewController) {
+		
+		
 		this.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+		
+		
+		
 		this.messageAccueil = new Label("Bienveue sur TwitTwit");
+		this.messageAccueil.setFont(new Font(30));
+		GridPane.setHgrow(messageAccueil, Priority.ALWAYS);
+		GridPane.setVgrow(messageAccueil, Priority.ALWAYS);
 		GridPane.setConstraints(messageAccueil, 0, 0, 2, 1, HPos.CENTER, VPos.CENTER);
+		
+		
 		ColumnConstraints col1 = new ColumnConstraints();
 		col1.setPercentWidth(50);
 		ColumnConstraints col2 = new ColumnConstraints();
@@ -28,6 +40,10 @@ public class AccueilComponentFx extends GridPane {
 		this.getColumnConstraints().addAll(col1, col2);
 		this.selectorComponent = viewController.getSwitchCompAccueil();
 		this.formPan = viewController.getCompConnexion();
+		GridPane.setHgrow(selectorComponent, Priority.ALWAYS);
+		GridPane.setVgrow(selectorComponent, Priority.ALWAYS);
+		GridPane.setHgrow(formPan, Priority.ALWAYS);
+		GridPane.setVgrow(formPan, Priority.ALWAYS);
 		GridPane.setConstraints(selectorComponent, 0, 1, 1, 1, HPos.CENTER, VPos.CENTER);
 		GridPane.setConstraints(formPan, 1, 1, 1, 1, HPos.CENTER, VPos.CENTER);
 
@@ -38,6 +54,8 @@ public class AccueilComponentFx extends GridPane {
 	public void setFormPan(GridPane newFormPan) {
 		this.formPan = newFormPan;
 		GridPane.setConstraints(formPan, 1, 1, 1, 1, HPos.CENTER, VPos.CENTER);
+		GridPane.setHgrow(formPan, Priority.ALWAYS);
+		GridPane.setVgrow(formPan, Priority.ALWAYS);
 		this.getChildren().clear();
 		this.getChildren().setAll(messageAccueil, formPan, selectorComponent);
 
@@ -46,6 +64,8 @@ public class AccueilComponentFx extends GridPane {
 	public void setSwitchConnexion(GridPane newFormPan) {
 		this.selectorComponent = newFormPan;
 		GridPane.setConstraints(selectorComponent, 0, 1, 1, 1, HPos.CENTER, VPos.CENTER);
+		GridPane.setHgrow(selectorComponent, Priority.ALWAYS);
+		GridPane.setVgrow(selectorComponent, Priority.ALWAYS);
 		this.getChildren().clear();
 		this.getChildren().setAll(messageAccueil, formPan, selectorComponent);
 	}

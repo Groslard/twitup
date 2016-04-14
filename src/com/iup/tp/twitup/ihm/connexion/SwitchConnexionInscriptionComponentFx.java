@@ -15,6 +15,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
@@ -34,8 +35,8 @@ public class SwitchConnexionInscriptionComponentFx extends GridPane {
 		this.btnInscritpion = new Button("Inscription");
 		this.btnConnexion.setMinSize(60, 30);
 		this.btnInscritpion.setMinSize(60, 30);
-		GridPane.setConstraints(btnConnexion, 0, 0, 1, 1, HPos.CENTER, VPos.CENTER);
-		GridPane.setConstraints(btnInscritpion, 0, 1, 1, 1, HPos.CENTER, VPos.CENTER);
+		GridPane.setConstraints(btnConnexion, 0, 0, 1, 1, HPos.CENTER, VPos.CENTER, Priority.NEVER, Priority.NEVER,new Insets(0, 0, 30, 0));
+		GridPane.setConstraints(btnInscritpion, 0, 2, 1, 1, HPos.CENTER, VPos.CENTER);
 		this.setAlignment(Pos.CENTER);
 		this.getChildren().setAll(btnConnexion,btnInscritpion);
 		btnConnexion.setOnAction(new EventHandler<ActionEvent>() {

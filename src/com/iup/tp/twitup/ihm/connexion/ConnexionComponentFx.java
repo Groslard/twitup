@@ -77,7 +77,7 @@ public class ConnexionComponentFx extends GridPane {
 
 	public void setErrorMessage(String errorMessage) {
 		this.labelError.setText(errorMessage);
-		// this.labelError.setStyle(Color.RED);
+		this.labelError.setTextFill(Color.RED);
 	}
 
 }
