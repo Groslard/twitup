@@ -2,8 +2,6 @@ package com.iup.tp.twitup.core;
 
 import java.io.File;
 
-import javax.swing.JPanel;
-
 import com.iup.tp.twitup.datamodel.User;
 import com.iup.tp.twitup.ihm.TwitupMainViewFx;
 import com.iup.tp.twitup.ihm.connexion.ConnexionComponentFx;
@@ -13,7 +11,6 @@ import com.iup.tp.twitup.ihm.connexion.AccueilComponentFx;
 import com.iup.tp.twitup.ihm.contents.TweetsQueueComponentFx;
 import com.iup.tp.twitup.ihm.contents.NewTweetComponentFx;
 import com.iup.tp.twitup.ihm.contents.ProfilComponent;
-import com.iup.tp.twitup.ihm.contents.SearchComponent;
 import com.iup.tp.twitup.ihm.contents.UsersQueueComponent;
 import com.iup.tp.twitup.ihm.menu.MenuComponentFx;
 
@@ -35,7 +32,6 @@ public class ViewControllerJfx {
 
 	protected TweetsQueueComponentFx compTweetsQueue;
 	protected ProfilComponent compProfil;
-	protected SearchComponent compSearch;
 	protected UsersQueueComponent compUsersQueue;
 
 	protected NewTweetComponentFx compNewTweet;
@@ -84,7 +80,6 @@ public class ViewControllerJfx {
 		// initAndShowGUI(this.stage, compTweetsQueue);
 
 		this.compProfil = new ProfilComponent();
-		this.compSearch = new SearchComponent();
 		this.compUsersQueue = new UsersQueueComponent(this.mTwitUp.mUserController);
 		this.compNewTweet = new NewTweetComponentFx(this.shared.getConnectedUser(), this.mTwitUp.mTweetController);
 
@@ -157,6 +152,7 @@ public class ViewControllerJfx {
 	public void onUserDisconnected() {
 		this.shared.setConnectedUser(null);
 		changeMainViewPanel(compAccueil);
+		changeRightPanel(null);
 		changeLeftPanel(null);
 	}
 
@@ -204,10 +200,6 @@ public class ViewControllerJfx {
 
 	public TweetsQueueComponentFx getCompTweetsQueue() {
 		return compTweetsQueue;
-	}
-
-	public SearchComponent getCompSearch() {
-		return compSearch;
 	}
 
 	public NewTweetComponentFx getCompNewTweet() {

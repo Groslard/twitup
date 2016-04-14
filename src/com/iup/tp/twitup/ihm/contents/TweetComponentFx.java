@@ -30,8 +30,7 @@ public class TweetComponentFx extends GridPane {
 		this.setStyle("-fx-background-color: #FFFFFF; -fx-border-color: black;");
 		this.setMaxWidth(Double.MAX_VALUE);
 		Label tagLabel = new Label(twit.getTwiter().getUserTag());
-		Label message = new Label(twit.getText().substring(0,
-				Math.min(twit.getText().length(), 50)));
+		Label message = new Label(twit.getText());
 
 		
 		HBox hbox = new HBox();

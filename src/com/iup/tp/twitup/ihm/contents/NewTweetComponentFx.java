@@ -1,5 +1,7 @@
 package com.iup.tp.twitup.ihm.contents;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 
@@ -24,18 +26,22 @@ public class NewTweetComponentFx extends GridPane {
 		this.mTweetController = mTweetController;
 		this.setMaxWidth(200);
 		
-//		this.setBackground(Color.WHITE);
-//		this.setLayout(new GridBagLayout());
-		
 		TextArea editorPane = new TextArea();
 		this.add(editorPane, 0, 0);
-		editorPane.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+		editorPane.setWrapText(true);
 		
-//		editorPane.setLineWrap(true);
-//		editorPane.setRows(50);
-//		this.add(editorPane, new GridBagConstraints(0, 0, 1, 1, 0, 1, 
-//				GridBagConstraints.CENTER, GridBagConstraints.BOTH, 
-//				new Insets(5, 2, 2, 2), 0, 0));
+		editorPane.textProperty().addListener(new ChangeListener<String>() {
+	        @Override
+	        public void changed(final ObservableValue<? extends String> ov, final String oldValue, final String newValue) {
+	            if (editorPane.getText().length() > 150) {
+	            	editorPane.positionCaret(editorPane.getCaretPosition()-10);
+	                editorPane.setText(oldValue);
+	                
+	            }
+	        }
+	    });
+		
+
 		send = new Button("Envoyer Tweet");
 		HBox hbBtn = new HBox(10);
 		hbBtn.setAlignment(Pos.BOTTOM_CENTER);

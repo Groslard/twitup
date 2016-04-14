@@ -22,7 +22,6 @@ public class MenuComponentFx extends GridPane {
 	protected Button profilButton;
 
 	protected Button newTweetButton;
-	protected Button rechercheButton;
 	protected Button disconnectButton;
 
 	public MenuComponentFx(ViewControllerJfx viewController) {
@@ -58,13 +57,6 @@ public class MenuComponentFx extends GridPane {
 		GridPane.setHgrow(newTweetButton, Priority.ALWAYS);
 		GridPane.setVgrow(newTweetButton, Priority.ALWAYS);
 		
-		
-		this.rechercheButton = new Button("Rechercher");
-		this.add(rechercheButton, 0, 5);
-		this.rechercheButton.setMinWidth(100);
-		this.rechercheButton.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-		GridPane.setHgrow(rechercheButton, Priority.ALWAYS);
-		GridPane.setVgrow(rechercheButton, Priority.ALWAYS);
 		
 		this.disconnectButton = new Button("Deconnexion");
 		this.add(disconnectButton, 0, 6);
@@ -106,14 +98,6 @@ public class MenuComponentFx extends GridPane {
 			@Override
 			public void handle(ActionEvent event) {
 				MenuComponentFx.this.viewController.onMenuNewTweetClicked();
-
-			}
-		});
-		rechercheButton.setOnAction(new EventHandler<ActionEvent>() {
-
-			@Override
-			public void handle(ActionEvent event) {
-				MenuComponentFx.this.viewController.onMenuRechercheClicked();
 
 			}
 		});
