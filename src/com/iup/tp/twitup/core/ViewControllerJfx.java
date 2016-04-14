@@ -145,6 +145,8 @@ public class ViewControllerJfx {
 	 * @param user **/
 	public void onUserLogged(User user) {
 		this.shared.setConnectedUser(user);
+		compConnexion.clear();
+		compInscription.clear();
 		changeMainViewPanel(compTweetsQueue);
 		changeLeftPanel(compMenu);
 	}

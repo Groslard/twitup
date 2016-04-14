@@ -88,4 +88,10 @@ public class InscriptionComponentFx extends GridPane {
 		this.labelError.setTextFill(Color.RED);
 
 	}
+	public void clear() {
+		this.labelError.setText("");
+		this.pwBox.setText("");
+		this.loginTextField.setText("");
+		this.tagTextField.setText("");
+	}
 }

@@ -78,4 +78,11 @@ public class ConnexionComponentFx extends GridPane {
 		this.labelError.setTextFill(Color.RED);
 	}
 
+	public void clear() {
+		this.labelError.setText("");
+		this.pwBox.setText("");
+		this.loginTextField.setText("");
+		
+	}
+
 }
