@@ -2,6 +2,8 @@ package com.iup.tp.twitup.core;
 
 import java.io.File;
 
+import com.iup.tp.twitup.datamodel.IDatabaseObserver;
+import com.iup.tp.twitup.datamodel.Twit;
 import com.iup.tp.twitup.datamodel.User;
 import com.iup.tp.twitup.ihm.TwitupMainViewFx;
 import com.iup.tp.twitup.ihm.connexion.ConnexionComponentFx;
@@ -10,6 +12,7 @@ import com.iup.tp.twitup.ihm.connexion.SwitchConnexionInscriptionComponentFx;
 import com.iup.tp.twitup.ihm.connexion.AccueilComponentFx;
 import com.iup.tp.twitup.ihm.contents.TweetsQueueComponentFx;
 import com.iup.tp.twitup.ihm.contents.NewTweetComponentFx;
+import com.iup.tp.twitup.ihm.contents.NotifComponent;
 import com.iup.tp.twitup.ihm.contents.ProfilComponentFx;
 import com.iup.tp.twitup.ihm.contents.SearchComponent;
 import com.iup.tp.twitup.ihm.contents.UsersQueueComponentFx;
@@ -22,7 +25,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
-public class ViewControllerJfx {
+public class ViewControllerJfx implements IDatabaseObserver{
 	static String defaultIcon = "./src/resources/images/lamaIcon.png";
 	protected TwitupFx mTwitUp;
 	/**
@@ -41,6 +44,8 @@ public class ViewControllerJfx {
 
 	protected NewTweetComponentFx compNewTweet;
 	protected Boolean newTweetIsShow;
+	
+	protected NotifComponent compNotif;
 
 	/** Component for log in pan **/
 	protected AccueilComponentFx compAccueil;
@@ -58,6 +63,7 @@ public class ViewControllerJfx {
 		this.newTweetIsShow = false;
 		this.stage = this.mTwitUp.getStage();
 		this.shared = shared;
+		//this.compNotif = new NotifComponent(this);
 	}
 
 	/**
@@ -176,6 +182,10 @@ public class ViewControllerJfx {
 	private void changeRightPanel(Node jpanel) {
 		this.mMainView.setRightPan(jpanel);
 	}
+	
+	public void changeBotPanel(Node jpanel) {
+		this.mMainView.setBotPan(jpanel);
+	}
 
 	private void changeLogFormPanel(GridPane gridpane) {
 		compAccueil.setFormPan(gridpane);
@@ -270,5 +280,45 @@ public class ViewControllerJfx {
 	public void setSwitchCompAccueil(SwitchConnexionInscriptionComponentFx switchCompAccueil) {
 		this.switchCompAccueil = switchCompAccueil;
 	}
+
+	@Override
+	public void notifyTwitAdded(Twit addedTwit) {
+//		if(this.shared.getConnectedUser().isFollowing(addedTwit.getTwiter())){
+//			this.compNotif.notifyNewTwit(addedTwit);
+//		}
+//		
+	}
+
+	@Override
+	public void notifyTwitDeleted(Twit deletedTwit) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void notifyTwitModified(Twit modifiedTwit) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void notifyUserAdded(User addedUser) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void notifyUserDeleted(User deletedUser) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void notifyUserModified(User modifiedUser) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
 
 }

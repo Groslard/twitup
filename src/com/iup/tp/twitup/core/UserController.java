@@ -265,7 +265,6 @@ public class UserController implements IDatabaseObserver, IUserSearchObserver {
 					valeur.setFollowed(false);
 				}
 			}
-
 		}
 
 	}

@@ -59,6 +59,10 @@ public class TweetController implements IDatabaseObserver, ITwitSearchObserver {
 		}
 		currentSearch = text.toLowerCase();
 
+		this.reloadTwits();
+	}
+	
+	private void reloadTwits(){
 		ArrayList<Twit> newTwitList = new ArrayList<Twit>();
 
 		// Récupération des twits à filtrer
@@ -69,7 +73,6 @@ public class TweetController implements IDatabaseObserver, ITwitSearchObserver {
 				newTwitList.add(twit);
 			}
 		}
-
 		// Ajout de la nouvelle liste
 		this.tweets = newTwitList;
 		this.sortTweets();
@@ -125,6 +128,13 @@ public class TweetController implements IDatabaseObserver, ITwitSearchObserver {
 			observer.notifyTwitListHasChanged(tweets);
 		}
 	}
+	
+	private void notifyObeserversUserUpdated(User user) {
+		for (ITwitListObserver observer : mObservers) {
+			observer.notifyUserUpdated(user);
+		}
+	}
+	
 
 	@Override
 	public void notifyTwitAdded(Twit addedTwit) {
@@ -164,8 +174,10 @@ public class TweetController implements IDatabaseObserver, ITwitSearchObserver {
 
 	@Override
 	public void notifyUserModified(User modifiedUser) {
-		// TODO Auto-generated method stub
-
+		this.reloadTwits();
+		notifyObservers();
+		notifyObeserversUserUpdated(modifiedUser);
+		
 	}
 
 	@Override

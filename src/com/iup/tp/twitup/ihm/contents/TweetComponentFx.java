@@ -26,9 +26,12 @@ import com.iup.tp.twitup.datamodel.Twit;
 public class TweetComponentFx extends GridPane {
 	static String dateFormat = "dd/MM/yy HH:mm:ss";
 
+	Label avatar = new Label();
+	Twit twit;
+	
 	public TweetComponentFx(Twit twit) {
 
-		//this.setMinSize(370, 50);
+		this.twit = twit;
 
 		this.setStyle("-fx-background-color: #FFFFFF; -fx-border-color: #0084B4;");
 		this.setMaxWidth(Double.MAX_VALUE);
@@ -41,16 +44,15 @@ public class TweetComponentFx extends GridPane {
 
 		HBox hbox = new HBox();
 		Image image;
-		Label label = new Label();
 		if (twit.getTwiter().getAvatarPath() != null && !twit.getTwiter().getAvatarPath().isEmpty()) {
 			image = new Image("file:" + twit.getTwiter().getAvatarPath(), 25, 25, false, false);
 		} else {
 			image = new Image("file:./src/resources/images/lamaIcon.png", 25, 25, false, false);
 		}
 
-		label.setGraphic(new ImageView(image));
+		avatar.setGraphic(new ImageView(image));
 		hbox.setSpacing(10);
-		hbox.getChildren().add((label));
+		hbox.getChildren().add((avatar));
 
 		//contrainte de colone
 		ColumnConstraints col1 = new ColumnConstraints();
@@ -158,6 +160,17 @@ public class TweetComponentFx extends GridPane {
 		ParallelTransition parallelTransition = new ParallelTransition();
 		parallelTransition.getChildren().addAll(fadeTransition, firstScaleTransition);
 		parallelTransition.play();
+	}
+
+	public void update() {
+		// TODO Auto-generated method stub
+		Image image;
+		if (twit.getTwiter().getAvatarPath() != null && !twit.getTwiter().getAvatarPath().isEmpty()) {
+			image = new Image("file:" + twit.getTwiter().getAvatarPath(), 25, 25, false, false);
+		} else {
+			image = new Image("file:./src/resources/images/lamaIcon.png", 25, 25, false, false);
+		}
+		avatar.setGraphic(new ImageView(image));
 	}
 
 }

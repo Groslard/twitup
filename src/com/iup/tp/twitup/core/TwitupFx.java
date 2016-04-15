@@ -147,8 +147,7 @@ public class TwitupFx {
 	protected void initDirectory() {
 		Properties prop = PropertiesManager.loadProperties(Constants.CONFIGURATION_FILE);
 		String dir = prop.getProperty(Constants.CONFIGURATION_KEY_EXCHANGE_DIRECTORY);
-
-		if (!dir.isEmpty()) {
+		if (dir!=null && !dir.isEmpty()) {
 			File directory = new File(dir);
 			if (!isValideExchangeDirectory(directory))
 				dir = this.mViewController.getDirPath();

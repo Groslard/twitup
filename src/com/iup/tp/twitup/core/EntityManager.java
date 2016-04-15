@@ -192,7 +192,7 @@ public class EntityManager implements IWatchableDirectoryObserver
     for (User modifiedUser : this.extractAllUsers(userFiles))
     {
       // Ajout de l'utilisateur
-      this.mDatabase.addUser(modifiedUser);
+      this.mDatabase.modifiyUser(modifiedUser);
 
       // Stockage dans la map
       mUserMap.put(modifiedUser.getUuid(), modifiedUser);

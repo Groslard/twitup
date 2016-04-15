@@ -7,16 +7,13 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import com.iup.tp.twitup.datamodel.Twit;
+import com.iup.tp.twitup.datamodel.User;
 import com.iup.tp.twitup.ihm.ITwitListObserver;
 
 import javafx.application.Platform;
-import javafx.beans.binding.Bindings;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 
@@ -72,6 +69,14 @@ public class TweetsQueueComponentFx extends ScrollPane implements ITwitListObser
 				TweetComponentFx newTwitComponent = this.createTwitComponent(twit);
 				this.addTwitComponent(twit, newTwitComponent);
 				newTwits.add(newTwitComponent);
+			}else{
+				Platform.runLater(new Runnable() {
+					@Override
+					public void run() {
+						component.update();
+					}
+				});
+				
 			}
 		}
 
@@ -156,6 +161,22 @@ public class TweetsQueueComponentFx extends ScrollPane implements ITwitListObser
 		mockTwitComponent.setVisible(false);
 
 		return mockTwitComponent;
+	}
+
+	@Override
+	public void notifyUserUpdated(User user) {
+		for(Map.Entry<Twit,TweetComponentFx> entry : twitMap.entrySet()) {
+			Twit key = entry.getKey();
+			TweetComponentFx value = entry.getValue();
+			if(key.getTwiter().getUserTag().equals(user.getUserTag())){
+				Platform.runLater(new Runnable() {
+					@Override
+					public void run() {
+						value.update();
+					}
+				});
+			}
+		}
 	}
 
 }

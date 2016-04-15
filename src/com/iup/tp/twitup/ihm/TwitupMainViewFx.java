@@ -60,6 +60,10 @@ public class TwitupMainViewFx implements IDatabaseObserver {
 		
 		this.root.setRight(newRightPan);
 	}
+	
+	public void setBotPan(Node jpanel) {
+		this.root.setBottom(jpanel);
+	}
 
 	public File showGuiDirPath() {
 		final JFileChooser fc = new JFileChooser();
