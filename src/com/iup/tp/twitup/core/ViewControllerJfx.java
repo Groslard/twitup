@@ -74,7 +74,6 @@ public class ViewControllerJfx {
 		this.switchCompAccueil = new SwitchConnexionInscriptionComponentFx(this);
 		this.compAccueil = new AccueilComponentFx(this);
 
-		// changeLogFormPanel(compConnexion);
 
 		// menu
 		this.compMenu = new MenuComponentFx(this);
@@ -85,13 +84,8 @@ public class ViewControllerJfx {
 		this.compTweetsQueue.getSearchComponent().addObserver(this.mTwitUp.mTweetController);
 		this.compUsersQueue = new UsersQueueComponentFx(this.mTwitUp.mUserController);
 		this.compUsersQueue.getSearchComponent().addObserver(this.mTwitUp.mUserController);
-
-		// initAndShowGUI(this.stage, compTweetsQueue);
-
 		this.compProfil = new ProfilComponentFx(this.mTwitUp.mUserController);
-
 		this.compSearch = new SearchComponent();
-
 		this.compNewTweet = new NewTweetComponentFx(this.shared.getConnectedUser(), this.mTwitUp.mTweetController);
 
 		this.mMainView.showGUI();
@@ -118,7 +112,6 @@ public class ViewControllerJfx {
 		changeMainViewPanel(compUsersQueue);
 	}
 
-	// a faire composant profil en jx
 	public void onMenuProfilClicked() {
 		setProfil();
 		changeMainViewPanel(compProfil);
@@ -205,6 +198,7 @@ public class ViewControllerJfx {
 		}
 	}
 
+	//fonction d'actualisation du composant profil appeler une fois une authentification effectuer
 	public void setProfil() {
 		User userConnected = this.shared.getConnectedUser();
 		if (userConnected != null) {

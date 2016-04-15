@@ -32,13 +32,13 @@ public class UsersComponentFx extends GridPane {
 	public UsersComponentFx(User user, UserController userController) {
 
 		this.userController = userController;
-		this.setMinSize(370, 50);;
-
-		
+		this.setMinSize(370, 50);
 		this.setStyle("-fx-background-color: #FFFFFF; -fx-border-color: #0084B4;");
 		this.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+
 		Label tagLabel = new Label(user.getUserTag());
 		tagLabel.setTextFill(Color.web("#3F84B4"));
+
 		Label message = new Label(user.getName());
 		message.setTextFill(Color.web("#3F84B4"));
 
@@ -47,7 +47,6 @@ public class UsersComponentFx extends GridPane {
 		this.btnFollow.setTextFill(Color.WHITE);
 
 		HBox hbox = new HBox();
-		// Replace the image you want to put up
 		Image image;
 		Label label = new Label();
 		if (user.getAvatarPath() != null && !user.getAvatarPath().isEmpty()) {
@@ -55,33 +54,35 @@ public class UsersComponentFx extends GridPane {
 		} else {
 			image = new Image("file:./src/resources/images/lamaIcon.png", 25, 25, false, false);
 		}
-
 		label.setGraphic(new ImageView(image));
 		hbox.setSpacing(10);
 		hbox.getChildren().add((label));
 
-		// gestion date
 		ColumnConstraints col1 = new ColumnConstraints();
 		col1.setPercentWidth(50);
 		ColumnConstraints col2 = new ColumnConstraints();
 		col2.setPercentWidth(50);
-
 		this.getColumnConstraints().addAll(col1, col2);
+
 		GridPane.setConstraints(hbox, 0, 0, 1, 1, HPos.LEFT, VPos.CENTER);
 		GridPane.setConstraints(tagLabel, 0, 1, 1, 1, HPos.LEFT, VPos.CENTER);
 		GridPane.setConstraints(btnFollow, 1, 1, 1, 1, HPos.RIGHT, VPos.CENTER);
 		GridPane.setConstraints(message, 0, 2, 1, 1, HPos.LEFT, VPos.CENTER);
+
 		this.minWidth(250);
 		this.getChildren().setAll(hbox, tagLabel, message, btnFollow);
-		UsersComponentFx compsatIntermediaire = this;
+		UsersComponentFx composantIntermediaire = this;
+
+		// action follow unfollow
 		btnFollow.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
 			public void handle(ActionEvent e) {
-				userController.followUser(user, compsatIntermediaire);
+				userController.followUser(user, composantIntermediaire);
 			}
 		});
 
+		// animation jfx
 		this.setOnMouseEntered(new EventHandler<MouseEvent>() {
 
 			@Override
@@ -101,6 +102,7 @@ public class UsersComponentFx extends GridPane {
 		});
 	}
 
+	/****************** animatiojfx *******************/
 	public void hideUser() {
 		FadeTransition fadeTransition = new FadeTransition(Duration.millis(250), this);
 		fadeTransition.setFromValue(1.0f);

@@ -37,7 +37,7 @@ public class UserController implements IDatabaseObserver, IUserSearchObserver {
 	protected SharedService shared;
 
 	protected String currentSearch = "";
-	
+
 	protected final Set<IUserlistObserver> mObservers = new HashSet<IUserlistObserver>();
 
 	public UserController(ViewControllerJfx mViewController, EntityManager mEntityManager, IDatabase mDatabase,
@@ -51,6 +51,7 @@ public class UserController implements IDatabaseObserver, IUserSearchObserver {
 
 	}
 
+	// fonction de connection d'un utilisateur gérant les champs vide  et les erreurs login/mdp
 	public void onUserLogged(String login, String password) {
 		boolean loginOK = false;
 		boolean passwordOK = false;
@@ -67,13 +68,9 @@ public class UserController implements IDatabaseObserver, IUserSearchObserver {
 				}
 			}
 		}
-
 		if (!passwordOK) {
 			this.mViewController.compConnexion.setErrorMessage("Password incorrect");
-		} else {
-			this.mViewController.compConnexion.setErrorMessage("");
-		}
-		if (!loginOK) {
+		} else if (!loginOK) {
 			this.mViewController.compConnexion.setErrorMessage("Login incorrect");
 		} else {
 			this.mViewController.compConnexion.setErrorMessage("");
@@ -81,6 +78,7 @@ public class UserController implements IDatabaseObserver, IUserSearchObserver {
 
 	}
 
+	// fonction d'inscription d'un nouvel utilisateur gerant les champs vide et le si le tag est déjà utilisé
 	public void onUserRegister(String login, String password, String tagEntry) {
 		boolean isPresent = false;
 		if (login.isEmpty()) {
@@ -125,6 +123,7 @@ public class UserController implements IDatabaseObserver, IUserSearchObserver {
 	public void showUsers() {
 
 		this.mUsers.remove(shared.getConnectedUser());
+
 		mViewController.getCompUsersQueue().notifyUserListHasChanged(this.mUsers);
 	}
 
@@ -132,10 +131,12 @@ public class UserController implements IDatabaseObserver, IUserSearchObserver {
 		mViewController.getCompUsersQueue().notifyUserListHasChanged(database.getFollowed(shared.getConnectedUser()));
 	}
 
+	
+	// fonction permettant de follow unfollow un utilisateur
 	public void followUser(User user, UsersComponentFx userComposant) {
 		// cas unfollow
 		if (userComposant.isFollowed()) {
-			
+
 			shared.getConnectedUser().removeFollowing(user.getUserTag());
 			mEntityManager.sendUser(shared.getConnectedUser());
 			userComposant.setFollowed(false);
@@ -151,10 +152,8 @@ public class UserController implements IDatabaseObserver, IUserSearchObserver {
 
 	}
 
-	
-	//gestion des recherche
+	// gestion des recherche
 	public void searchUsers(String text) {
-
 
 		currentSearch = text.toLowerCase();
 
@@ -164,12 +163,12 @@ public class UserController implements IDatabaseObserver, IUserSearchObserver {
 		Set<User> databaseUsers = this.database.getUsers();
 
 		for (User user : databaseUsers) {
-			if(isSearched(user) && !newUserList.contains(user)){
-				//cas user connected
-				if(!user.getUserTag().equals(this.shared.getConnectedUser().getUserTag())){
+			if (isSearched(user) && !newUserList.contains(user)) {
+				// cas user connected
+				if (!user.getUserTag().equals(this.shared.getConnectedUser().getUserTag())) {
 					newUserList.add(user);
 				}
-				
+
 			}
 		}
 
@@ -180,20 +179,14 @@ public class UserController implements IDatabaseObserver, IUserSearchObserver {
 
 	private boolean isSearched(User user) {
 
-		
-				if ((user.getUserTag().toLowerCase().equals(currentSearch)
-						|| user.getUserTag().toLowerCase().contains( currentSearch))) {
-					return true;
-				}
-	
+		if ((user.getUserTag().toLowerCase().equals(currentSearch)
+				|| user.getUserTag().toLowerCase().contains(currentSearch))) {
+			return true;
+		}
+
 		return false;
 	}
 
-	
-	
-	
-	
-	
 	@Override
 	public void notifyTwitAdded(Twit addedTwit) {
 		// TODO Auto-generated method stub
@@ -253,14 +246,13 @@ public class UserController implements IDatabaseObserver, IUserSearchObserver {
 			User cle = it.next();
 			UsersComponentFx valeur = map.get(cle);
 
-			// cas de k'utilisateur connecter
+			// cas de l'utilisateur connecter
 			if (cle.getUserTag().equals(user.getUserTag())) {
-				GridPane parent=(GridPane) valeur.getParent();
-				if(valeur!=null&&parent!=null&&parent.getChildren()!=null){
+				GridPane parent = (GridPane) valeur.getParent();
+				if (valeur != null && parent != null && parent.getChildren() != null) {
 					parent.getChildren().remove(valeur);
 				}
-			
-				
+
 			}
 			// cas utilisateur followed
 			for (String tagFollowed : user.getFollows()) {
@@ -268,26 +260,26 @@ public class UserController implements IDatabaseObserver, IUserSearchObserver {
 					valeur.getBtnFollow().setText("Unfollow");
 					valeur.setFollowed(true);
 				} else {
+					// cas utilisateur unfollowed
 					valeur.getBtnFollow().setText("Follow");
 					valeur.setFollowed(false);
 				}
 			}
-			
-			
-			
-			
+
 		}
 
 	}
 
-	public void updateUserProfil(String nom, String mdp,String pathImg){
-		User userModif=this.shared.getConnectedUser();
+	// fonction permettant de mettre a jour le profil de l'utilisateur , appel le raffraichissement du view controller
+	public void updateUserProfil(String nom, String mdp, String pathImg) {
+		User userModif = this.shared.getConnectedUser();
 		userModif.setAvatarPath(pathImg);
 		userModif.setName(nom);
 		userModif.setUserPassword(mdp);
 		this.mEntityManager.sendUser(userModif);
 		this.mViewController.setProfil();
 	}
+
 	@Override
 	public void notifyUserSearched(String text) {
 		this.searchUsers(text);

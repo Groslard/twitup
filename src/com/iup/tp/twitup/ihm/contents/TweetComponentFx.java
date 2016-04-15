@@ -28,17 +28,18 @@ public class TweetComponentFx extends GridPane {
 
 	public TweetComponentFx(Twit twit) {
 
-		this.setMinSize(370, 50);
+		//this.setMinSize(370, 50);
 
 		this.setStyle("-fx-background-color: #FFFFFF; -fx-border-color: #0084B4;");
 		this.setMaxWidth(Double.MAX_VALUE);
+		
 		Label tagLabel = new Label(twit.getTwiter().getUserTag());
 		tagLabel.setTextFill(Color.web("#3F84B4"));
+		
 		Label message = new Label(twit.getText());
 		message.setTextFill(Color.web("#3F84B4"));
 
 		HBox hbox = new HBox();
-		// Replace the image you want to put up
 		Image image;
 		Label label = new Label();
 		if (twit.getTwiter().getAvatarPath() != null && !twit.getTwiter().getAvatarPath().isEmpty()) {
@@ -51,24 +52,29 @@ public class TweetComponentFx extends GridPane {
 		hbox.setSpacing(10);
 		hbox.getChildren().add((label));
 
+		//contrainte de colone
 		ColumnConstraints col1 = new ColumnConstraints();
 		col1.setPercentWidth(50);
 		ColumnConstraints col2 = new ColumnConstraints();
 		col2.setPercentWidth(50);
 		this.getColumnConstraints().addAll(col1, col2);
-		// gestion date
 
 		Date date = new Date(twit.getEmissionDate());
 		SimpleDateFormat df2 = new SimpleDateFormat(dateFormat);
 		String dateText = df2.format(date);
 		Label labelDate = new Label(dateText);
 		labelDate.setTextFill(Color.web("#3F84B4"));
+		
+		
 		GridPane.setConstraints(hbox, 0, 0, 1, 1, HPos.LEFT, VPos.CENTER);
 		GridPane.setConstraints(labelDate, 1, 0, 1, 1, HPos.RIGHT, VPos.CENTER);
 		GridPane.setConstraints(tagLabel, 0, 1, 1, 1, HPos.LEFT, VPos.CENTER);
 		GridPane.setConstraints(message, 0, 2, 1, 1, HPos.LEFT, VPos.CENTER);
+		
 		this.minWidth(250);
 		this.getChildren().setAll(hbox, labelDate, tagLabel, message);
+		
+		/*********aimation jfx ********/
 		this.setOnMouseEntered(new EventHandler<MouseEvent>() {
 
 			@Override
@@ -88,6 +94,7 @@ public class TweetComponentFx extends GridPane {
 		});
 	}
 
+	/**************Animation jfx******************/
 	public void hideTwit() {
 		FadeTransition fadeTransition = new FadeTransition(Duration.millis(250), this);
 		fadeTransition.setFromValue(1.0f);

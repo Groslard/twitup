@@ -23,19 +23,26 @@ public class SwitchConnexionInscriptionComponentFx extends GridPane {
 		
 		this.viewController= viewControlle;
 		this.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-		this.btnConnexion = new Button("Connexion");
-		this.btnInscritpion = new Button("Inscription");
 		
+		
+		this.btnConnexion = new Button("Connexion");
 		this.btnConnexion.setStyle("-fx-background-color: #0084B4");
-		this.btnInscritpion.setStyle("-fx-background-color: #0084B4");
+		this.btnConnexion.setStyle("-fx-background-color: #0084B4");
 		this.btnConnexion.setTextFill(Color.WHITE);
-		this.btnInscritpion.setTextFill(Color.WHITE);
 		this.btnConnexion.setMinSize(60, 30);
+		
+		this.btnInscritpion = new Button("Inscription");
+		this.btnInscritpion.setStyle("-fx-background-color: #0084B4");
+		this.btnInscritpion.setTextFill(Color.WHITE);
 		this.btnInscritpion.setMinSize(60, 30);
+		
 		GridPane.setConstraints(btnConnexion, 0, 0, 1, 1, HPos.CENTER, VPos.CENTER, Priority.NEVER, Priority.NEVER,new Insets(0, 0, 30, 0));
 		GridPane.setConstraints(btnInscritpion, 0, 2, 1, 1, HPos.CENTER, VPos.CENTER);
+		
 		this.setAlignment(Pos.CENTER);
+		
 		this.getChildren().setAll(btnConnexion,btnInscritpion);
+		
 		btnConnexion.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override

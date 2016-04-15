@@ -22,7 +22,6 @@ public class SearchComponent extends GridPane {
 	public SearchComponent() {
 
 		searchTextField = new javafx.scene.control.TextField();
-
 		this.add(searchTextField , 0 , 0);
 		GridPane.setFillWidth(searchTextField, true);
 		GridPane.setHgrow(searchTextField, Priority.ALWAYS);

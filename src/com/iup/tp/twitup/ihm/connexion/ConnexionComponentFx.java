@@ -39,7 +39,7 @@ public class ConnexionComponentFx extends GridPane {
 
 		this.scenetitle = new Text("Connexion");
 		this.scenetitle.setFill(Color.web("#3F84B4"));
-		
+
 		scenetitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
 		this.add(scenetitle, 0, 0, 2, 1);
 
@@ -67,8 +67,6 @@ public class ConnexionComponentFx extends GridPane {
 		hbBtn.getChildren().add(btnConnexion);
 		this.add(hbBtn, 1, 5);
 
-		
-
 		btnConnexion.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
@@ -88,7 +86,7 @@ public class ConnexionComponentFx extends GridPane {
 		this.labelError.setText("");
 		this.pwBox.setText("");
 		this.loginTextField.setText("");
-		
+
 	}
 
 }

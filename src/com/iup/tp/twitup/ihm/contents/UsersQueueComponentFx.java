@@ -15,33 +15,46 @@ import javafx.application.Platform;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Priority;
 
-public class UsersQueueComponentFx extends ScrollPane implements IUserlistObserver{
+public class UsersQueueComponentFx extends ScrollPane implements IUserlistObserver {
 
-	
 	protected Map<User, UsersComponentFx> userMap = new TreeMap<User, UsersComponentFx>(new Comparator<User>() {
 		@Override
 		public int compare(User o1, User o2) {
-			return  (o2.getName().compareTo(o1.getName())  );
+			return (o2.getName().compareTo(o1.getName()));
 		}
-	}); 
-	
-	protected GridPane contentPane= new GridPane();
+	});
+
+	protected GridPane contentPane = new GridPane();
 	protected SearchUserComponent searchComponent = new SearchUserComponent();
 	protected GridPane usersPane = new GridPane();
 	protected UserController userController;
-	
-	public UsersQueueComponentFx(UserController userController){
-		this.userController=userController;
-		this.setContent(this.contentPane);
+
+	public UsersQueueComponentFx(UserController userController) {
+		
+		this.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+		this.contentPane.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+		
+		GridPane.setHgrow(contentPane, Priority.ALWAYS);
+		GridPane.setVgrow(contentPane, Priority.ALWAYS);
+		GridPane.setHgrow(usersPane, Priority.ALWAYS);
+		GridPane.setMargin(searchComponent, new Insets(20, 5, 5, 20));
+		GridPane.setMargin(usersPane, new Insets(5, 20, 5, 20));
+		
+		this.setContent(contentPane);
 		this.contentPane.setVgap(5);
-		GridPane.setMargin(searchComponent, new Insets(5,5,5,40));
 		this.contentPane.add(searchComponent, 0, 0);
 		this.contentPane.add(usersPane, 0, 1);
+		
+		this.setFitToHeight(true);
+		this.setFitToWidth(true);
 		this.setVbarPolicy(ScrollBarPolicy.AS_NEEDED);
 		this.setHbarPolicy(ScrollBarPolicy.AS_NEEDED);
 	}
+
 	@Override
 	public synchronized void notifyUserListHasChanged(Set<User> users) {
 
@@ -52,8 +65,7 @@ public class UsersQueueComponentFx extends ScrollPane implements IUserlistObserv
 
 			// Nouveau user
 			if (component == null) {
-				UsersComponentFx newUserComponent = this
-						.createUserComponent(user);
+				UsersComponentFx newUserComponent = this.createUserComponent(user);
 				this.addUserComponent(user, newUserComponent);
 				newUsers.add(newUserComponent);
 			}
@@ -73,8 +85,6 @@ public class UsersQueueComponentFx extends ScrollPane implements IUserlistObserv
 		for (User remove : toRemove) {
 			userMap.remove(remove);
 		}
-		
-		
 
 		Runnable r = new Runnable() {
 
@@ -86,17 +96,13 @@ public class UsersQueueComponentFx extends ScrollPane implements IUserlistObserv
 
 		Thread t = new Thread(r);
 		t.start();
-	
-		
-	}
-	
 
+	}
 
 	protected void updateUsersComponents(
-			
-			List<UsersComponentFx> deletedUsers,
-			List<UsersComponentFx> newUsers) {
-			Platform.runLater(new Runnable() {
+
+			List<UsersComponentFx> deletedUsers, List<UsersComponentFx> newUsers) {
+		Platform.runLater(new Runnable() {
 
 			@Override
 			public void run() {
@@ -133,33 +139,34 @@ public class UsersQueueComponentFx extends ScrollPane implements IUserlistObserv
 
 			@Override
 			public void run() {
-				GridPane.setMargin(searchComponent, new Insets(5,5,5,40));
+				GridPane.setMargin(component, new Insets(5, 5, 5, 5));
+				GridPane.setHgrow(component, Priority.ALWAYS);
+				GridPane.setVgrow(component, Priority.ALWAYS);
 				usersPane.add(component, 0, 0);
 				GridPane.setFillWidth(component, true);
-				
+
 				GridPane.setHalignment(component, HPos.CENTER);
 			}
 		});
 	}
 
 	protected UsersComponentFx createUserComponent(User user) {
-		UsersComponentFx mockUserComponent = new UsersComponentFx(user,this.userController);
+		UsersComponentFx mockUserComponent = new UsersComponentFx(user, this.userController);
 		mockUserComponent.setVisible(true);
 
 		return mockUserComponent;
 	}
 
-	
 	public SearchUserComponent getSearchComponent() {
 		return searchComponent;
 	}
+
 	public Map<User, UsersComponentFx> getUserMap() {
 		return userMap;
 	}
+
 	public void setUserMap(Map<User, UsersComponentFx> userMap) {
 		this.userMap = userMap;
 	}
-		
-	}
-	
 
+}

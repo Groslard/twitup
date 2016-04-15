@@ -24,12 +24,13 @@ public class InscriptionComponentFx extends GridPane {
 	protected Label login;
 	protected UserController userController;
 	protected TextField loginTextField;
-	protected Label tag ;
+	protected Label tag;
 	protected TextField tagTextField;
 	protected Label pw;
 	protected Label labelError;
 	protected PasswordField pwBox;
 	protected Button btnConnexion;
+
 	public InscriptionComponentFx(UserController userController) {
 
 		this.setAlignment(Pos.CENTER);
@@ -43,7 +44,6 @@ public class InscriptionComponentFx extends GridPane {
 		this.scenetitle.setTextAlignment(TextAlignment.CENTER);
 		this.add(scenetitle, 0, 0, 2, 1);
 
-		
 		this.labelError = new Label();
 		this.add(labelError, 1, 1);
 		this.login = new Label("Login:");
@@ -75,7 +75,6 @@ public class InscriptionComponentFx extends GridPane {
 		hbBtn.getChildren().add(btnConnexion);
 		this.add(hbBtn, 1, 5);
 
-
 		btnConnexion.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
@@ -84,14 +83,14 @@ public class InscriptionComponentFx extends GridPane {
 			}
 		});
 
-		
-
 	}
+
 	public void setErrorMessage(String errorMessage) {
 		this.labelError.setText(errorMessage);
 		this.labelError.setTextFill(Color.RED);
 
 	}
+
 	public void clear() {
 		this.labelError.setText("");
 		this.pwBox.setText("");

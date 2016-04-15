@@ -26,7 +26,6 @@ public class SearchUserComponent extends GridPane {
 		this.add(searchTextField , 0 , 0);
 		GridPane.setFillWidth(searchTextField, true);
 		GridPane.setHgrow(searchTextField, Priority.ALWAYS);
-		
 		searchTextField.textProperty().addListener(new ChangeListener<String>() {
 	        @Override
 	        public void changed(final ObservableValue<? extends String> ov, final String oldValue, final String newValue) {

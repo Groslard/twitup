@@ -91,6 +91,7 @@ public class ProfilComponentFx extends GridPane {
 		this.add(labelimg, 0, 5);
 		this.pathPhoto = new TextField();
 		this.add(pathPhoto, 1, 5);
+		
 		this.pathChooser= new Button("Selectionner");
 		this.pathChooser.setStyle("-fx-background-color: #0084B4");
 		this.pathChooser.setTextFill(Color.WHITE);
@@ -102,8 +103,17 @@ public class ProfilComponentFx extends GridPane {
             public void handle(ActionEvent arg0) {
             	final JFileChooser fc = new JFileChooser();
          		fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
-         		fc.showOpenDialog(fc);
-         		pathPhoto.setText(fc.getSelectedFile().getAbsolutePath());
+         		int result = fc.showSaveDialog(fc);
+         		if (result == JFileChooser.APPROVE_OPTION) {
+         			String imgPath=fc.getSelectedFile().getAbsolutePath();
+             		if(imgPath!=null){
+             			pathPhoto.setText(imgPath);
+             		}
+         		} else if (result == JFileChooser.CANCEL_OPTION) {
+         			pathPhoto.setText("");
+         		}
+         		
+         		
             }
         });
 		

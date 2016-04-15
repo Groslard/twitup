@@ -34,14 +34,24 @@ public class TweetsQueueComponentFx extends ScrollPane implements ITwitListObser
 	protected GridPane twitsPane = new GridPane();
 
 	public TweetsQueueComponentFx() {
+		
 		this.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-	
-	
-		this.setContent(this.contentPane);
+		this.contentPane.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+		
+		GridPane.setHgrow(contentPane, Priority.ALWAYS);
+		GridPane.setVgrow(contentPane, Priority.ALWAYS);
+		GridPane.setHgrow(twitsPane, Priority.ALWAYS);
+		GridPane.setMargin(searchComponent, new Insets(20, 5, 5, 20));
+		GridPane.setMargin(twitsPane, new Insets(20, 5, 5, 20));
+		
+		this.setContent(contentPane);
 		this.contentPane.setVgap(5);
-		GridPane.setMargin(searchComponent, new Insets(5,5,5,40));
 		this.contentPane.add(searchComponent, 0, 0);
 		this.contentPane.add(twitsPane, 0, 1);
+		
+		
+		this.setFitToHeight(true);
+		this.setFitToWidth(true);
 		this.setVbarPolicy(ScrollBarPolicy.AS_NEEDED);
 		this.setHbarPolicy(ScrollBarPolicy.AS_NEEDED);
 	}
@@ -130,7 +140,9 @@ public class TweetsQueueComponentFx extends ScrollPane implements ITwitListObser
 
 			@Override
 			public void run() {
-				GridPane.setMargin(component, new Insets(5,5,5,40));
+				GridPane.setMargin(component, new Insets(5, 5, 5, 5));
+				GridPane.setHgrow(component, Priority.ALWAYS);
+				GridPane.setVgrow(component, Priority.ALWAYS);
 				twitsPane.add(component, 0, 0);
 				GridPane.setFillWidth(component, true);
 
