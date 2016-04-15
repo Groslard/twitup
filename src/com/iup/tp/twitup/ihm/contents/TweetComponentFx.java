@@ -15,6 +15,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.paint.Color;
 import javafx.util.Duration;
 
 import java.text.SimpleDateFormat;
@@ -24,50 +25,50 @@ import com.iup.tp.twitup.datamodel.Twit;
 
 public class TweetComponentFx extends GridPane {
 	static String dateFormat = "dd/MM/yy HH:mm:ss";
+
 	public TweetComponentFx(Twit twit) {
 
-		//this.setMinSize(370, 50);
+		this.setMinSize(370, 50);
 
-		this.setStyle("-fx-background-color: #FFFFFF; -fx-border-color: black;");
+		this.setStyle("-fx-background-color: #FFFFFF; -fx-border-color: #0084B4;");
 		this.setMaxWidth(Double.MAX_VALUE);
 		Label tagLabel = new Label(twit.getTwiter().getUserTag());
+		tagLabel.setTextFill(Color.web("#3F84B4"));
 		Label message = new Label(twit.getText());
+		message.setTextFill(Color.web("#3F84B4"));
 
-		
 		HBox hbox = new HBox();
-	    //Replace the image you want to put up
-	    Image image ;
-	    Label label = new Label();
+		// Replace the image you want to put up
+		Image image;
+		Label label = new Label();
 		if (twit.getTwiter().getAvatarPath() != null && !twit.getTwiter().getAvatarPath().isEmpty()) {
 			image = new Image("file:" + twit.getTwiter().getAvatarPath(), 25, 25, false, false);
 		} else {
 			image = new Image("file:./src/resources/images/lamaIcon.png", 25, 25, false, false);
 		}
-	    
-	    
-	    
-	    label.setGraphic(new ImageView(image));
-	    hbox.setSpacing(10);
-	    hbox.getChildren().add((label));
-		
-	    //gestion date
-	    
-	    ColumnConstraints col1 = new ColumnConstraints();
+
+		label.setGraphic(new ImageView(image));
+		hbox.setSpacing(10);
+		hbox.getChildren().add((label));
+
+		ColumnConstraints col1 = new ColumnConstraints();
 		col1.setPercentWidth(50);
 		ColumnConstraints col2 = new ColumnConstraints();
 		col2.setPercentWidth(50);
 		this.getColumnConstraints().addAll(col1, col2);
-	    
-	    Date date=new Date(twit.getEmissionDate());
-        SimpleDateFormat df2 = new SimpleDateFormat(dateFormat);
-        String dateText = df2.format(date);
-	    Label labelDate=new Label(dateText);
-	    GridPane.setConstraints(hbox, 0, 0, 1, 1, HPos.LEFT, VPos.CENTER);
-	    GridPane.setConstraints(labelDate, 1, 0, 1, 1, HPos.RIGHT, VPos.CENTER);
-	    GridPane.setConstraints(tagLabel, 0, 1, 1, 1, HPos.LEFT, VPos.CENTER);
-	    GridPane.setConstraints(message, 0, 2, 1, 1, HPos.LEFT, VPos.CENTER);
+		// gestion date
+
+		Date date = new Date(twit.getEmissionDate());
+		SimpleDateFormat df2 = new SimpleDateFormat(dateFormat);
+		String dateText = df2.format(date);
+		Label labelDate = new Label(dateText);
+		labelDate.setTextFill(Color.web("#3F84B4"));
+		GridPane.setConstraints(hbox, 0, 0, 1, 1, HPos.LEFT, VPos.CENTER);
+		GridPane.setConstraints(labelDate, 1, 0, 1, 1, HPos.RIGHT, VPos.CENTER);
+		GridPane.setConstraints(tagLabel, 0, 1, 1, 1, HPos.LEFT, VPos.CENTER);
+		GridPane.setConstraints(message, 0, 2, 1, 1, HPos.LEFT, VPos.CENTER);
 		this.minWidth(250);
-		this.getChildren().setAll(hbox, labelDate, tagLabel,message);
+		this.getChildren().setAll(hbox, labelDate, tagLabel, message);
 		this.setOnMouseEntered(new EventHandler<MouseEvent>() {
 
 			@Override
@@ -76,9 +77,9 @@ public class TweetComponentFx extends GridPane {
 				setScaleY(1.025);
 			}
 		});
-		
+
 		this.setOnMouseExited(new EventHandler<MouseEvent>() {
-			
+
 			@Override
 			public void handle(MouseEvent arg0) {
 				setScaleX(1);
@@ -88,19 +89,16 @@ public class TweetComponentFx extends GridPane {
 	}
 
 	public void hideTwit() {
-		FadeTransition fadeTransition = new FadeTransition(
-				Duration.millis(250), this);
+		FadeTransition fadeTransition = new FadeTransition(Duration.millis(250), this);
 		fadeTransition.setFromValue(1.0f);
 		fadeTransition.setToValue(0.5f);
 		fadeTransition.setAutoReverse(true);
 
-		TranslateTransition translateTransition = new TranslateTransition(
-				Duration.millis(250), this);
+		TranslateTransition translateTransition = new TranslateTransition(Duration.millis(250), this);
 		translateTransition.setFromX(0);
-		translateTransition.setToX(-getWidth()  /2 );
-		
-		ScaleTransition scaleTransition = new ScaleTransition(
-				Duration.millis(250), this);
+		translateTransition.setToX(-getWidth() / 2);
+
+		ScaleTransition scaleTransition = new ScaleTransition(Duration.millis(250), this);
 		scaleTransition.setFromX(1);
 		scaleTransition.setToX(0);
 		scaleTransition.setOnFinished(new EventHandler<ActionEvent>() {
@@ -112,27 +110,23 @@ public class TweetComponentFx extends GridPane {
 		});
 
 		ParallelTransition parallelTransition = new ParallelTransition();
-		parallelTransition.getChildren()
-				.addAll(fadeTransition, translateTransition, scaleTransition);
+		parallelTransition.getChildren().addAll(fadeTransition, translateTransition, scaleTransition);
 		parallelTransition.play();
 	}
 
 	public void showTwit() {
 		this.setVisible(true);
 
-		FadeTransition fadeTransition = new FadeTransition(
-				Duration.millis(500), this);
+		FadeTransition fadeTransition = new FadeTransition(Duration.millis(500), this);
 		fadeTransition.setFromValue(0f);
 		fadeTransition.setToValue(1.0f);
 		fadeTransition.setAutoReverse(true);
 
-		ScaleTransition thirdScaleTransition = new ScaleTransition(
-				Duration.millis(100), this);
+		ScaleTransition thirdScaleTransition = new ScaleTransition(Duration.millis(100), this);
 		thirdScaleTransition.setFromY(0.8);
 		thirdScaleTransition.setToY(1);
 
-		ScaleTransition secondScaleTransition = new ScaleTransition(
-				Duration.millis(100), this);
+		ScaleTransition secondScaleTransition = new ScaleTransition(Duration.millis(100), this);
 		secondScaleTransition.setFromY(1.2);
 		secondScaleTransition.setToY(0.8);
 		secondScaleTransition.setOnFinished(new EventHandler<ActionEvent>() {
@@ -143,8 +137,7 @@ public class TweetComponentFx extends GridPane {
 			}
 		});
 
-		ScaleTransition firstScaleTransition = new ScaleTransition(
-				Duration.millis(200), this);
+		ScaleTransition firstScaleTransition = new ScaleTransition(Duration.millis(200), this);
 		firstScaleTransition.setFromY(0);
 		firstScaleTransition.setToY(1.2);
 		firstScaleTransition.setOnFinished(new EventHandler<ActionEvent>() {
@@ -156,8 +149,7 @@ public class TweetComponentFx extends GridPane {
 		});
 
 		ParallelTransition parallelTransition = new ParallelTransition();
-		parallelTransition.getChildren().addAll(fadeTransition,
-				firstScaleTransition);
+		parallelTransition.getChildren().addAll(fadeTransition, firstScaleTransition);
 		parallelTransition.play();
 	}
 

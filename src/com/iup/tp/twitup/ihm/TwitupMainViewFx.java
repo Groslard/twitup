@@ -10,6 +10,7 @@ import com.iup.tp.twitup.datamodel.IDatabaseObserver;
 import com.iup.tp.twitup.datamodel.Twit;
 import com.iup.tp.twitup.datamodel.User;
 
+import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
@@ -36,7 +37,6 @@ public class TwitupMainViewFx implements IDatabaseObserver {
 	public TwitupMainViewFx(ViewControllerJfx viewController) {
 		this.viewController = viewController;
 		this.stage = this.viewController.getStage();
-		
 		this.root = new BorderPane();
 		this.root.setStyle("-fx-background-color: #F5F8FA");
 	}
@@ -52,10 +52,12 @@ public class TwitupMainViewFx implements IDatabaseObserver {
 	}
 
 	public void setCenterPan(Node component) {
+		BorderPane.setMargin(component, new Insets(12,12,12,12));
 		this.root.setCenter(component);
 	}
 
 	public void setRightPan(Node newRightPan) {
+		
 		this.root.setRight(newRightPan);
 	}
 

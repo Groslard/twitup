@@ -13,6 +13,7 @@ import com.iup.tp.twitup.ihm.IUserlistObserver;
 
 import javafx.application.Platform;
 import javafx.geometry.HPos;
+import javafx.geometry.Insets;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.GridPane;
 
@@ -33,11 +34,9 @@ public class UsersQueueComponentFx extends ScrollPane implements IUserlistObserv
 	
 	public UsersQueueComponentFx(UserController userController){
 		this.userController=userController;
-		this.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-		this.contentPane.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-
 		this.setContent(this.contentPane);
 		this.contentPane.setVgap(5);
+		GridPane.setMargin(searchComponent, new Insets(5,5,5,40));
 		this.contentPane.add(searchComponent, 0, 0);
 		this.contentPane.add(usersPane, 0, 1);
 		this.setVbarPolicy(ScrollBarPolicy.AS_NEEDED);
@@ -134,7 +133,8 @@ public class UsersQueueComponentFx extends ScrollPane implements IUserlistObserv
 
 			@Override
 			public void run() {
-				contentPane.add(component, 0, 0);
+				GridPane.setMargin(searchComponent, new Insets(5,5,5,40));
+				usersPane.add(component, 0, 0);
 				GridPane.setFillWidth(component, true);
 				
 				GridPane.setHalignment(component, HPos.CENTER);

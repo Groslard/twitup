@@ -221,7 +221,6 @@ public class ViewControllerJfx {
 				 image = new Image("file:./src/resources/images/lamaIcon.png", 25, 25, false, false);
 				 compProfil.getPathPhoto().setText("./src/resources/images/lamaIcon.png");
 			}
-			System.out.println(image);
 			compProfil.getLabelimg().setGraphic(new ImageView(image));
 		}
 	}

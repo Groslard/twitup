@@ -135,15 +135,13 @@ public class UserController implements IDatabaseObserver, IUserSearchObserver {
 	public void followUser(User user, UsersComponentFx userComposant) {
 		// cas unfollow
 		if (userComposant.isFollowed()) {
-			System.out
-					.println("utilisateur :" + shared.getConnectedUser().getName() + "  a unfollow " + user.getName());
+			
 			shared.getConnectedUser().removeFollowing(user.getUserTag());
 			mEntityManager.sendUser(shared.getConnectedUser());
 			userComposant.setFollowed(false);
 			userComposant.getBtnFollow().setText("Follow");
 			this.notifyObservers();
 		} else {// cas follow
-			System.out.println("utilisateur :" + shared.getConnectedUser().getName() + "  a follow " + user.getName());
 			shared.getConnectedUser().addFollowing(user.getUserTag());
 			mEntityManager.sendUser(shared.getConnectedUser());
 			userComposant.setFollowed(true);

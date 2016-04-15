@@ -14,6 +14,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.paint.Color;
 
 public class NewTweetComponentFx extends GridPane {
 
@@ -43,6 +44,8 @@ public class NewTweetComponentFx extends GridPane {
 		
 
 		send = new Button("Envoyer Tweet");
+		this.send.setStyle("-fx-background-color: #0084B4");
+		this.send.setTextFill(Color.WHITE);
 		HBox hbBtn = new HBox(10);
 		hbBtn.setAlignment(Pos.BOTTOM_CENTER);
 		hbBtn.getChildren().add(send);

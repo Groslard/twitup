@@ -10,9 +10,15 @@ import com.iup.tp.twitup.datamodel.Twit;
 import com.iup.tp.twitup.ihm.ITwitListObserver;
 
 import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
 import javafx.geometry.HPos;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Priority;
 
 public class TweetsQueueComponentFx extends ScrollPane implements ITwitListObserver {
 
@@ -29,10 +35,11 @@ public class TweetsQueueComponentFx extends ScrollPane implements ITwitListObser
 
 	public TweetsQueueComponentFx() {
 		this.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-		this.contentPane.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-
+	
+	
 		this.setContent(this.contentPane);
 		this.contentPane.setVgap(5);
+		GridPane.setMargin(searchComponent, new Insets(5,5,5,40));
 		this.contentPane.add(searchComponent, 0, 0);
 		this.contentPane.add(twitsPane, 0, 1);
 		this.setVbarPolicy(ScrollBarPolicy.AS_NEEDED);
@@ -105,7 +112,7 @@ public class TweetsQueueComponentFx extends ScrollPane implements ITwitListObser
 
 	private void replaceTwit(List<Twit> twits) {
 
-		int posY = 0;
+		int posY = 1;
 
 		for (Twit twit : twits) {
 			TweetComponentFx component = twitMap.get(twit);
@@ -123,6 +130,7 @@ public class TweetsQueueComponentFx extends ScrollPane implements ITwitListObser
 
 			@Override
 			public void run() {
+				GridPane.setMargin(component, new Insets(5,5,5,40));
 				twitsPane.add(component, 0, 0);
 				GridPane.setFillWidth(component, true);
 

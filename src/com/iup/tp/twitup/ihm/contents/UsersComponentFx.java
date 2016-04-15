@@ -7,6 +7,7 @@ import javafx.animation.TranslateTransition;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.HPos;
+import javafx.geometry.Insets;
 import javafx.geometry.VPos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -16,6 +17,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.paint.Color;
 import javafx.util.Duration;
 
 import com.iup.tp.twitup.core.UserController;
@@ -30,16 +32,19 @@ public class UsersComponentFx extends GridPane {
 	public UsersComponentFx(User user, UserController userController) {
 
 		this.userController = userController;
-		// this.setMinSize(370, 50);
+		this.setMinSize(370, 50);;
 
-		this.setStyle("-fx-background-color: #FFFFFF; -fx-border-color: black;");
-		// this.setMaxWidth(Double.MAX_VALUE);
+		
+		this.setStyle("-fx-background-color: #FFFFFF; -fx-border-color: #0084B4;");
 		this.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
 		Label tagLabel = new Label(user.getUserTag());
+		tagLabel.setTextFill(Color.web("#3F84B4"));
 		Label message = new Label(user.getName());
+		message.setTextFill(Color.web("#3F84B4"));
 
 		btnFollow = new Button("Follow");
-		this.btnFollow.minWidth(120);
+		this.btnFollow.setStyle("-fx-background-color: #0084B4");
+		this.btnFollow.setTextFill(Color.WHITE);
 
 		HBox hbox = new HBox();
 		// Replace the image you want to put up
