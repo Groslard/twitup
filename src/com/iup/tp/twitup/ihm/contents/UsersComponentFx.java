@@ -31,7 +31,7 @@ public class UsersComponentFx extends GridPane {
 	public UsersComponentFx(User user, UserController userController) {
 
 		this.userController = userController;
-		this.setMinSize(370, 50);
+		this.setMinSize(370, 70);
 		this.setStyle("-fx-background-color: #FFFFFF; -fx-border-color: #0084B4;");
 		this.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
 
