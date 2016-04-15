@@ -15,7 +15,6 @@ import javafx.application.Platform;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 
@@ -34,7 +33,7 @@ public class UsersQueueComponentFx extends ScrollPane implements IUserlistObserv
 	protected UserController userController;
 
 	public UsersQueueComponentFx(UserController userController) {
-		
+		this.userController = userController;
 		this.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
 		this.contentPane.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
 		
