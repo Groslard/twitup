@@ -5,9 +5,12 @@ import com.iup.tp.twitup.core.ViewControllerJfx;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
 public class AccueilComponentFx extends GridPane {
@@ -22,10 +25,14 @@ public class AccueilComponentFx extends GridPane {
 		
 		
 		this.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-		
+			
+		  Image	image = new Image("file:./src/resources/images/pigeon.png", 100, 100, false, false);
+			
 		
 		
 		this.messageAccueil = new Label("Bienveue sur TwitTwit");
+		this.messageAccueil.setGraphic(new ImageView(image));
+		this.messageAccueil.setTextFill(Color.web("#3F84B4"));
 		this.messageAccueil.setFont(new Font(30));
 		GridPane.setHgrow(messageAccueil, Priority.ALWAYS);
 		GridPane.setVgrow(messageAccueil, Priority.ALWAYS);

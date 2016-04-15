@@ -38,6 +38,7 @@ public class InscriptionComponentFx extends GridPane {
 		this.setPadding(new Insets(25, 25, 25, 25));
 
 		this.scenetitle = new Text("Inscription");
+		this.scenetitle.setFill(Color.web("#3F84B4"));
 		this.scenetitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
 		this.scenetitle.setTextAlignment(TextAlignment.CENTER);
 		this.add(scenetitle, 0, 0, 2, 1);
@@ -46,24 +47,29 @@ public class InscriptionComponentFx extends GridPane {
 		this.labelError = new Label();
 		this.add(labelError, 1, 1);
 		this.login = new Label("Login:");
+		this.login.setTextFill(Color.web("#3F84B4"));
 		this.add(login, 0, 2);
 
 		this.loginTextField = new TextField();
 		this.add(loginTextField, 1, 2);
 
 		this.tag = new Label("Tag:");
+		this.tag.setTextFill(Color.web("#3F84B4"));
 		this.add(tag, 0, 3);
 
 		this.tagTextField = new TextField();
 		this.add(tagTextField, 1, 3);
 
 		this.pw = new Label("Password:");
+		this.pw.setTextFill(Color.web("#3F84B4"));
 		this.add(pw, 0, 4);
 
 		this.pwBox = new PasswordField();
 		this.add(pwBox, 1, 4);
 
 		this.btnConnexion = new Button("Inscription");
+		this.btnConnexion.setStyle("-fx-background-color: #0084B4");
+		this.btnConnexion.setTextFill(Color.WHITE);
 		HBox hbBtn = new HBox(10);
 		hbBtn.setAlignment(Pos.BOTTOM_RIGHT);
 		hbBtn.getChildren().add(btnConnexion);

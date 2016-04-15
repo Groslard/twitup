@@ -1,6 +1,5 @@
 package com.iup.tp.twitup.ihm.connexion;
 
-import com.iup.tp.twitup.core.UserController;
 import com.iup.tp.twitup.core.ViewControllerJfx;
 
 import javafx.event.ActionEvent;
@@ -10,16 +9,9 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.VPos;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
-import javafx.scene.text.Text;
 
 public class SwitchConnexionInscriptionComponentFx extends GridPane {
 
@@ -33,6 +25,11 @@ public class SwitchConnexionInscriptionComponentFx extends GridPane {
 		this.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
 		this.btnConnexion = new Button("Connexion");
 		this.btnInscritpion = new Button("Inscription");
+		
+		this.btnConnexion.setStyle("-fx-background-color: #0084B4");
+		this.btnInscritpion.setStyle("-fx-background-color: #0084B4");
+		this.btnConnexion.setTextFill(Color.WHITE);
+		this.btnInscritpion.setTextFill(Color.WHITE);
 		this.btnConnexion.setMinSize(60, 30);
 		this.btnInscritpion.setMinSize(60, 30);
 		GridPane.setConstraints(btnConnexion, 0, 0, 1, 1, HPos.CENTER, VPos.CENTER, Priority.NEVER, Priority.NEVER,new Insets(0, 0, 30, 0));

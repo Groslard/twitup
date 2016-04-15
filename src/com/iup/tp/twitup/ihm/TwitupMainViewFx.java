@@ -36,12 +36,14 @@ public class TwitupMainViewFx implements IDatabaseObserver {
 	public TwitupMainViewFx(ViewControllerJfx viewController) {
 		this.viewController = viewController;
 		this.stage = this.viewController.getStage();
+		
 		this.root = new BorderPane();
+		this.root.setStyle("-fx-background-color: #F5F8FA");
 	}
 
 	public void showGUI() {
 
-		final Scene scene = new Scene(root, 400, 300);
+		final Scene scene = new Scene(root, 600, 400);
 		this.stage.setScene(scene);
 	}
 

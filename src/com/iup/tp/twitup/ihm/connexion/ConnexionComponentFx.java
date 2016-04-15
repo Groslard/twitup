@@ -38,24 +38,30 @@ public class ConnexionComponentFx extends GridPane {
 		this.setPadding(new Insets(25, 25, 25, 25));
 
 		this.scenetitle = new Text("Connexion");
+		this.scenetitle.setFill(Color.web("#3F84B4"));
+		
 		scenetitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
 		this.add(scenetitle, 0, 0, 2, 1);
 
 		this.labelError = new Label();
 		this.add(labelError, 1, 1);
 		this.login = new Label("Login:");
+		this.login.setTextFill(Color.web("#3F84B4"));
 		this.add(login, 0, 2);
 
 		this.loginTextField = new TextField();
 		this.add(loginTextField, 1, 2);
 
 		this.pw = new Label("Password:");
+		this.pw.setTextFill(Color.web("#3F84B4"));
 		this.add(pw, 0, 3);
 
 		this.pwBox = new PasswordField();
 		this.add(pwBox, 1, 3);
 
 		this.btnConnexion = new Button("Connexion");
+		this.btnConnexion.setStyle("-fx-background-color: #0084B4");
+		this.btnConnexion.setTextFill(Color.WHITE);
 		HBox hbBtn = new HBox(10);
 		hbBtn.setAlignment(Pos.BOTTOM_RIGHT);
 		hbBtn.getChildren().add(btnConnexion);

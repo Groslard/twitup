@@ -14,7 +14,6 @@ import com.iup.tp.twitup.datamodel.IDatabaseObserver;
 import com.iup.tp.twitup.events.file.IWatchableDirectory;
 import com.iup.tp.twitup.events.file.WatchableDirectory;
 import com.iup.tp.twitup.ihm.TwitupMock;
-import com.iup.tp.twitup.mock.MockController;
 
 import javafx.stage.Stage;
 
@@ -178,7 +177,6 @@ public class TwitupFx {
 	 */
 	protected void initMock() {
 		TwitupMock mock = new TwitupMock(this.mDatabase, this.mEntityManager);
-		new MockController(this.mDatabase).startMock();
 		mock.showGUI();
 	}
 

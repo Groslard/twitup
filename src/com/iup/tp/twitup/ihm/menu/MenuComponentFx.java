@@ -1,10 +1,7 @@
 package com.iup.tp.twitup.ihm.menu;
 
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
 
-import com.iup.tp.twitup.core.ViewController;
+
 import com.iup.tp.twitup.core.ViewControllerJfx;
 
 import javafx.event.ActionEvent;

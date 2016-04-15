@@ -77,7 +77,7 @@ public class ProfilComponentFx extends GridPane {
 		this.add(hbBtn, 1, 6);
 
 		
-		Image image = new Image(getClass().getResourceAsStream("lamaIcon.png"), 25, 25, false, false);
+		Image  image = new Image("file:./src/resources/images/lamaIcon.png", 25, 25, false, false);
 		labelimg = new Label();
 		labelimg.setGraphic(new ImageView(image));
 		

@@ -1,6 +1,5 @@
 package com.iup.tp.twitup.core;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
@@ -15,7 +14,6 @@ import com.iup.tp.twitup.ihm.IUserSearchObserver;
 import com.iup.tp.twitup.ihm.IUserlistObserver;
 import com.iup.tp.twitup.ihm.contents.UsersComponentFx;
 
-import javafx.scene.Node;
 import javafx.scene.layout.GridPane;
 
 public class UserController implements IDatabaseObserver, IUserSearchObserver {
@@ -183,7 +181,6 @@ public class UserController implements IDatabaseObserver, IUserSearchObserver {
 	}
 
 	private boolean isSearched(User user) {
-		User userConnected = this.shared.getConnectedUser();
 
 		
 				if ((user.getUserTag().toLowerCase().equals(currentSearch)

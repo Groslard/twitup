@@ -10,16 +10,13 @@ import com.iup.tp.twitup.ihm.connexion.SwitchConnexionInscriptionComponentFx;
 import com.iup.tp.twitup.ihm.connexion.AccueilComponentFx;
 import com.iup.tp.twitup.ihm.contents.TweetsQueueComponentFx;
 import com.iup.tp.twitup.ihm.contents.NewTweetComponentFx;
-import com.iup.tp.twitup.ihm.contents.ProfilComponent;
 import com.iup.tp.twitup.ihm.contents.ProfilComponentFx;
 import com.iup.tp.twitup.ihm.contents.SearchComponent;
-import com.iup.tp.twitup.ihm.contents.UsersQueueComponent;
 import com.iup.tp.twitup.ihm.contents.UsersQueueComponentFx;
 import com.iup.tp.twitup.ihm.menu.MenuComponentFx;
 
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
