@@ -1,24 +1,13 @@
 package com.iup.tp.twitup.ihm.contents;
 
-import java.awt.Color;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-
 import com.iup.tp.twitup.core.UserController;
-import com.iup.tp.twitup.core.ViewController;
-import com.iup.tp.twitup.datamodel.Twit;
 import com.iup.tp.twitup.datamodel.User;
 import com.iup.tp.twitup.ihm.IUserlistObserver;
 
@@ -30,6 +19,8 @@ import javafx.scene.layout.GridPane;
 
 public class UsersQueueComponentFx extends ScrollPane implements IUserlistObserver{
 
+
+	
 	protected Map<User, UsersComponentFx> userMap = new TreeMap<User, UsersComponentFx>(new Comparator<User>() {
 		@Override
 		public int compare(User o1, User o2) {
@@ -37,19 +28,25 @@ public class UsersQueueComponentFx extends ScrollPane implements IUserlistObserv
 		}
 	}); 
 	
-	protected GridPane contentPane;
+	protected GridPane contentPane= new GridPane();
+	protected SearchComponent searchComponent = new SearchComponent();
+	protected GridPane usersPane = new GridPane();
+	protected UserController userController;
 	
-	public UsersQueueComponentFx(){
-		this.contentPane = new GridPane();
+	public UsersQueueComponentFx(UserController userController){
+		this.userController=userController;
 		this.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
 		this.contentPane.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-		
+
 		this.setContent(this.contentPane);
+		this.contentPane.setVgap(5);
+		this.contentPane.add(searchComponent, 0, 0);
+		this.contentPane.add(usersPane, 0, 1);
 		this.setVbarPolicy(ScrollBarPolicy.AS_NEEDED);
 		this.setHbarPolicy(ScrollBarPolicy.AS_NEEDED);
 	}
 	@Override
-	public void notifyUserListHasChanged(Set<User> users) {
+	public synchronized void notifyUserListHasChanged(Set<User> users) {
 
 		List<UsersComponentFx> newUsers = new ArrayList<UsersComponentFx>();
 		for (User user : users) {
@@ -101,7 +98,7 @@ public class UsersQueueComponentFx extends ScrollPane implements IUserlistObserv
 	protected void updateUsersComponents(
 			List<UsersComponentFx> deletedUsers,
 			List<UsersComponentFx> newUsers) {
-		Platform.runLater(new Runnable() {
+			Platform.runLater(new Runnable() {
 
 			@Override
 			public void run() {
@@ -147,14 +144,16 @@ public class UsersQueueComponentFx extends ScrollPane implements IUserlistObserv
 	}
 
 	protected UsersComponentFx createUserComponent(User user) {
-		UsersComponentFx mockUserComponent = new UsersComponentFx(user);
-		mockUserComponent.setVisible(false);
+		UsersComponentFx mockUserComponent = new UsersComponentFx(user,this.userController);
+		mockUserComponent.setVisible(true);
 
 		return mockUserComponent;
 	}
 
 
-
+	public SearchComponent getSearchComponent() {
+		return searchComponent;
+	}
 		
 	}
 	

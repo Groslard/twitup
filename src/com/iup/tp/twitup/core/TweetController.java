@@ -38,6 +38,7 @@ public class TweetController implements IDatabaseObserver, ITwitSearchObserver {
 		this.database = mDatabase;
 		this.database.addObserver(this);
 		this.shared = shared;
+		
 	}
 
 	/**

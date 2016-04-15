@@ -16,7 +16,7 @@ public class UserController implements IDatabaseObserver {
 	/**
 	 * Base de donénes de l'application.
 	 */
-	protected IDatabase mDatabase;
+	protected IDatabase database;
 
 	/**
 	 * Gestionnaire de bdd et de fichier.
@@ -34,11 +34,11 @@ public class UserController implements IDatabaseObserver {
 	
 
 	public UserController(ViewControllerJfx mViewController, EntityManager mEntityManager, IDatabase mDatabase, SharedService shared)  {
-		this.mDatabase = mDatabase;
+		this.database = mDatabase;
 		this.mEntityManager = mEntityManager;
 		this.mViewController = mViewController;
 		this.mUsers = new HashSet<>();
-		this.mDatabase.addObserver(this);
+		this.database.addObserver(this);
 		this.shared = shared;
 		
 	}
@@ -46,7 +46,7 @@ public class UserController implements IDatabaseObserver {
 	public void onUserLogged(String login, String password) {
 		boolean loginOK = false;
 		boolean passwordOK = false;
-		this.mUsers = mDatabase.getUsers();
+		this.mUsers = database.getUsers();
 
 		for (User user : this.mUsers) {
 			if (user.getName().equals(login)) {
@@ -83,7 +83,7 @@ public class UserController implements IDatabaseObserver {
 			this.mViewController.compInscription.setErrorMessage("Veuillez remplir le tag");
 		} else {
 
-			this.mUsers = mDatabase.getUsers();
+			this.mUsers = database.getUsers();
 			// parcours de sutilisaterurs
 			for (User user : this.mUsers) {
 				if (user.getUserTag().equals(tagEntry)) {
@@ -116,19 +116,21 @@ public class UserController implements IDatabaseObserver {
 	
 	
 	public void showUsers(){
+		
 		this.mUsers.remove(shared.getConnectedUser());
 		mViewController.getCompUsersQueue().notifyUserListHasChanged(this.mUsers);
 	}
 	
 	
 	public void loadUsersFollowed(){
-		System.out.println("taille de la liste de "+mDatabase.getFollowed(shared.getConnectedUser()).size());
-		mViewController.getCompUsersQueue().notifyUserListHasChanged(mDatabase.getFollowed(shared.getConnectedUser()));
+		mViewController.getCompUsersQueue().notifyUserListHasChanged(database.getFollowed(shared.getConnectedUser()));
 	}
 	
 	public void followUser(User user){
+		System.out.println("utilisateur :"+shared.getConnectedUser().getName() +"  a follow "+user.getName());
 		shared.getConnectedUser().addFollowing(user.getUserTag());
 		mEntityManager.sendUser(shared.getConnectedUser());
+		this.notifyObservers();
 	}
 
 	@Override

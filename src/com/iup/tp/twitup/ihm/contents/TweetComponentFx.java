@@ -12,6 +12,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.util.Duration;
@@ -42,6 +43,13 @@ public class TweetComponentFx extends GridPane {
 	    hbox.getChildren().add((label));
 		
 	    //gestion date
+	    
+	    ColumnConstraints col1 = new ColumnConstraints();
+		col1.setPercentWidth(50);
+		ColumnConstraints col2 = new ColumnConstraints();
+		col2.setPercentWidth(50);
+		this.getColumnConstraints().addAll(col1, col2);
+	    
 	    Date date=new Date(twit.getEmissionDate());
         SimpleDateFormat df2 = new SimpleDateFormat(dateFormat);
         String dateText = df2.format(date);

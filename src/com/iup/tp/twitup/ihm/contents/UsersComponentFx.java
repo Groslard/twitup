@@ -8,29 +8,32 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.util.Duration;
 
-
+import com.iup.tp.twitup.core.UserController;
 import com.iup.tp.twitup.datamodel.User;
 
 public class UsersComponentFx extends GridPane {
 	static String dateFormat = "dd/MM/yy HH:mm:ss";
-	public UsersComponentFx(User user) {
+	public UsersComponentFx(User user,UserController userController) {
 
 		//this.setMinSize(370, 50);
 
 		this.setStyle("-fx-background-color: #FFFFFF; -fx-border-color: black;");
-		this.setMaxWidth(Double.MAX_VALUE);
+	//	this.setMaxWidth(Double.MAX_VALUE);
+		this.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
 		Label tagLabel = new Label(user.getUserTag());
 		Label message = new Label(user.getName());
 
-		
+		Button btnFollow =new Button("Follow");
 		HBox hbox = new HBox();
 	    //Replace the image you want to put up
 	    Image image = new Image(getClass().getResourceAsStream("lamaIcon.png"), 25, 25, false, false);
@@ -40,11 +43,27 @@ public class UsersComponentFx extends GridPane {
 	    hbox.getChildren().add((label));
 		
 	    //gestion date
-	   
+	    ColumnConstraints col1 = new ColumnConstraints();
+		col1.setPercentWidth(50);
+		ColumnConstraints col2 = new ColumnConstraints();
+		col2.setPercentWidth(50);
+
+		this.getColumnConstraints().addAll(col1, col2);
 	    GridPane.setConstraints(hbox, 0, 0, 1, 1, HPos.LEFT, VPos.CENTER);
 	    GridPane.setConstraints(tagLabel, 0, 1, 1, 1, HPos.LEFT, VPos.CENTER);
+	    GridPane.setConstraints(btnFollow, 1, 1, 1, 1, HPos.RIGHT, VPos.CENTER);
 	    GridPane.setConstraints(message, 0, 2, 1, 1, HPos.LEFT, VPos.CENTER);
-		this.minWidth(250);
+	    this.minWidth(250);
+		this.getChildren().setAll(hbox, tagLabel,message,btnFollow);
+		
+		btnFollow.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent e) {
+				userController.followUser(user);
+			}
+		});
+		
 		this.setOnMouseEntered(new EventHandler<MouseEvent>() {
 
 			@Override

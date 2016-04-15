@@ -83,7 +83,7 @@ public class ViewControllerJfx {
 		this.compTweetsQueue = new TweetsQueueComponentFx();
 
 		this.compTweetsQueue.getSearchComponent().addObserver(this.mTwitUp.mTweetController);
-		this.compUsersQueue = new UsersQueueComponentFx();
+		this.compUsersQueue = new UsersQueueComponentFx(this.mTwitUp.mUserController);
 
 
 		// initAndShowGUI(this.stage, compTweetsQueue);

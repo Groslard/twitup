@@ -23,9 +23,9 @@ public class TweetsQueueComponentFx extends ScrollPane implements ITwitListObser
 		}
 	});
 
-	protected GridPane contentPane = new GridPane();;
+	protected GridPane contentPane = new GridPane();
 	protected SearchComponent searchComponent = new SearchComponent();
-	protected GridPane twitsPane = new GridPane();;
+	protected GridPane twitsPane = new GridPane();
 
 	public TweetsQueueComponentFx() {
 		this.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);

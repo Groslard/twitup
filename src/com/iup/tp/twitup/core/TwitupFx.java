@@ -99,6 +99,7 @@ public class TwitupFx {
 	public void initGui() {
 		this.mViewController.initGui();
 		this.mTweetController.addObserver(this.mViewController.compTweetsQueue);
+		this.mUserController.addObserver(this.mViewController.compUsersQueue);
 		this.initDirectory();
 	}
 
