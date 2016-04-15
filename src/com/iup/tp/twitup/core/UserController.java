@@ -1,5 +1,6 @@
 package com.iup.tp.twitup.core;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
@@ -10,10 +11,14 @@ import com.iup.tp.twitup.datamodel.IDatabase;
 import com.iup.tp.twitup.datamodel.IDatabaseObserver;
 import com.iup.tp.twitup.datamodel.Twit;
 import com.iup.tp.twitup.datamodel.User;
+import com.iup.tp.twitup.ihm.IUserSearchObserver;
 import com.iup.tp.twitup.ihm.IUserlistObserver;
 import com.iup.tp.twitup.ihm.contents.UsersComponentFx;
 
-public class UserController implements IDatabaseObserver {
+import javafx.scene.Node;
+import javafx.scene.layout.GridPane;
+
+public class UserController implements IDatabaseObserver, IUserSearchObserver {
 
 	protected ViewControllerJfx mViewController;
 	/**
@@ -33,6 +38,8 @@ public class UserController implements IDatabaseObserver {
 
 	protected SharedService shared;
 
+	protected String currentSearch = "";
+	
 	protected final Set<IUserlistObserver> mObservers = new HashSet<IUserlistObserver>();
 
 	public UserController(ViewControllerJfx mViewController, EntityManager mEntityManager, IDatabase mDatabase,
@@ -148,6 +155,50 @@ public class UserController implements IDatabaseObserver {
 
 	}
 
+	
+	//gestion des recherche
+	public void searchUsers(String text) {
+
+
+		currentSearch = text.toLowerCase();
+
+		Set<User> newUserList = new HashSet<User>();
+
+		// Récupération des twits à filtrer
+		Set<User> databaseUsers = this.database.getUsers();
+
+		for (User user : databaseUsers) {
+			if(isSearched(user) && !newUserList.contains(user)){
+				//cas user connected
+				if(!user.getUserTag().equals(this.shared.getConnectedUser().getUserTag())){
+					newUserList.add(user);
+				}
+				
+			}
+		}
+
+		// Ajout de la nouvelle liste
+		this.mUsers = newUserList;
+		this.notifyObservers();
+	}
+
+	private boolean isSearched(User user) {
+		User userConnected = this.shared.getConnectedUser();
+
+		
+				if ((user.getUserTag().toLowerCase().equals(currentSearch)
+						|| user.getUserTag().toLowerCase().contains( currentSearch))) {
+					return true;
+				}
+	
+		return false;
+	}
+
+	
+	
+	
+	
+	
 	@Override
 	public void notifyTwitAdded(Twit addedTwit) {
 		// TODO Auto-generated method stub
@@ -209,7 +260,12 @@ public class UserController implements IDatabaseObserver {
 
 			// cas de k'utilisateur connecter
 			if (cle.getUserTag().equals(user.getUserTag())) {
-				valeur.hideUser();
+				GridPane parent=(GridPane) valeur.getParent();
+				if(valeur!=null&&parent!=null&&parent.getChildren()!=null){
+					parent.getChildren().remove(valeur);
+				}
+			
+				
 			}
 			// cas utilisateur followed
 			for (String tagFollowed : user.getFollows()) {
@@ -223,6 +279,18 @@ public class UserController implements IDatabaseObserver {
 			}
 		}
 
+	}
+
+	public void updateUserProfil(String nom, String mdp,String pathImg){
+		User userModif=this.shared.getConnectedUser();
+		userModif.setAvatarPath(pathImg);
+		userModif.setName(nom);
+		userModif.setUserPassword(mdp);
+		this.mEntityManager.sendUser(userModif);
+	}
+	@Override
+	public void notifyUserSearched(String text) {
+		this.searchUsers(text);
 	}
 
 }

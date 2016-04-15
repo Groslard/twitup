@@ -14,11 +14,9 @@ import com.iup.tp.twitup.ihm.IUserlistObserver;
 import javafx.application.Platform;
 import javafx.geometry.HPos;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.layout.GridPane;
 
 public class UsersQueueComponentFx extends ScrollPane implements IUserlistObserver{
-
 
 	
 	protected Map<User, UsersComponentFx> userMap = new TreeMap<User, UsersComponentFx>(new Comparator<User>() {
@@ -29,7 +27,7 @@ public class UsersQueueComponentFx extends ScrollPane implements IUserlistObserv
 	}); 
 	
 	protected GridPane contentPane= new GridPane();
-	protected SearchComponent searchComponent = new SearchComponent();
+	protected SearchUserComponent searchComponent = new SearchUserComponent();
 	protected GridPane usersPane = new GridPane();
 	protected UserController userController;
 	
@@ -118,7 +116,7 @@ public class UsersQueueComponentFx extends ScrollPane implements IUserlistObserv
 
 	private void replaceUser(List<User> users) {
 
-		int posY = 0;
+		int posY = 1;
 
 		for (User user : users) {
 			UsersComponentFx component = userMap.get(user);
@@ -152,7 +150,7 @@ public class UsersQueueComponentFx extends ScrollPane implements IUserlistObserv
 	}
 
 	
-	public SearchComponent getSearchComponent() {
+	public SearchUserComponent getSearchComponent() {
 		return searchComponent;
 	}
 	public Map<User, UsersComponentFx> getUserMap() {

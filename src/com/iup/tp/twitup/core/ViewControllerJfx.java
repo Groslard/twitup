@@ -11,6 +11,7 @@ import com.iup.tp.twitup.ihm.connexion.AccueilComponentFx;
 import com.iup.tp.twitup.ihm.contents.TweetsQueueComponentFx;
 import com.iup.tp.twitup.ihm.contents.NewTweetComponentFx;
 import com.iup.tp.twitup.ihm.contents.ProfilComponent;
+import com.iup.tp.twitup.ihm.contents.ProfilComponentFx;
 import com.iup.tp.twitup.ihm.contents.SearchComponent;
 import com.iup.tp.twitup.ihm.contents.UsersQueueComponent;
 import com.iup.tp.twitup.ihm.contents.UsersQueueComponentFx;
@@ -18,6 +19,9 @@ import com.iup.tp.twitup.ihm.menu.MenuComponentFx;
 
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
@@ -33,11 +37,10 @@ public class ViewControllerJfx {
 	protected MenuComponentFx compMenu;
 
 	protected TweetsQueueComponentFx compTweetsQueue;
-	protected ProfilComponent compProfil;
+	protected ProfilComponentFx compProfil;
 
 	protected SearchComponent compSearch;
 	protected UsersQueueComponentFx compUsersQueue;
-
 
 	protected NewTweetComponentFx compNewTweet;
 	protected Boolean newTweetIsShow;
@@ -84,12 +87,11 @@ public class ViewControllerJfx {
 
 		this.compTweetsQueue.getSearchComponent().addObserver(this.mTwitUp.mTweetController);
 		this.compUsersQueue = new UsersQueueComponentFx(this.mTwitUp.mUserController);
-
+		this.compUsersQueue.getSearchComponent().addObserver(this.mTwitUp.mUserController);
 
 		// initAndShowGUI(this.stage, compTweetsQueue);
 
-		this.compProfil = new ProfilComponent();
-
+		this.compProfil = new ProfilComponentFx(this.mTwitUp.mUserController);
 
 		this.compSearch = new SearchComponent();
 
@@ -121,7 +123,8 @@ public class ViewControllerJfx {
 
 	// a faire composant profil en jx
 	public void onMenuProfilClicked() {
-		// changeMainViewPanel(compProfil);
+		setProfil();
+		changeMainViewPanel(compProfil);
 	}
 
 	public void onMenuNewTweetClicked() {
@@ -133,11 +136,6 @@ public class ViewControllerJfx {
 			newTweetIsShow = true;
 		}
 
-	}
-
-	// a faire composant x pour la recherceh
-	public void onMenuRechercheClicked() {
-		// changeMainViewPanel(compSearch);
 	}
 
 	public void onMenuDisconnectClicked() {
@@ -153,8 +151,11 @@ public class ViewControllerJfx {
 		changeLogFormPanel(compInscription);
 	}
 
-	/** CONNECT/DISCONNECT ACTION 
-	 * @param user **/
+	/**
+	 * CONNECT/DISCONNECT ACTION
+	 * 
+	 * @param user
+	 **/
 	public void onUserLogged(User user) {
 		this.shared.setConnectedUser(user);
 		compConnexion.clear();
@@ -173,9 +174,8 @@ public class ViewControllerJfx {
 
 	/** PANELS UPDATES METHODS **/
 
-
 	private void changeMainViewPanel(Node component) {
-		
+
 		this.mMainView.setCenterPan(component);
 	}
 
@@ -200,7 +200,7 @@ public class ViewControllerJfx {
 	public String getDirPath() {
 		File filePath = this.mMainView.showGuiDirPath();
 		if (filePath != null) {
-			
+
 			// On recupere le path selectionné
 			return filePath.getAbsolutePath();
 		} else {
@@ -208,6 +208,23 @@ public class ViewControllerJfx {
 		}
 	}
 
+	public void setProfil() {
+		User userConnected = this.shared.getConnectedUser();
+		if (userConnected != null) {
+			compProfil.getLabTag().setText(userConnected.getUserTag());
+			compProfil.getLoginTextField().setText(userConnected.getName());
+			compProfil.getPwBox().setText(userConnected.getUserPassword());
+//			Image image;
+//			System.out.println(userConnected.getAvatarPath());
+//			if(userConnected.getAvatarPath()!=null&&!userConnected.getAvatarPath().isEmpty()){
+//				 image = new Image(getClass().getResourceAsStream(userConnected.getAvatarPath()), 25, 25, false, false);
+//			}else{
+//				 image = new Image((System.getProperty("user.dir")+"\\src\\resources\\images\\lamaIcon.png").tourl, 25, 25, false, false);
+//			}
+//			
+//			compProfil.getLabelimg().setGraphic(new ImageView(image));
+		}
+	}
 
 	public UsersQueueComponentFx getCompUsersQueue() {
 		return compUsersQueue;

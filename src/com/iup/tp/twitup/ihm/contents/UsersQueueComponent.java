@@ -9,10 +9,8 @@ import java.util.Iterator;
 import java.util.Set;
 
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 
 import com.iup.tp.twitup.core.UserController;
-import com.iup.tp.twitup.core.ViewController;
 import com.iup.tp.twitup.datamodel.User;
 
 import javafx.scene.layout.GridPane;
