@@ -25,7 +25,8 @@ public class UsersComponentFx extends GridPane {
 	static String dateFormat = "dd/MM/yy HH:mm:ss";
 	protected UserController userController;
 	protected Button btnFollow;
-	protected boolean isFollowed=false;
+	protected boolean isFollowed = false;
+
 	public UsersComponentFx(User user, UserController userController) {
 
 		this.userController = userController;
@@ -39,12 +40,17 @@ public class UsersComponentFx extends GridPane {
 
 		btnFollow = new Button("Follow");
 		this.btnFollow.minWidth(120);
-		
 
 		HBox hbox = new HBox();
 		// Replace the image you want to put up
-		Image image = new Image(getClass().getResourceAsStream("lamaIcon.png"), 25, 25, false, false);
+		Image image;
 		Label label = new Label();
+		if (user.getAvatarPath() != null && !user.getAvatarPath().isEmpty()) {
+			image = new Image("file:" + user.getAvatarPath(), 25, 25, false, false);
+		} else {
+			image = new Image("file:./src/resources/images/lamaIcon.png", 25, 25, false, false);
+		}
+
 		label.setGraphic(new ImageView(image));
 		hbox.setSpacing(10);
 		hbox.getChildren().add((label));
@@ -62,12 +68,12 @@ public class UsersComponentFx extends GridPane {
 		GridPane.setConstraints(message, 0, 2, 1, 1, HPos.LEFT, VPos.CENTER);
 		this.minWidth(250);
 		this.getChildren().setAll(hbox, tagLabel, message, btnFollow);
-		UsersComponentFx compsatIntermediaire=this;
+		UsersComponentFx compsatIntermediaire = this;
 		btnFollow.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
 			public void handle(ActionEvent e) {
-				userController.followUser(user,compsatIntermediaire);
+				userController.followUser(user, compsatIntermediaire);
 			}
 		});
 
@@ -89,8 +95,6 @@ public class UsersComponentFx extends GridPane {
 			}
 		});
 	}
-
-
 
 	public void hideUser() {
 		FadeTransition fadeTransition = new FadeTransition(Duration.millis(250), this);
@@ -165,13 +169,9 @@ public class UsersComponentFx extends GridPane {
 		this.btnFollow = btnFollow;
 	}
 
-
-
 	public boolean isFollowed() {
 		return isFollowed;
 	}
-
-
 
 	public void setFollowed(boolean isFollowed) {
 		this.isFollowed = isFollowed;

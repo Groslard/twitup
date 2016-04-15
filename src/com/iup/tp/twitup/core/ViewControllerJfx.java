@@ -26,7 +26,7 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
 public class ViewControllerJfx {
-
+	static String defaultIcon = "./src/resources/images/lamaIcon.png";
 	protected TwitupFx mTwitUp;
 	/**
 	 * Vue principale de l'application.
@@ -214,15 +214,18 @@ public class ViewControllerJfx {
 			compProfil.getLabTag().setText(userConnected.getUserTag());
 			compProfil.getLoginTextField().setText(userConnected.getName());
 			compProfil.getPwBox().setText(userConnected.getUserPassword());
-//			Image image;
-//			System.out.println(userConnected.getAvatarPath());
-//			if(userConnected.getAvatarPath()!=null&&!userConnected.getAvatarPath().isEmpty()){
-//				 image = new Image(getClass().getResourceAsStream(userConnected.getAvatarPath()), 25, 25, false, false);
-//			}else{
-//				 image = new Image((System.getProperty("user.dir")+"\\src\\resources\\images\\lamaIcon.png").tourl, 25, 25, false, false);
-//			}
-//			
-//			compProfil.getLabelimg().setGraphic(new ImageView(image));
+			Image image;
+		
+		
+			if(userConnected.getAvatarPath()!=null&&!userConnected.getAvatarPath().isEmpty()){
+				 image = new Image("file:"+userConnected.getAvatarPath(), 25, 25, false, false);
+				 compProfil.getPathPhoto().setText(userConnected.getAvatarPath());
+			}else{
+				 image = new Image("file:./src/resources/images/lamaIcon.png", 25, 25, false, false);
+				 compProfil.getPathPhoto().setText("./src/resources/images/lamaIcon.png");
+			}
+			System.out.println(image);
+			compProfil.getLabelimg().setGraphic(new ImageView(image));
 		}
 	}
 

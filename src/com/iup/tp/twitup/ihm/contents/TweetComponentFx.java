@@ -36,8 +36,16 @@ public class TweetComponentFx extends GridPane {
 		
 		HBox hbox = new HBox();
 	    //Replace the image you want to put up
-	    Image image = new Image(getClass().getResourceAsStream("lamaIcon.png"), 25, 25, false, false);
+	    Image image ;
 	    Label label = new Label();
+		if (twit.getTwiter().getAvatarPath() != null && !twit.getTwiter().getAvatarPath().isEmpty()) {
+			image = new Image("file:" + twit.getTwiter().getAvatarPath(), 25, 25, false, false);
+		} else {
+			image = new Image("file:./src/resources/images/lamaIcon.png", 25, 25, false, false);
+		}
+	    
+	    
+	    
 	    label.setGraphic(new ImageView(image));
 	    hbox.setSpacing(10);
 	    hbox.getChildren().add((label));

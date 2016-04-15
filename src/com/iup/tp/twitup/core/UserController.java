@@ -277,6 +277,10 @@ public class UserController implements IDatabaseObserver, IUserSearchObserver {
 					valeur.setFollowed(false);
 				}
 			}
+			
+			
+			
+			
 		}
 
 	}
@@ -287,6 +291,7 @@ public class UserController implements IDatabaseObserver, IUserSearchObserver {
 		userModif.setName(nom);
 		userModif.setUserPassword(mdp);
 		this.mEntityManager.sendUser(userModif);
+		this.mViewController.setProfil();
 	}
 	@Override
 	public void notifyUserSearched(String text) {
