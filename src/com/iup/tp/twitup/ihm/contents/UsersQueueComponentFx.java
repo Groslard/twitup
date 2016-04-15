@@ -96,6 +96,7 @@ public class UsersQueueComponentFx extends ScrollPane implements IUserlistObserv
 
 
 	protected void updateUsersComponents(
+			
 			List<UsersComponentFx> deletedUsers,
 			List<UsersComponentFx> newUsers) {
 			Platform.runLater(new Runnable() {
@@ -150,9 +151,15 @@ public class UsersQueueComponentFx extends ScrollPane implements IUserlistObserv
 		return mockUserComponent;
 	}
 
-
+	
 	public SearchComponent getSearchComponent() {
 		return searchComponent;
+	}
+	public Map<User, UsersComponentFx> getUserMap() {
+		return userMap;
+	}
+	public void setUserMap(Map<User, UsersComponentFx> userMap) {
+		this.userMap = userMap;
 	}
 		
 	}

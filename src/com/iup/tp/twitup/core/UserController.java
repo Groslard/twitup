@@ -1,6 +1,8 @@
 package com.iup.tp.twitup.core;
 
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
@@ -9,6 +11,7 @@ import com.iup.tp.twitup.datamodel.IDatabaseObserver;
 import com.iup.tp.twitup.datamodel.Twit;
 import com.iup.tp.twitup.datamodel.User;
 import com.iup.tp.twitup.ihm.IUserlistObserver;
+import com.iup.tp.twitup.ihm.contents.UsersComponentFx;
 
 public class UserController implements IDatabaseObserver {
 
@@ -27,20 +30,20 @@ public class UserController implements IDatabaseObserver {
 	 * Liste des utilisateurs enregistrés.
 	 */
 	protected Set<User> mUsers;
-	
+
 	protected SharedService shared;
 
 	protected final Set<IUserlistObserver> mObservers = new HashSet<IUserlistObserver>();
-	
 
-	public UserController(ViewControllerJfx mViewController, EntityManager mEntityManager, IDatabase mDatabase, SharedService shared)  {
+	public UserController(ViewControllerJfx mViewController, EntityManager mEntityManager, IDatabase mDatabase,
+			SharedService shared) {
 		this.database = mDatabase;
 		this.mEntityManager = mEntityManager;
 		this.mViewController = mViewController;
 		this.mUsers = new HashSet<>();
 		this.database.addObserver(this);
 		this.shared = shared;
-		
+
 	}
 
 	public void onUserLogged(String login, String password) {
@@ -52,6 +55,7 @@ public class UserController implements IDatabaseObserver {
 			if (user.getName().equals(login)) {
 				loginOK = true;
 				if (user.getUserPassword().equals(password)) {
+					updateUserComponent(user);
 					this.mViewController.onUserLogged(user);
 					passwordOK = true;
 					break;
@@ -61,12 +65,12 @@ public class UserController implements IDatabaseObserver {
 
 		if (!passwordOK) {
 			this.mViewController.compConnexion.setErrorMessage("Password incorrect");
-		}else{
+		} else {
 			this.mViewController.compConnexion.setErrorMessage("");
 		}
 		if (!loginOK) {
 			this.mViewController.compConnexion.setErrorMessage("Login incorrect");
-		}else{
+		} else {
 			this.mViewController.compConnexion.setErrorMessage("");
 		}
 
@@ -94,6 +98,7 @@ public class UserController implements IDatabaseObserver {
 			if (!isPresent) {
 				User userAdd = new User(UUID.randomUUID(), tagEntry, password, login, new HashSet<String>(), "");
 				mEntityManager.sendUser(userAdd);
+				updateUserComponent(userAdd);
 				this.mViewController.onUserLogged(userAdd);
 			} else {
 				// gerer affichage tag deja utilise
@@ -101,65 +106,74 @@ public class UserController implements IDatabaseObserver {
 			}
 		}
 	}
-	
-	
+
 	public void addObserver(IUserlistObserver observer) {
 		this.mObservers.add(observer);
 	}
-	
-	
+
 	private void notifyObservers() {
 		for (IUserlistObserver observer : mObservers) {
 			observer.notifyUserListHasChanged(mUsers);
 		}
 	}
-	
-	
-	public void showUsers(){
-		
+
+	public void showUsers() {
+
 		this.mUsers.remove(shared.getConnectedUser());
 		mViewController.getCompUsersQueue().notifyUserListHasChanged(this.mUsers);
 	}
-	
-	
-	public void loadUsersFollowed(){
+
+	public void loadUsersFollowed() {
 		mViewController.getCompUsersQueue().notifyUserListHasChanged(database.getFollowed(shared.getConnectedUser()));
 	}
-	
-	public void followUser(User user){
-		System.out.println("utilisateur :"+shared.getConnectedUser().getName() +"  a follow "+user.getName());
-		shared.getConnectedUser().addFollowing(user.getUserTag());
-		mEntityManager.sendUser(shared.getConnectedUser());
-		this.notifyObservers();
+
+	public void followUser(User user, UsersComponentFx userComposant) {
+		// cas unfollow
+		if (userComposant.isFollowed()) {
+			System.out
+					.println("utilisateur :" + shared.getConnectedUser().getName() + "  a unfollow " + user.getName());
+			shared.getConnectedUser().removeFollowing(user.getUserTag());
+			mEntityManager.sendUser(shared.getConnectedUser());
+			userComposant.setFollowed(false);
+			userComposant.getBtnFollow().setText("Follow");
+			this.notifyObservers();
+		} else {// cas follow
+			System.out.println("utilisateur :" + shared.getConnectedUser().getName() + "  a follow " + user.getName());
+			shared.getConnectedUser().addFollowing(user.getUserTag());
+			mEntityManager.sendUser(shared.getConnectedUser());
+			userComposant.setFollowed(true);
+			userComposant.getBtnFollow().setText("Unfollow");
+			this.notifyObservers();
+		}
+
 	}
 
 	@Override
 	public void notifyTwitAdded(Twit addedTwit) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void notifyTwitDeleted(Twit deletedTwit) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void notifyTwitModified(Twit modifiedTwit) {
 		// TODO Auto-generated method stub
-		
-	}
 
+	}
 
 	@Override
 	public void notifyUserAdded(User addedUser) {
-		if(addedUser != shared.getConnectedUser())
+		if (addedUser != shared.getConnectedUser())
 			this.mUsers.add(addedUser);
-		
-		if(this.shared.getConnectedUser() != null)
+
+		if (this.shared.getConnectedUser() != null)
 			this.showUsers();
-		
+
 		notifyObservers();
 	}
 
@@ -167,13 +181,48 @@ public class UserController implements IDatabaseObserver {
 	public void notifyUserDeleted(User deletedUser) {
 		mUsers.remove(deletedUser);
 		this.notifyObservers();
-		
+
 	}
 
 	@Override
 	public void notifyUserModified(User modifiedUser) {
 		// TODO Auto-generated method stub
-		
+
+	}
+
+	public SharedService getShared() {
+		return shared;
+	}
+
+	public void setShared(SharedService shared) {
+		this.shared = shared;
+	}
+
+	public void updateUserComponent(User user) {
+
+		Map<User, UsersComponentFx> map = this.mViewController.compUsersQueue.getUserMap();
+		Set<User> cles = map.keySet();
+		Iterator<User> it = cles.iterator();
+		while (it.hasNext()) {
+			User cle = it.next();
+			UsersComponentFx valeur = map.get(cle);
+
+			// cas de k'utilisateur connecter
+			if (cle.getUserTag().equals(user.getUserTag())) {
+				valeur.hideUser();
+			}
+			// cas utilisateur followed
+			for (String tagFollowed : user.getFollows()) {
+				if (tagFollowed.equals(cle.getUserTag())) {
+					valeur.getBtnFollow().setText("Unfollow");
+					valeur.setFollowed(true);
+				} else {
+					valeur.getBtnFollow().setText("Follow");
+					valeur.setFollowed(false);
+				}
+			}
+		}
+
 	}
 
 }
