@@ -8,6 +8,7 @@ import com.iup.tp.twitup.datamodel.IDatabase;
 import com.iup.tp.twitup.datamodel.IDatabaseObserver;
 import com.iup.tp.twitup.datamodel.Twit;
 import com.iup.tp.twitup.datamodel.User;
+import com.iup.tp.twitup.ihm.IUserlistObserver;
 
 public class UserController implements IDatabaseObserver {
 
@@ -29,13 +30,17 @@ public class UserController implements IDatabaseObserver {
 	
 	protected SharedService shared;
 
+	protected final Set<IUserlistObserver> mObservers = new HashSet<IUserlistObserver>();
+	
 
 	public UserController(ViewControllerJfx mViewController, EntityManager mEntityManager, IDatabase mDatabase, SharedService shared)  {
 		this.mDatabase = mDatabase;
 		this.mEntityManager = mEntityManager;
 		this.mViewController = mViewController;
 		this.mUsers = new HashSet<>();
+		this.mDatabase.addObserver(this);
 		this.shared = shared;
+		
 	}
 
 	public void onUserLogged(String login, String password) {
@@ -97,15 +102,28 @@ public class UserController implements IDatabaseObserver {
 		}
 	}
 	
+	
+	public void addObserver(IUserlistObserver observer) {
+		this.mObservers.add(observer);
+	}
+	
+	
+	private void notifyObservers() {
+		for (IUserlistObserver observer : mObservers) {
+			observer.notifyUserListHasChanged(mUsers);
+		}
+	}
+	
+	
 	public void showUsers(){
 		this.mUsers.remove(shared.getConnectedUser());
-		mViewController.getCompUsersQueue().notifyUsersUpdated(this.mUsers);
+		mViewController.getCompUsersQueue().notifyUserListHasChanged(this.mUsers);
 	}
 	
 	
 	public void loadUsersFollowed(){
 		System.out.println("taille de la liste de "+mDatabase.getFollowed(shared.getConnectedUser()).size());
-		mViewController.getCompUsersQueue().notifyUsersUpdated(mDatabase.getFollowed(shared.getConnectedUser()));
+		mViewController.getCompUsersQueue().notifyUserListHasChanged(mDatabase.getFollowed(shared.getConnectedUser()));
 	}
 	
 	public void followUser(User user){
@@ -140,11 +158,13 @@ public class UserController implements IDatabaseObserver {
 		if(this.shared.getConnectedUser() != null)
 			this.showUsers();
 		
+		notifyObservers();
 	}
 
 	@Override
 	public void notifyUserDeleted(User deletedUser) {
-		// TODO Auto-generated method stub
+		mUsers.remove(deletedUser);
+		this.notifyObservers();
 		
 	}
 

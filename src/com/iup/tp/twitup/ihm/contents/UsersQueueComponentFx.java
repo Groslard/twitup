@@ -4,81 +4,158 @@ import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import com.iup.tp.twitup.core.UserController;
 import com.iup.tp.twitup.core.ViewController;
+import com.iup.tp.twitup.datamodel.Twit;
 import com.iup.tp.twitup.datamodel.User;
+import com.iup.tp.twitup.ihm.IUserlistObserver;
 
+import javafx.application.Platform;
+import javafx.geometry.HPos;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.layout.GridPane;
 
-public class UsersQueueComponentFx extends GridPane {
+public class UsersQueueComponentFx extends ScrollPane implements IUserlistObserver{
 
-	protected HashMap<User, UsersComponent> usersComponents; 
-
-	protected JPanel content;
-
-	protected GridBagConstraints userPlacement;
-
-	private GridBagLayout gridBagLayout;
-	
-	protected UserController userController;
-	
-	public UsersQueueComponentFx(UserController userController) {
-		this.userController=userController;
-		this.usersComponents= new HashMap<User, UsersComponent>();
-		this.content = new JPanel();
-		this.content.setBackground(Color.WHITE);
-		gridBagLayout = new GridBagLayout();
-		this.content.setLayout(gridBagLayout);
-		
-//		this.setViewportView(this.content);
-//		this.getVerticalScrollBar().setUnitIncrement(10);
-		
-		this.userPlacement = new GridBagConstraints(0, 0, 1, 1, 1, 1, 
-				GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, 
-				new Insets(0, 70, 5, 70), 0, 0);
-	}
-
-	
-	public void notifyUsersUpdated(Set<User> users){
-//		Set<User> temp = usersComponents.keySet();
-//		temp.removeAll(users);
-//		for (User user : temp) {
-//			UsersComponent usersComponent = this.usersComponents.get(user);
-//			this.content.remove(usersComponent);
-//			this.usersComponents.remove(user);
-//		}
-		
-		int line = 0;
-		Iterator<User> iterator = users.iterator();
-		while(iterator.hasNext()){
-			this.userPlacement.gridy = line;
-			User user = iterator.next();
-			
-			UsersComponent userComp = this.usersComponents.get(user);
-			
-			if(userComp == null){
-				userComp = new UsersComponent(user,this.userController);
-				this.usersComponents.put(user, userComp);
-				this.content.add(userComp, this.userPlacement);
-			}else{
-				System.out.println(user);
-				// TODO : mettre a jour la constraint sur le comp si il existe
-				gridBagLayout.setConstraints(userComp, this.userPlacement);
-			}			
-			line++;
+	protected Map<User, UsersComponentFx> userMap = new TreeMap<User, UsersComponentFx>(new Comparator<User>() {
+		@Override
+		public int compare(User o1, User o2) {
+			return  (o2.getName().compareTo(o1.getName())  );
 		}
-		//ViewController.updatePan(content);
+	}); 
+	
+	protected GridPane contentPane;
+	
+	public UsersQueueComponentFx(){
+		this.contentPane = new GridPane();
+		this.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+		this.contentPane.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+		
+		this.setContent(this.contentPane);
+		this.setVbarPolicy(ScrollBarPolicy.AS_NEEDED);
+		this.setHbarPolicy(ScrollBarPolicy.AS_NEEDED);
+	}
+	@Override
+	public void notifyUserListHasChanged(Set<User> users) {
+
+		List<UsersComponentFx> newUsers = new ArrayList<UsersComponentFx>();
+		for (User user : users) {
+
+			UsersComponentFx component = userMap.get(user);
+
+			// Nouveau user
+			if (component == null) {
+				UsersComponentFx newUserComponent = this
+						.createUserComponent(user);
+				this.addUserComponent(user, newUserComponent);
+				newUsers.add(newUserComponent);
+			}
+		}
+
+		List<UsersComponentFx> deletedUsers = new ArrayList<UsersComponentFx>();
+		List<User> toRemove = new ArrayList<User>();
+		for (User oldUser : userMap.keySet()) {
+			if (users.contains(oldUser) == false) {
+				UsersComponentFx oldUserComponent = userMap.get(oldUser);
+				if (oldUserComponent != null) {
+					deletedUsers.add(oldUserComponent);
+				}
+				toRemove.add(oldUser);
+			}
+		}
+		for (User remove : toRemove) {
+			userMap.remove(remove);
+		}
 		
 		
+
+		Runnable r = new Runnable() {
+
+			@Override
+			public void run() {
+				updateUsersComponents(deletedUsers, newUsers);
+			}
+		};
+
+		Thread t = new Thread(r);
+		t.start();
+	
 		
 	}
 	
-}
+
+
+	protected void updateUsersComponents(
+			List<UsersComponentFx> deletedUsers,
+			List<UsersComponentFx> newUsers) {
+		Platform.runLater(new Runnable() {
+
+			@Override
+			public void run() {
+				for (UsersComponentFx oldUserComponent : deletedUsers) {
+					oldUserComponent.hideUser();
+				}
+
+				replaceUser(new ArrayList<User>(userMap.keySet()));
+
+				for (UsersComponentFx newUserComponent : newUsers) {
+					newUserComponent.showUser();
+				}
+			}
+		});
+	}
+
+	private void replaceUser(List<User> users) {
+
+		int posY = 0;
+
+		for (User user : users) {
+			UsersComponentFx component = userMap.get(user);
+
+			if (component != null) {
+				GridPane.setConstraints(component, 0, posY);
+				posY++;
+			}
+		}
+	}
+
+	protected void addUserComponent(User user, UsersComponentFx component) {
+		userMap.put(user, component);
+		Platform.runLater(new Runnable() {
+
+			@Override
+			public void run() {
+				contentPane.add(component, 0, 0);
+				GridPane.setFillWidth(component, true);
+				
+				GridPane.setHalignment(component, HPos.CENTER);
+			}
+		});
+	}
+
+	protected UsersComponentFx createUserComponent(User user) {
+		UsersComponentFx mockUserComponent = new UsersComponentFx(user);
+		mockUserComponent.setVisible(false);
+
+		return mockUserComponent;
+	}
+
+
+
+		
+	}
+	
+

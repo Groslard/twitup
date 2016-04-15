@@ -11,7 +11,9 @@ import com.iup.tp.twitup.ihm.connexion.AccueilComponentFx;
 import com.iup.tp.twitup.ihm.contents.TweetsQueueComponentFx;
 import com.iup.tp.twitup.ihm.contents.NewTweetComponentFx;
 import com.iup.tp.twitup.ihm.contents.ProfilComponent;
+import com.iup.tp.twitup.ihm.contents.SearchComponent;
 import com.iup.tp.twitup.ihm.contents.UsersQueueComponent;
+import com.iup.tp.twitup.ihm.contents.UsersQueueComponentFx;
 import com.iup.tp.twitup.ihm.menu.MenuComponentFx;
 
 import javafx.scene.Node;
@@ -32,7 +34,10 @@ public class ViewControllerJfx {
 
 	protected TweetsQueueComponentFx compTweetsQueue;
 	protected ProfilComponent compProfil;
-	protected UsersQueueComponent compUsersQueue;
+
+	protected SearchComponent compSearch;
+	protected UsersQueueComponentFx compUsersQueue;
+
 
 	protected NewTweetComponentFx compNewTweet;
 	protected Boolean newTweetIsShow;
@@ -76,12 +81,18 @@ public class ViewControllerJfx {
 
 		// panel principal / central
 		this.compTweetsQueue = new TweetsQueueComponentFx();
+
 		this.compTweetsQueue.getSearchComponent().addObserver(this.mTwitUp.mTweetController);
+		this.compUsersQueue = new UsersQueueComponentFx();
+
 
 		// initAndShowGUI(this.stage, compTweetsQueue);
 
 		this.compProfil = new ProfilComponent();
-		this.compUsersQueue = new UsersQueueComponent(this.mTwitUp.mUserController);
+
+
+		this.compSearch = new SearchComponent();
+
 		this.compNewTweet = new NewTweetComponentFx(this.shared.getConnectedUser(), this.mTwitUp.mTweetController);
 
 		this.mMainView.showGUI();
@@ -198,7 +209,7 @@ public class ViewControllerJfx {
 	}
 
 
-	public UsersQueueComponent getCompUsersQueue() {
+	public UsersQueueComponentFx getCompUsersQueue() {
 		return compUsersQueue;
 	}
 

@@ -47,13 +47,13 @@ public class UsersQueueComponent extends GridPane {
 
 	
 	public void notifyUsersUpdated(Set<User> users){
-//		Set<User> temp = usersComponents.keySet();
-//		temp.removeAll(users);
-//		for (User user : temp) {
-//			UsersComponent usersComponent = this.usersComponents.get(user);
-//			this.content.remove(usersComponent);
-//			this.usersComponents.remove(user);
-//		}
+		Set<User> temp = usersComponents.keySet();
+		temp.removeAll(users);
+		for (User user : temp) {
+			UsersComponent usersComponent = this.usersComponents.get(user);
+			this.content.remove(usersComponent);
+			this.usersComponents.remove(user);
+		}
 		
 		int line = 0;
 		Iterator<User> iterator = users.iterator();
